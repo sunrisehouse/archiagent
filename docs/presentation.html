@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>archiagent — 아키텍처 산출물을 살아있는 지식으로</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme" />
+
+  <style>
+    :root {
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --ink: #1e293b;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --ok: #16a34a;
+      --warn: #dc2626;
+    }
+    .reveal { font-family: "Pretendard", system-ui, sans-serif; color: var(--ink); }
+    .reveal .slides { text-align: left; }
+    .reveal h1, .reveal h2, .reveal h3 { font-family: "Pretendard", sans-serif; color: var(--ink); text-transform: none; letter-spacing: -0.02em; font-weight: 800; }
+    .reveal h1 { font-size: 2.4em; line-height: 1.15; }
+    .reveal h2 { font-size: 1.55em; margin-bottom: .5em; }
+    .reveal h3 { font-size: 1.1em; color: var(--accent); }
+    .reveal p, .reveal li { font-size: .8em; line-height: 1.5; }
+    .reveal .muted { color: var(--muted); }
+    .reveal section { padding: 10px 14px; }
+
+    /* Section accent bar under headings */
+    .reveal h2.bar { position: relative; padding-bottom: .35em; }
+    .reveal h2.bar::after { content: ""; position: absolute; left: 0; bottom: 0; width: 64px; height: 5px; background: var(--accent); border-radius: 3px; }
+
+    .reveal .kicker { display: inline-block; font-size: .62em; font-weight: 700; letter-spacing: .08em; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 999px; margin-bottom: .6em; text-transform: uppercase; }
+
+    /* Tables */
+    .reveal table { font-size: .62em; border-collapse: collapse; width: 100%; }
+    .reveal table th { background: var(--accent); color: #fff; font-weight: 700; padding: 8px 10px; border: none; }
+    .reveal table td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .reveal table tr:nth-child(even) td { background: #f8fafc; }
+    .reveal .tag { font-family: ui-monospace, monospace; font-size: .92em; background: #f1f5f9; padding: 1px 6px; border-radius: 5px; color: var(--accent); }
+
+    /* Cards / grid */
+    .grid { display: grid; gap: 14px; }
+    .grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .card { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+    .card h3 { margin: 0 0 .3em; font-size: .82em; }
+    .card p, .card li { font-size: .64em; margin: .2em 0; }
+    .card .num { font-weight: 800; color: var(--accent); }
+
+    /* Mermaid */
+    .mermaid { text-align: center; margin: 0 auto; }
+    .mermaid svg { max-height: 440px; width: auto !important; max-width: 100%; height: auto; }
+    .split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; align-items: center; }
+    .split .mermaid svg { max-height: 420px; }
+
+    .reveal .pill-ok { color: var(--ok); font-weight: 700; }
+    .reveal .pill-warn { color: var(--warn); font-weight: 700; }
+    .footer { position: fixed; bottom: 10px; left: 18px; font-size: 12px; color: var(--muted); z-index: 30; }
+    .reveal .title-wrap { text-align: center; }
+    .reveal .title-wrap .sub { font-size: .9em; color: var(--muted); margin-top: .4em; font-weight: 500; }
+    .reveal .title-wrap .meta { margin-top: 1.4em; font-size: .62em; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="footer">archiagent · 소프트웨어 아키텍트 보조 에이전트</div>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- 1. Title -->
+      <section>
+        <div class="title-wrap">
+          <span class="kicker">Agent Building · PoC</span>
+          <h1>archiagent</h1>
+          <p class="sub">아키텍처 산출물을 <strong>문서</strong>가 아닌 <strong>살아있는 지식 그래프</strong>로.<br/>설계(의도)와 실제(배포)를 잇는 멀티 에이전트.</p>
+          <p class="meta">기획 의도 · 주요 기능 · 아키텍처 구성도 &nbsp;|&nbsp; Built on Claude Agent SDK</p>
+        </div>
+      </section>
+
+      <!-- 2. Problem -->
+      <section>
+        <span class="kicker">Problem</span>
+        <h2 class="bar">문제 정의 — 산출물이 "문서"라서 생기는 일</h2>
+        <table>
+          <thead><tr><th style="width:60px">#</th><th style="width:160px">문제</th><th>증상</th></tr></thead>
+          <tbody>
+            <tr><td><b>P1</b></td><td>최신성 붕괴</td><td>시스템은 계속 배포·변경되는데 문서는 갱신이 늦음 → 설계와 실제의 <b>괴리(drift)</b></td></tr>
+            <tr><td><b>P2</b></td><td>추적 불가</td><td>컴포넌트 간 의존성·영향 범위를 문서에서 추적 불가. "이거 바꾸면 뭐가 깨지지?"에 답 못함</td></tr>
+            <tr><td><b>P3</b></td><td>의도-실제 단절</td><td>설계 의도(why)는 문서에, 실제 운영 상태(what-is)는 인프라 콘솔에. 서로 연결 안 됨</td></tr>
+            <tr><td><b>P4</b></td><td>질의 불가</td><td>"현재 결제 도메인 구조 알려줘" 같은 자연어 질의·온보딩 설명을 매번 수작업</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top:1em; font-size:.72em;">근본 원인 — 산출물이 <b>연결된 구조(graph)</b>가 아니라 <b>납작한 텍스트(doc)</b>로 저장되고, <b>실제 시스템 상태</b>와 분리되어 있다.</p>
+      </section>
+
+      <!-- 3. Intent -->
+      <section>
+        <span class="kicker">Intent</span>
+        <h2 class="bar">기획 의도</h2>
+        <div class="grid cols-2">
+          <div class="card"><h3>① 문서 → 지식 그래프</h3><p>컴포넌트·의존성·결정(ADR)을 노드·엣지로(Graph DB) + 자연어 의미검색(Vector DB). <span class="muted">→ P2·P4</span></p></div>
+          <div class="card"><h3>② 설계 ↔ 실제 연계</h3><p>설계를 아는 <b>Agent A</b> + 배포 상태를 아는 <b>Agent B</b>를 오케스트레이터로 묶어 "의도 vs 실제"를 교차 질의. <span class="muted">→ P1·P3</span></p></div>
+          <div class="card"><h3>③ 반복 작업 보조</h3><p>영향분석 · 현황 파악 · 온보딩 설명 같은 아키텍트의 반복 업무를 에이전트가 대신.</p></div>
+          <div class="card"><h3>④ 시나리오 중심 PoC</h3><p>완성형 제품이 아니라, 몇 가지 시나리오로 <b>에이전트 간 연계의 가치</b>를 시연.</p></div>
+        </div>
+      </section>
+
+      <!-- 4. Solution overview -->
+      <section>
+        <span class="kicker">Solution</span>
+        <h2 class="bar">해법 — 두 에이전트 + 오케스트레이터</h2>
+        <div class="split">
+          <pre class="mermaid">
+flowchart TB
+  U["Architect"] --> O["Orchestrator<br/>의도 분해·라우팅·합성"]
+  O -->|subagent| A["Agent A<br/>아키텍처 지식 에이전트"]
+  O -. MCP tool .-> B["Agent B<br/>시스템 상태 에이전트"]
+  A --> KB[("Graph DB + Vector DB<br/>설계 의도·의존성·ADR")]
+  B --> INF["Cloud / Infra<br/>실제 배포 상태"]
+  classDef ours fill:#eef2ff,stroke:#4f46e5,stroke-width:2px,color:#1e293b;
+  classDef ext fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
+  class O,A,KB ours;
+  class B,INF ext;
+          </pre>
+          <div>
+            <table>
+              <tbody>
+                <tr><td><b>Agent A</b><br/><span class="muted">우리가 만드는 핵심</span></td><td>산출물을 Graph+Vector DB로 관리·질의·갱신</td></tr>
+                <tr><td><b>Agent B</b><br/><span class="muted">외부 팀·별도 스택</span></td><td>실제 배포 상태 조회. <b>추상 계약(MCP)</b>으로 연계, 미완성 시 <b>모킹</b></td></tr>
+                <tr><td><b>Orchestrator</b></td><td>의도 분해 → 두 에이전트 호출·조합 → 답변 합성</td></tr>
+              </tbody>
+            </table>
+            <p class="muted" style="font-size:.64em; margin-top:.8em;">단일 에이전트로는 못 푸는, <b>설계+실제</b>가 모두 필요한 작업에 집중.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Scenario 1 -->
+      <section>
+        <span class="kicker">주요 기능 · 시나리오 1</span>
+        <h2 class="bar">설계 vs 실제 Drift 탐지 <span class="muted" style="font-size:.6em;">— 연계의 핵심 가치</span></h2>
+        <div class="split">
+          <pre class="mermaid">
+sequenceDiagram
+  actor U as Architect
+  participant O as Orchestrator
+  participant A as Agent A
+  participant B as Agent B
+  U->>O: "결제 도메인 설계 대비<br/>실제 배포 차이 알려줘"
+  O->>A: 설계상 결제 토폴로지
+  A-->>O: intended 구성
+  O->>B: 실제 배포 컴포넌트
+  B-->>O: observed 상태
+  O->>O: 교차 비교 (drift)
+  O-->>U: Drift 리포트
+          </pre>
+          <div>
+            <p><b>산출</b> — Drift 리포트</p>
+            <ul>
+              <li><span class="pill-warn">누락</span> 설계엔 있으나 미배포</li>
+              <li><span class="pill-warn">추가</span> 배포됐으나 설계에 없음</li>
+              <li><span class="pill-warn">불일치</span> 버전·의존성 차이</li>
+            </ul>
+            <p class="muted" style="font-size:.66em;">해소: <b>P1 최신성 · P3 의도-실제 단절</b></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Scenario 2 -->
+      <section>
+        <span class="kicker">주요 기능 · 시나리오 2</span>
+        <h2 class="bar">변경 영향도 분석</h2>
+        <div class="split">
+          <pre class="mermaid">
+sequenceDiagram
+  actor U as Architect
+  participant O as Orchestrator
+  participant A as Agent A
+  participant B as Agent B
+  U->>O: "Auth 인터페이스 변경 시<br/>영향 범위는?"
+  O->>A: 역방향 의존성 탐색<br/>(DEPENDS_ON*)
+  A-->>O: 영향 후보 + ADR
+  O->>B: 후보들 실제 가동·트래픽?
+  B-->>O: live / idle
+  O-->>U: 영향 범위 + 우선순위화
+          </pre>
+          <div>
+            <p><b>핵심</b></p>
+            <ul>
+              <li>A: 그래프 <b>다단계 의존성</b> 추적</li>
+              <li>B: 후보 중 <b>실제 운영 중</b>인 것 식별</li>
+              <li>O: "운영 중인 것 먼저" 우선순위화</li>
+            </ul>
+            <p class="muted" style="font-size:.66em;">해소: <b>P2 추적 · P3 단절</b></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Scenario 3 -->
+      <section>
+        <span class="kicker">주요 기능 · 시나리오 3</span>
+        <h2 class="bar">아키텍처 Q&A / 온보딩</h2>
+        <div class="split">
+          <pre class="mermaid">
+sequenceDiagram
+  actor U as Newcomer
+  participant O as Orchestrator
+  participant A as Agent A
+  participant B as Agent B
+  U->>O: "현재 주문 시스템<br/>구조 설명해줘"
+  O->>A: 주문 서브그래프 + ADR(why)
+  A-->>O: 설계 의도·구성
+  O->>B: 실제 배포 토폴로지·헬스
+  B-->>O: 현재 상태
+  O-->>U: 의도(why)+실제(what)<br/>통합 설명 + 그래프 뷰
+          </pre>
+          <div>
+            <p><b>산출</b></p>
+            <ul>
+              <li>설계 의도(<b>why</b>) + 실제 상태(<b>what</b>) 통합</li>
+              <li>신규 입사자 온보딩을 자동화</li>
+              <li>그래프 뷰로 시각적 이해</li>
+            </ul>
+            <p class="muted" style="font-size:.66em;">해소: <b>P3 단절 · P4 질의</b></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Architecture overall -->
+      <section>
+        <span class="kicker">아키텍처 구성도</span>
+        <h2 class="bar">전체 구성</h2>
+        <pre class="mermaid">
+flowchart TB
+  subgraph FE["① Front"]
+    UI["Chat UI · 그래프 뷰어 · Drift 리포트"]
+  end
+  subgraph RT["② Agent Runtime — Claude Agent SDK"]
+    ORCH["Orchestrator Agent"]
+    AGA["Agent A (subagent)"]
+  end
+  subgraph MP["③ Model Provider"]
+    CL["Anthropic Claude<br/>Opus 4.8 / Sonnet 4.6 / Haiku 4.5"]
+  end
+  subgraph MC["④ MCP Servers"]
+    GMCP["Graph/KB MCP"]
+    BMCP["System State MCP = Agent B (외부)"]
+  end
+  subgraph KB["⑥ Knowledge Base"]
+    GDB[("Graph DB")]
+    VDB[("Vector DB")]
+  end
+  subgraph PP["⑦ Data Pipeline"]
+    ING["인제스트·LLM 추출·Upsert"]
+    SYNC["관측 동기화·Reconcile"]
+  end
+  UI --> ORCH
+  ORCH <--> AGA
+  ORCH -. tool .-> BMCP
+  AGA --> GMCP
+  GMCP --> GDB & VDB
+  ORCH --> CL
+  AGA --> CL
+  ING --> GDB & VDB
+  BMCP -. observed .-> SYNC --> GDB
+  classDef ours fill:#eef2ff,stroke:#4f46e5,color:#1e293b;
+  classDef ext fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
+  class ORCH,AGA,GMCP,GDB,VDB,ING,SYNC,UI ours;
+  class BMCP ext;
+        </pre>
+      </section>
+
+      <!-- 9. Agent Runtime -->
+      <section>
+        <span class="kicker">② Agent Runtime</span>
+        <h2 class="bar">Orchestration · Instruction</h2>
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>Orchestration 부문</h3>
+            <ul>
+              <li>SDK <span class="tag">query()</span> 루프 진입점</li>
+              <li>의도 분해 → 시나리오 라우팅(drift/영향도/Q&A)</li>
+              <li><b>Agent A = subagent</b>, <b>Agent B = MCP tool</b></li>
+              <li>정지 조건: 시나리오별 최대 반복 · 실패 시 graceful degrade</li>
+              <li>비가역 작업(그래프 쓰기)은 <span class="tag">AskUserQuestion</span> 확인</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Agent Instruction · Prompt</h3>
+            <ul>
+              <li><b>Orchestrator:</b> 역할·라우팅 휴리스틱·"설계는 A, 실제는 B" 도구 규칙</li>
+              <li><b>Agent A:</b> 그래프 데이터 모델·질의 패턴, "그래프에 없으면 없다고", <span class="tag">concise|detailed</span></li>
+              <li>설계 원칙은 <span class="tag">CLAUDE.md §5</span>(Harness Engineering) 준수</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. Provider + MCP + Tools -->
+      <section>
+        <span class="kicker">③④⑤ Provider · MCP · Tools</span>
+        <h2 class="bar">모델 · MCP · 도구</h2>
+        <div class="grid cols-2">
+          <div>
+            <h3>③ Model Provider</h3>
+            <table>
+              <thead><tr><th>용도</th><th>모델</th></tr></thead>
+              <tbody>
+                <tr><td>오케스트레이션·영향도 (기본)</td><td><span class="tag">claude-opus-4-8</span></td></tr>
+                <tr><td>라우틴 질의·요약</td><td><span class="tag">claude-sonnet-4-6</span></td></tr>
+                <tr><td>대량 엔티티 추출</td><td><span class="tag">claude-haiku-4-5</span></td></tr>
+              </tbody>
+            </table>
+            <h3 style="margin-top:.7em;">④ MCP Server</h3>
+            <ul style="font-size:.64em;">
+              <li><b>Graph/KB MCP</b> — 우리 구현 (Agent A 백엔드)</li>
+              <li><b>System State MCP</b> = Agent B (외부). 계약: <span class="tag">state_get_topology</span> · <span class="tag">state_get_component</span> · <span class="tag">state_list_running</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>⑤ Tools <span class="muted" style="font-size:.7em;">— prefix로 용도 분리</span></h3>
+            <table>
+              <thead><tr><th>도구</th><th>설명</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tag">kb_graph_query</span></td><td>의존성·패턴 탐색</td></tr>
+                <tr><td><span class="tag">kb_graph_upsert</span></td><td>노드·엣지 갱신(확인)</td></tr>
+                <tr><td><span class="tag">kb_vector_search</span></td><td>자연어 의미검색</td></tr>
+                <tr><td><span class="tag">state_*</span></td><td>Agent B 상태 계약</td></tr>
+                <tr><td><span class="tag">drift_compare</span></td><td>설계 vs 관측 비교</td></tr>
+              </tbody>
+            </table>
+            <p class="muted" style="font-size:.6em; margin-top:.5em;"><span class="tag">kb_*</span> 설계 · <span class="tag">state_*</span> 실제 — 에이전트가 용도를 구분.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. Knowledge Base -->
+      <section>
+        <span class="kicker">⑥ Knowledge Base</span>
+        <h2 class="bar">그래프 데이터 모델</h2>
+        <div class="split">
+          <pre class="mermaid">
+flowchart LR
+  SVC["Service /<br/>Component"] -->|DEPENDS_ON| SVC
+  SVC -->|EXPOSES| API["API"]
+  SVC -->|STORES_IN| DS[("Datastore")]
+  SVC -->|OWNED_BY| TEAM["Team"]
+  ADR["ADR / Decision"] -->|AFFECTS| SVC
+  SVC -. DEPLOYED_AS .-> DEP["DeployedComponent<br/>(observed · Agent B)"]
+  classDef obs fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
+  class DEP obs;
+          </pre>
+          <div>
+            <p><b>Graph DB</b> <span class="muted">(예: Neo4j)</span></p>
+            <p style="font-size:.66em;">설계 노드와 <b>관측 노드(DeployedComponent)</b>를 분리 저장 → <b>drift 비교의 기반</b>.</p>
+            <p style="margin-top:.6em;"><b>Vector DB</b> <span class="muted">(예: pgvector/Qdrant)</span></p>
+            <p style="font-size:.66em;">문서 청크·노드 설명 임베딩 → 자연어 질의를 그래프 진입점으로 변환.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12. Data Pipeline -->
+      <section>
+        <span class="kicker">⑦ Data Pipeline</span>
+        <h2 class="bar">문서 → 그래프, 그리고 최신 유지</h2>
+        <pre class="mermaid">
+flowchart LR
+  DOC["기존 산출물<br/>설계서·분석서·ADR"] --> EXT["LLM 추출 (Haiku)<br/>엔티티·관계 식별"]
+  EXT --> UP["Upsert"]
+  UP --> GDB[("Graph DB")]
+  UP --> VDB[("Vector DB")]
+  B["Agent B<br/>observed state"] --> REC["Reconcile<br/>관측 → DeployedComponent 갱신"]
+  REC --> GDB
+  classDef ext fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
+  class B ext;
+        </pre>
+        <div class="grid cols-2" style="margin-top:.6em;">
+          <div class="card"><h3>인제스트 (1회·주기)</h3><p>문서 → LLM 엔티티/관계 추출 → 그래프·벡터 Upsert</p></div>
+          <div class="card"><h3>Reconcile (주기)</h3><p>Agent B 관측 상태로 <span class="tag">DeployedComponent</span> 갱신 → drift 항상 최신</p></div>
+        </div>
+      </section>
+
+      <!-- 13. Closing -->
+      <section>
+        <span class="kicker">Wrap-up</span>
+        <h2 class="bar">정리 — PoC 성공 기준 & 남은 결정</h2>
+        <div class="grid cols-2">
+          <div>
+            <h3>성공 기준</h3>
+            <ul style="font-size:.68em;">
+              <li>3개 시나리오에서 오케스트레이터가 두 에이전트를 호출·조합</li>
+              <li>Drift 리포트가 누락/추가/불일치 3범주 구분</li>
+              <li>영향도 분석이 다단계 의존성 + 실제 가동 우선순위</li>
+              <li>Agent B를 <b>모킹 계약</b>으로 대체 가능</li>
+            </ul>
+          </div>
+          <div>
+            <h3>남은 결정 (Open)</h3>
+            <ul style="font-size:.68em;">
+              <li>Graph/Vector DB 제품 선정</li>
+              <li>Front 형태(웹 챗 vs CLI)</li>
+              <li>Agent B 연계 계약 상세 스키마(외부 팀 합의)</li>
+              <li>인제스트 대상 산출물 포맷 범위</li>
+            </ul>
+          </div>
+        </div>
+        <p class="muted" style="text-align:center; margin-top:1.2em; font-size:.7em;">archiagent — 설계와 실제를 잇는 아키텍트의 에이전트 · Built on Claude Agent SDK</p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      themeVariables: {
+        fontFamily: 'Pretendard, sans-serif',
+        primaryColor: '#eef2ff',
+        primaryBorderColor: '#4f46e5',
+        primaryTextColor: '#1e293b',
+        lineColor: '#94a3b8',
+        actorBkg: '#eef2ff',
+        actorBorder: '#4f46e5',
+        actorTextColor: '#1e293b',
+        signalColor: '#475569',
+        signalTextColor: '#334155',
+      },
+    });
+
+    // Render every diagram up-front (mermaid.render measures in a visible temp node,
+    // so this works even though reveal.js hides off-screen slides).
+    const blocks = [...document.querySelectorAll('pre.mermaid')];
+    for (let i = 0; i < blocks.length; i++) {
+      const code = blocks[i].textContent.trim();
+      try {
+        const { svg } = await mermaid.render('mmd-' + i, code);
+        blocks[i].innerHTML = svg;
+      } catch (e) {
+        blocks[i].innerHTML = '<pre style="color:#dc2626">Mermaid error: ' + e.message + '</pre>';
+      }
+    }
+
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      transition: 'slide',
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+    });
+  </script>
+</body>
+</html>

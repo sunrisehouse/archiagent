@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>archiagent — 산출물 ③ 시나리오별 데모 영상</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme" />
+
+  <style>
+    :root {
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --ink: #1e293b;
+      --muted: #64748b;
+      --line: #e2e8f0;
+    }
+    .reveal { font-family: "Pretendard", system-ui, sans-serif; color: var(--ink); }
+    .reveal .slides { text-align: left; }
+    .reveal h1, .reveal h2, .reveal h3 { font-family: "Pretendard", sans-serif; color: var(--ink); text-transform: none; letter-spacing: -0.02em; font-weight: 800; }
+    .reveal h1 { font-size: 2.4em; line-height: 1.15; }
+    .reveal h2 { font-size: 1.5em; margin-bottom: .3em; }
+    .reveal p, .reveal li { font-size: .8em; line-height: 1.5; }
+    .reveal .muted { color: var(--muted); }
+    .reveal section { padding: 10px 14px; }
+    .reveal h2.bar { position: relative; padding-bottom: .3em; }
+    .reveal h2.bar::after { content: ""; position: absolute; left: 0; bottom: 0; width: 64px; height: 5px; background: var(--accent); border-radius: 3px; }
+    .reveal .kicker { display: inline-block; font-size: .62em; font-weight: 700; letter-spacing: .08em; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 999px; margin-bottom: .5em; text-transform: uppercase; }
+    .reveal table { font-size: .64em; border-collapse: collapse; width: 100%; }
+    .reveal table th { background: var(--accent); color: #fff; font-weight: 700; padding: 8px 10px; border: none; }
+    .reveal table td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .reveal table tr:nth-child(even) td { background: #f8fafc; }
+    .reveal .tag { font-family: ui-monospace, monospace; font-size: .92em; background: #f1f5f9; padding: 1px 6px; border-radius: 5px; color: var(--accent); }
+    .reveal .quote { font-size: .78em; color: var(--ink); background: #f8fafc; border-left: 4px solid var(--accent); border-radius: 8px; padding: 8px 12px; margin: .4em 0; }
+    .footer { position: fixed; bottom: 10px; left: 18px; font-size: 12px; color: var(--muted); z-index: 30; }
+    .reveal .title-wrap { text-align: center; }
+    .reveal .title-wrap .sub { font-size: .9em; color: var(--muted); margin-top: .4em; font-weight: 500; }
+    .reveal .title-wrap .meta { margin-top: 1.4em; font-size: .62em; color: var(--muted); }
+
+    /* Video placeholder */
+    .demo-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: 20px; align-items: center; }
+    .video-ph {
+      position: relative; width: 100%; aspect-ratio: 16 / 9;
+      border: 2px dashed #cbd5e1; border-radius: 16px;
+      background:
+        repeating-linear-gradient(45deg, #f8fafc, #f8fafc 14px, #f1f5f9 14px, #f1f5f9 28px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--muted); gap: 10px;
+    }
+    .video-ph .play {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: #fff; border: 2px solid var(--accent);
+      color: var(--accent); display: flex; align-items: center; justify-content: center;
+      font-size: 26px; padding-left: 6px; box-shadow: 0 4px 14px rgba(79,70,229,.18);
+    }
+    .video-ph .cap { font-weight: 700; color: var(--ink); font-size: 1.0em; }
+    .video-ph .sub { font-size: .8em; }
+    .video-ph .badge { position: absolute; top: 12px; left: 12px; font-size: .62em; font-weight: 700; color: var(--muted); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+    /* full-width variant for overview */
+    .video-ph.wide { max-width: 760px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <div class="footer">archiagent · 산출물 ③ 시나리오별 데모 영상</div>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- Title -->
+      <section>
+        <div class="title-wrap">
+          <span class="kicker">산출물 ③ · Demo</span>
+          <h1>시나리오별 데모 영상</h1>
+          <p class="sub"><strong>archiagent</strong> — 문제(P1~P4)별 시나리오를 영상으로 시연.<br/>각 시나리오의 설명과 데모 영상을 함께 제공.</p>
+          <p class="meta">※ 영상은 추후 삽입 — 현재는 <strong>플레이스홀더(빈 상자)</strong></p>
+        </div>
+      </section>
+
+      <!-- Index -->
+      <section>
+        <span class="kicker">Index</span>
+        <h2 class="bar">데모 구성</h2>
+        <table>
+          <thead><tr><th style="width:90px">데모</th><th style="width:160px">문제</th><th>시나리오</th></tr></thead>
+          <tbody>
+            <tr><td><b>Demo 1</b></td><td>P1 최신성 붕괴</td><td>설계 vs 실제 Drift 탐지</td></tr>
+            <tr><td><b>Demo 2</b></td><td>P2 추적 불가</td><td>변경 영향도 분석</td></tr>
+            <tr><td><b>Demo 3</b></td><td>P3 의도-실제 단절</td><td>의사결정 지원 (why + what)</td></tr>
+            <tr><td><b>Demo 4</b></td><td>P4 질의 불가</td><td>아키텍처 Q&amp;A / 온보딩</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top:1em; font-size:.72em;">시나리오 상세는 산출물 ① <span class="tag">01-product-brief.html</span>, 아키텍처는 ② <span class="tag">02-architecture.html</span> 참고.</p>
+      </section>
+
+      <!-- Demo 1 -->
+      <section>
+        <span class="kicker">Demo 1 · P1 최신성 붕괴</span>
+        <h2 class="bar">설계 vs 실제 Drift 탐지</h2>
+        <div class="demo-grid">
+          <div>
+            <div class="quote">"결제 도메인, 설계 대비 실제 배포 차이 알려줘"</div>
+            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
+            <ul style="font-size:.72em;">
+              <li>Agent A가 설계상 결제 토폴로지 조회</li>
+              <li>Agent B가 실제 배포 컴포넌트 조회</li>
+              <li>Drift 리포트 — <b>누락·추가·불일치</b> 3범주</li>
+            </ul>
+          </div>
+          <div class="video-ph">
+            <div class="badge">16:9 · 데모 영상</div>
+            <div class="play">▶</div>
+            <div class="cap">데모 영상 (준비 중)</div>
+            <div class="sub">Demo 1 · Drift 탐지</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Demo 2 -->
+      <section>
+        <span class="kicker">Demo 2 · P2 추적 불가</span>
+        <h2 class="bar">변경 영향도 분석</h2>
+        <div class="demo-grid">
+          <div>
+            <div class="quote">"Auth 토큰 검증 인터페이스 바꾸면 영향 범위는?"</div>
+            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
+            <ul style="font-size:.72em;">
+              <li>Agent A가 역방향 의존성(<span class="tag">DEPENDS_ON*</span>) 탐색</li>
+              <li>Agent B가 후보들의 실제 가동·트래픽 확인</li>
+              <li>"운영 중인 것 먼저" 우선순위화된 영향 목록</li>
+            </ul>
+          </div>
+          <div class="video-ph">
+            <div class="badge">16:9 · 데모 영상</div>
+            <div class="play">▶</div>
+            <div class="cap">데모 영상 (준비 중)</div>
+            <div class="sub">Demo 2 · 영향도 분석</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Demo 3 -->
+      <section>
+        <span class="kicker">Demo 3 · P3 의도-실제 단절</span>
+        <h2 class="bar">의사결정 지원 <span class="muted" style="font-size:.6em;">— why + what</span></h2>
+        <div class="demo-grid">
+          <div>
+            <div class="quote">"주문 조회가 왜 DB 직접이야? 캐시 추가해도 돼?"</div>
+            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
+            <ul style="font-size:.72em;">
+              <li>Agent A가 과거 결정(ADR-009, why) 검색</li>
+              <li>Agent B가 현재 트래픽·지연(what) 측정</li>
+              <li>전제 변화 → <b>근거 있는 재결정</b> 제시</li>
+            </ul>
+          </div>
+          <div class="video-ph">
+            <div class="badge">16:9 · 데모 영상</div>
+            <div class="play">▶</div>
+            <div class="cap">데모 영상 (준비 중)</div>
+            <div class="sub">Demo 3 · 의사결정 지원</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Demo 4 -->
+      <section>
+        <span class="kicker">Demo 4 · P4 질의 불가</span>
+        <h2 class="bar">아키텍처 Q&amp;A / 온보딩</h2>
+        <div class="demo-grid">
+          <div>
+            <div class="quote">"현재 주문 시스템 구조 설명해줘" <span class="muted">(신규 입사자)</span></div>
+            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
+            <ul style="font-size:.72em;">
+              <li>Agent A가 주문 서브그래프 + 핵심 ADR 제공</li>
+              <li>Agent B가 실제 배포 토폴로지·헬스 제공</li>
+              <li>의도(why)+실제(what) 통합 설명 + 그래프 뷰</li>
+            </ul>
+          </div>
+          <div class="video-ph">
+            <div class="badge">16:9 · 데모 영상</div>
+            <div class="play">▶</div>
+            <div class="cap">데모 영상 (준비 중)</div>
+            <div class="sub">Demo 4 · Q&amp;A / 온보딩</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({ hash: true, slideNumber: 'c/t', transition: 'slide', width: 1280, height: 720, margin: 0.04 });
+  </script>
+</body>
+</html>

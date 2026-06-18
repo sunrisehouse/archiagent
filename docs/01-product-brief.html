@@ -125,9 +125,25 @@ flowchart TB
         </div>
       </section>
 
-      <!-- Scenario 1 -->
+      <!-- Scenario mapping -->
       <section>
-        <span class="kicker">주요 기능 · 시나리오 1</span>
+        <span class="kicker">주요 기능 · 시나리오 개요</span>
+        <h2 class="bar">문제별 시나리오 매핑</h2>
+        <table>
+          <thead><tr><th style="width:150px">문제</th><th style="width:215px">시나리오</th><th>한 줄 요약</th></tr></thead>
+          <tbody>
+            <tr><td><b>P1</b> 최신성 붕괴</td><td>① 설계 vs 실제 Drift 탐지</td><td>설계서와 배포 현실의 차이를 즉시 리포트</td></tr>
+            <tr><td><b>P2</b> 추적 불가</td><td>② 변경 영향도 분석</td><td>"바꾸면 어디가 깨지나" + 실제 가동 여부로 우선순위</td></tr>
+            <tr><td><b>P3</b> 의도-실제 단절</td><td>③ 의사결정 지원</td><td>과거 결정(why) + 현재 실측(what)을 한 화면에</td></tr>
+            <tr><td><b>P4</b> 질의 불가</td><td>④ 아키텍처 Q&amp;A / 온보딩</td><td>자연어로 현재 구조를 설명</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top:1em; font-size:.72em;">각 시나리오는 <b>Agent A(설계) + Agent B(실제)</b>를 오케스트레이터가 조합해야만 풀리는, 단일 에이전트로는 불가능한 작업이다.</p>
+      </section>
+
+      <!-- Scenario 1 · P1 -->
+      <section>
+        <span class="kicker">시나리오 ① · P1 최신성 붕괴</span>
         <h2 class="bar">설계 vs 실제 Drift 탐지 <span class="muted" style="font-size:.6em;">— 연계의 핵심 가치</span></h2>
         <div class="split">
           <pre class="mermaid">
@@ -136,29 +152,30 @@ sequenceDiagram
   participant O as Orchestrator
   participant A as Agent A
   participant B as Agent B
-  U->>O: "결제 도메인 설계 대비<br/>실제 배포 차이 알려줘"
-  O->>A: 설계상 결제 토폴로지
-  A-->>O: intended 구성
-  O->>B: 실제 배포 컴포넌트
-  B-->>O: observed 상태
-  O->>O: 교차 비교 (drift)
+  U->>O: "결제 도메인 설계 대비 실제 차이?"
+  O->>A: kb_graph_query(payment 설계)
+  A-->>O: PaymentSvc→FraudCheck·LedgerSvc
+  O->>B: state_get_topology(payment)
+  B-->>O: FraudCheck 없음 · PayoutWorker 추가
+  O->>O: drift_compare()
   O-->>U: Drift 리포트
           </pre>
           <div>
-            <p><b>산출</b> — Drift 리포트</p>
+            <p><b>상황</b> <span class="muted">분기 아키텍처 리뷰. 설계서는 6개월 전 작성.</span></p>
+            <p style="margin-top:.5em;"><b>산출 — Drift 리포트(예시)</b></p>
             <ul>
-              <li><span class="pill-warn">누락</span> 설계엔 있으나 미배포</li>
-              <li><span class="pill-warn">추가</span> 배포됐으나 설계에 없음</li>
-              <li><span class="pill-warn">불일치</span> 버전·의존성 차이</li>
+              <li><span class="pill-warn">누락</span> FraudCheck — 설계O / 실제X</li>
+              <li><span class="pill-warn">추가</span> PayoutWorker — 실제O / 설계X</li>
+              <li><span class="pill-warn">불일치</span> LedgerService v1.0 → v1.1</li>
             </ul>
-            <p class="muted" style="font-size:.66em;">해소: <b>P1 최신성 · P3 의도-실제 단절</b></p>
+            <p class="muted" style="font-size:.64em;">해소: <b>P1 최신성 · P3 단절</b></p>
           </div>
         </div>
       </section>
 
-      <!-- Scenario 2 -->
+      <!-- Scenario 2 · P2 -->
       <section>
-        <span class="kicker">주요 기능 · 시나리오 2</span>
+        <span class="kicker">시나리오 ② · P2 추적 불가</span>
         <h2 class="bar">변경 영향도 분석</h2>
         <div class="split">
           <pre class="mermaid">
@@ -167,28 +184,62 @@ sequenceDiagram
   participant O as Orchestrator
   participant A as Agent A
   participant B as Agent B
-  U->>O: "Auth 인터페이스 변경 시<br/>영향 범위는?"
-  O->>A: 역방향 의존성 탐색<br/>(DEPENDS_ON*)
-  A-->>O: 영향 후보 + ADR
-  O->>B: 후보들 실제 가동·트래픽?
-  B-->>O: live / idle
-  O-->>U: 영향 범위 + 우선순위화
+  U->>O: "Auth 토큰 검증 IF 변경 영향 범위?"
+  O->>A: 역방향 DEPENDS_ON* (Auth)
+  A-->>O: Order·Payment·Notif·Admin +ADR-017
+  O->>B: state_get_component(각 서비스)
+  B-->>O: Order=live·高 · Notif=idle
+  O-->>U: 영향 범위 + 우선순위
           </pre>
           <div>
-            <p><b>핵심</b></p>
-            <ul>
-              <li>A: 그래프 <b>다단계 의존성</b> 추적</li>
-              <li>B: 후보 중 <b>실제 운영 중</b>인 것 식별</li>
-              <li>O: "운영 중인 것 먼저" 우선순위화</li>
-            </ul>
-            <p class="muted" style="font-size:.66em;">해소: <b>P2 추적 · P3 단절</b></p>
+            <p><b>상황</b> <span class="muted">Auth 토큰 포맷 변경 검토.</span></p>
+            <p style="margin-top:.4em;"><b>산출 — 영향 목록(예시)</b></p>
+            <table>
+              <thead><tr><th>서비스</th><th>실제 상태</th><th>우선순위</th></tr></thead>
+              <tbody>
+                <tr><td>OrderService</td><td>live · 高트래픽</td><td><b>높음</b></td></tr>
+                <tr><td>PaymentService</td><td>live</td><td>높음</td></tr>
+                <tr><td>AdminPortal</td><td>live · 低트래픽</td><td>중</td></tr>
+                <tr><td>NotificationSvc</td><td>idle</td><td>낮음</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
-      <!-- Scenario 3 -->
+      <!-- Scenario 3 · P3 -->
       <section>
-        <span class="kicker">주요 기능 · 시나리오 3</span>
+        <span class="kicker">시나리오 ③ · P3 의도-실제 단절</span>
+        <h2 class="bar">의사결정 지원 <span class="muted" style="font-size:.6em;">— why + what</span></h2>
+        <div class="split">
+          <pre class="mermaid">
+sequenceDiagram
+  actor U as Architect
+  participant O as Orchestrator
+  participant A as Agent A
+  participant B as Agent B
+  U->>O: "주문 조회 왜 DB 직접? 캐시 OK?"
+  O->>A: kb_vector_search(조회 캐시 결정)
+  A-->>O: ADR-009 "일관성 우선·캐시 보류"
+  O->>B: state_get_component(OrderService)
+  B-->>O: 트래픽 ×10 · P99 지연 ↑
+  O-->>U: why + what → 재결정 근거
+          </pre>
+          <div>
+            <p><b>상황</b> <span class="muted">신규 캐시 레이어 도입 논의.</span></p>
+            <p style="margin-top:.5em;"><b>산출 — 결정 컨텍스트(예시)</b></p>
+            <ul>
+              <li><b>why(과거)</b> ADR-009: 저트래픽 → 일관성 우선, 캐시 보류</li>
+              <li><b>what(현재)</b> 트래픽 10배 · P99 지연 상승</li>
+              <li><b>결론</b> 전제가 깨짐 → <b>캐시 도입 근거 충분</b>, ADR 갱신 제안</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scenario 4 · P4 -->
+      <section>
+        <span class="kicker">시나리오 ④ · P4 질의 불가</span>
         <h2 class="bar">아키텍처 Q&amp;A / 온보딩</h2>
         <div class="split">
           <pre class="mermaid">
@@ -197,21 +248,22 @@ sequenceDiagram
   participant O as Orchestrator
   participant A as Agent A
   participant B as Agent B
-  U->>O: "현재 주문 시스템<br/>구조 설명해줘"
-  O->>A: 주문 서브그래프 + ADR(why)
+  U->>O: "주문 시스템 구조 설명해줘"
+  O->>A: 주문 서브그래프 + 핵심 ADR(why)
   A-->>O: 설계 의도·구성
   O->>B: 실제 배포 토폴로지·헬스
   B-->>O: 현재 상태
-  O-->>U: 의도(why)+실제(what)<br/>통합 설명 + 그래프 뷰
+  O-->>U: 통합 설명 + 그래프 뷰
           </pre>
           <div>
-            <p><b>산출</b></p>
+            <p><b>상황</b> <span class="muted">신규 입사자 첫 주 온보딩.</span></p>
+            <p style="margin-top:.5em;"><b>산출(예시)</b></p>
             <ul>
-              <li>설계 의도(<b>why</b>) + 실제 상태(<b>what</b>) 통합</li>
-              <li>신규 입사자 온보딩을 자동화</li>
-              <li>그래프 뷰로 시각적 이해</li>
+              <li>설계 의도(<b>why</b>) + 실제 상태(<b>what</b>) 통합 설명</li>
+              <li>주문 도메인 그래프 뷰로 시각적 이해</li>
+              <li>관련 ADR · 소유 팀까지 한 번에</li>
             </ul>
-            <p class="muted" style="font-size:.66em;">해소: <b>P3 단절 · P4 질의</b></p>
+            <p class="muted" style="font-size:.64em;">해소: <b>P3 단절 · P4 질의</b></p>
           </div>
         </div>
       </section>
@@ -221,7 +273,7 @@ sequenceDiagram
         <span class="kicker">Wrap-up</span>
         <h2 class="bar">PoC 성공 기준</h2>
         <ul>
-          <li>3개 시나리오 각각에서 오케스트레이터가 두 에이전트를 호출·조합해 기대 산출 생성</li>
+          <li>4개 시나리오 각각에서 오케스트레이터가 두 에이전트를 호출·조합해 기대 산출 생성</li>
           <li>Drift 리포트가 <b>누락 / 추가 / 불일치</b> 세 범주를 구분</li>
           <li>영향도 분석이 그래프 <b>다단계 의존성</b>을 따라가고, 실제 가동 여부로 우선순위화</li>
           <li>Agent B는 <b>모킹된 System State Contract</b> 응답으로 대체 가능(외부 스택 미정 대응)</li>

@@ -189,7 +189,8 @@ sequenceDiagram
             <table>
               <thead><tr><th>도구</th><th>설명</th></tr></thead>
               <tbody>
-                <tr><td><span class="tag">kb_graph_query</span></td><td>의존성·패턴 탐색</td></tr>
+                <tr><td><span class="tag">kb_artifact_ingest</span></td><td>산출물 문서 → Artifact·엔티티 적재(확인)</td></tr>
+                <tr><td><span class="tag">kb_graph_query</span></td><td>의존성·패턴·추적성 탐색</td></tr>
                 <tr><td><span class="tag">kb_graph_upsert</span></td><td>노드·엣지 갱신(확인)</td></tr>
                 <tr><td><span class="tag">kb_vector_search</span></td><td>자연어 의미검색</td></tr>
                 <tr><td><span class="tag">state_*</span></td><td>Agent B 상태 계약</td></tr>
@@ -208,19 +209,25 @@ sequenceDiagram
         <div class="split">
           <pre class="mermaid">
 flowchart LR
-  SVC["Service /<br/>Component"] -->|DEPENDS_ON| SVC
+  RFP["Artifact<br/>(요구·분석·설계·테스트 산출물)"] -->|DERIVED_FROM| RFP
+  RFP -->|DEFINES| SVC["Service /<br/>Component"]
+  SVC -->|DEPENDS_ON| SVC
   SVC -->|EXPOSES| API["API"]
   SVC -->|STORES_IN| DS[("Datastore")]
   SVC -->|OWNED_BY| TEAM["Team"]
   ADR["ADR / Decision"] -->|AFFECTS| SVC
+  RFP -. VALIDATES .-> SVC
   SVC -. DEPLOYED_AS .-> DEP["DeployedComponent<br/>(observed · Agent B)"]
+  classDef art fill:#fef9c3,stroke:#ca8a04,color:#1e293b;
   classDef obs fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
+  class RFP art;
   class DEP obs;
           </pre>
           <div>
             <p><b>Graph DB</b> <span class="muted">(예: Neo4j)</span></p>
+            <p style="font-size:.66em;"><b>Artifact 노드</b>(산출물) — <span class="tag">phase</span>·<span class="tag">type</span> 속성으로 SI 단계 표현. <b>DERIVED_FROM</b>으로 요구→설계→테스트 <b>추적성</b> 연결, <b>DEFINES/VALIDATES</b>로 설계 엔티티와 연결.</p>
             <p style="font-size:.66em;">설계 노드와 <b>관측 노드(DeployedComponent)</b>를 분리 저장 → <b>drift 비교의 기반</b>.</p>
-            <p style="margin-top:.6em;"><b>Vector DB</b> <span class="muted">(예: pgvector/Qdrant)</span></p>
+            <p style="margin-top:.5em;"><b>Vector DB</b> <span class="muted">(예: pgvector/Qdrant)</span></p>
             <p style="font-size:.66em;">문서 청크·노드 설명 임베딩 → 자연어 질의를 그래프 진입점으로 변환.</p>
           </div>
         </div>
@@ -232,8 +239,8 @@ flowchart LR
         <h2 class="bar">문서 → 그래프, 그리고 최신 유지</h2>
         <pre class="mermaid">
 flowchart LR
-  DOC["기존 산출물<br/>설계서·분석서·ADR"] --> EXT["LLM 추출 (Haiku)<br/>엔티티·관계 식별"]
-  EXT --> UP["Upsert"]
+  DOC["SI 산출물<br/>요구·분석·설계·테스트·인수인계"] --> EXT["LLM 추출 (Haiku)<br/>Artifact·엔티티·관계 식별"]
+  EXT --> UP["Upsert<br/>Artifact 노드 + 추적성 엣지"]
   UP --> GDB[("Graph DB")]
   UP --> VDB[("Vector DB")]
   B["Agent B<br/>observed state"] --> REC["Reconcile<br/>관측 → DeployedComponent 갱신"]
@@ -242,7 +249,7 @@ flowchart LR
   class B ext;
         </pre>
         <div class="grid cols-2" style="margin-top:.6em;">
-          <div class="card"><h3>인제스트 (1회·주기)</h3><p>문서 → LLM 엔티티/관계 추출 → 그래프·벡터 Upsert</p></div>
+          <div class="card"><h3>인제스트 (<span class="tag">kb_artifact_ingest</span>)</h3><p>문서 → LLM 추출 → <b>Artifact 노드</b> + 엔티티 + <b>DERIVED_FROM/DEFINES</b> 추적성 엣지 Upsert</p></div>
           <div class="card"><h3>Reconcile (주기)</h3><p>Agent B 관측 상태로 <span class="tag">DeployedComponent</span> 갱신 → drift 항상 최신</p></div>
         </div>
       </section>

@@ -87,6 +87,7 @@
     .pipe .stage .io .g { color: var(--accent); font-weight: 700; }
     .pipe .down { font-size: .68em; color: var(--accent); font-weight: 800; padding: 1px 0 1px 10px; }
     .pipe .down span { color: var(--muted); font-weight: 500; margin-left: 6px; }
+    .reveal table td.grp { background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 1.02em; }
   </style>
 </head>
 <body>
@@ -104,7 +105,8 @@
             <span class="st">① 현황</span><span class="arr">→</span>
             <span class="st">② 문제점</span><span class="arr">→</span>
             <span class="st">③ 해결방안</span><span class="arr">→</span>
-            <span class="st">④ 실제 시나리오</span>
+            <span class="st">④ 기능</span><span class="arr">→</span>
+            <span class="st">⑤ 시나리오</span>
           </div>
           <p class="meta">Built on Claude Agent SDK</p>
         </div>
@@ -211,9 +213,34 @@ sequenceDiagram
         </div>
       </section>
 
-      <!-- ④ 시나리오 한눈에 -->
+      <!-- ④ 주요 기능 -->
       <section>
-        <span class="kicker">④ 시나리오 · 한눈에</span>
+        <span class="kicker">④ 기능 · 에이전트가 할 수 있는 것</span>
+        <h2 class="bar">주요 기능 <span class="muted" style="font-size:.6em;">— 9가지, 도구·시나리오로 연결</span></h2>
+        <table>
+          <thead><tr><th style="width:150px">기능</th><th>하는 일</th><th style="width:150px">도구</th><th style="width:90px">시나리오</th></tr></thead>
+          <tbody>
+            <tr><td class="grp" colspan="4">지식화 · 문서 ↔ 그래프</td></tr>
+            <tr><td><b>산출물 작성·갱신</b></td><td>자연어로 요구·현행·설계 초안 작성, 단계별 그래프 누적, As-Is 제약 검증·경고</td><td><span class="tag">kb_doc_generate</span></td><td>1</td></tr>
+            <tr><td><b>산출물 적재</b></td><td>기존 문서를 Artifact·엔티티·추적성으로 그래프화</td><td><span class="tag">kb_artifact_ingest</span></td><td>토대</td></tr>
+            <tr><td class="grp" colspan="4">그래프 질의 · 설계 지식</td></tr>
+            <tr><td><b>추적성 탐색</b></td><td>요구↔설계↔구축↔검증 양방향 추적</td><td><span class="tag">kb_graph_query</span></td><td>2</td></tr>
+            <tr><td><b>변경 영향도 분석</b></td><td>역방향 의존 추적 + 영향 범위·갱신 체크리스트</td><td><span class="tag">kb_graph_query</span></td><td>3</td></tr>
+            <tr><td><b>자연어 질의·설명</b></td><td>의미검색 → 그래프, 의도(why)+실제(what) 통합 설명</td><td><span class="tag">kb_vector_search</span></td><td>5</td></tr>
+            <tr><td class="grp" colspan="4">설계 ↔ 실제 교차</td></tr>
+            <tr><td><b>실제 시스템 연계</b></td><td>배포·용량·헬스 (외부 Agent B)</td><td><span class="tag">state_*</span></td><td>3·4·5</td></tr>
+            <tr><td><b>Drift 비교</b></td><td>설계 vs 실제 차이 — 누락·추가·불일치</td><td><span class="tag">drift_compare</span></td><td>4</td></tr>
+            <tr><td class="grp" colspan="4">신뢰 · UX</td></tr>
+            <tr><td><b>사람 확인 게이트</b></td><td>비가역 작업(그래프 쓰기·산출물 확정) 전 승인</td><td><span class="tag">AskUserQuestion</span></td><td>1·토대</td></tr>
+            <tr><td><b>그래프 시각화</b></td><td>서브그래프·의존성 뷰</td><td><span class="muted">Front</span></td><td>5</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top:.8em; font-size:.72em;">다음 장부터 이 기능들을 <b>시나리오로 엮어</b> 시연.</p>
+      </section>
+
+      <!-- ⑤ 시나리오 한눈에 -->
+      <section>
+        <span class="kicker">⑤ 시나리오 · 한눈에</span>
         <h2 class="bar">시나리오 한눈에 <span class="muted" style="font-size:.6em;">— 이렇게 묻고, 이런 걸 받는다</span></h2>
         <table>
           <thead><tr><th style="width:120px">시나리오</th><th style="width:130px">이런 상황에서</th><th>이렇게 물으면</th><th>이런 걸 받는다</th></tr></thead>
@@ -228,9 +255,9 @@ sequenceDiagram
         <p class="muted" style="margin-top:1em; font-size:.72em;">공통 — 모두 <b>작성하며 쌓인 그래프</b> 위에서 동작. 다음 장부터 하나씩 자세히.</p>
       </section>
 
-      <!-- ④ 시나리오 1 · 문서 작성 -->
+      <!-- ⑤ 시나리오 1 · 문서 작성 -->
       <section>
-        <span class="kicker">④ 시나리오 1 · 문서 작성</span>
+        <span class="kicker">⑤ 시나리오 1 · 문서 작성</span>
         <h2 class="bar">문서 작성 <span class="muted" style="font-size:.6em;">— 요구 → 현행 → 설계, 단계마다 그래프에 쌓으며</span></h2>
         <div class="ask">💬 "인터뷰·RFP로 요구사항 잡고 → 현행 시스템 분석하고 → ToBe는 AsIs처럼 노드 대수 유지해서 설계서까지"</div>
         <div class="pipe">
@@ -261,9 +288,9 @@ sequenceDiagram
         </div>
       </section>
 
-      <!-- ④ 시나리오 2 · 감리 추적성 -->
+      <!-- ⑤ 시나리오 2 · 감리 추적성 -->
       <section>
-        <span class="kicker">④ 시나리오 2 · 감리 대응</span>
+        <span class="kicker">⑤ 시나리오 2 · 감리 대응</span>
         <h2 class="bar">요구사항 추적성 <span class="muted" style="font-size:.6em;">— 요구 → 설계 → 구축</span></h2>
         <div class="ask">💬 "요구사항 R-12, 설계랑 구축 어디에 반영됐어?"</div>
         <div class="story">
@@ -282,9 +309,9 @@ sequenceDiagram
         </div>
       </section>
 
-      <!-- ④ 시나리오 3 · 설계 변경 영향도 -->
+      <!-- ⑤ 시나리오 3 · 설계 변경 영향도 -->
       <section>
-        <span class="kicker">④ 시나리오 3 · 설계 변경</span>
+        <span class="kicker">⑤ 시나리오 3 · 설계 변경</span>
         <h2 class="bar">설계 변경 영향도 <span class="muted" style="font-size:.6em;">— 용량 한계에서 시작</span></h2>
         <div class="ask">💬 "OrderDB 디스크가 꽉 차가는데, 샤딩 추가하면 설계 뭐부터 고쳐?"</div>
         <div class="story">
@@ -305,9 +332,9 @@ sequenceDiagram
         </div>
       </section>
 
-      <!-- ④ 시나리오 4 · Drift -->
+      <!-- ⑤ 시나리오 4 · Drift -->
       <section>
-        <span class="kicker">④ 시나리오 4 · 최신성</span>
+        <span class="kicker">⑤ 시나리오 4 · 최신성</span>
         <h2 class="bar">설계 vs 실제 Drift 탐지</h2>
         <div class="ask">💬 "결제 도메인, 설계랑 실제 배포가 얼마나 달라?"</div>
         <div class="story">
@@ -328,9 +355,9 @@ sequenceDiagram
         </div>
       </section>
 
-      <!-- ④ 시나리오 5 · Q&A -->
+      <!-- ⑤ 시나리오 5 · Q&A -->
       <section>
-        <span class="kicker">④ 시나리오 5 · 온보딩</span>
+        <span class="kicker">⑤ 시나리오 5 · 온보딩</span>
         <h2 class="bar">아키텍처 Q&amp;A / 온보딩</h2>
         <div class="ask">💬 "주문 시스템 구조 좀 설명해줘" <span class="muted" style="font-weight:500;">(신규 입사자)</span></div>
         <div class="story">
@@ -354,7 +381,7 @@ sequenceDiagram
       <section>
         <div class="title-wrap">
           <span class="kicker">Next</span>
-          <h2 class="bar center" style="display:inline-block;">현황 → 문제점 → 해결방안 → 시나리오</h2>
+          <h2 class="bar center" style="display:inline-block;">현황 → 문제점 → 해결방안 → 기능 → 시나리오</h2>
           <p class="sub" style="margin-top:1em;">산출물을 <b>문서</b>가 아닌 <b>연결된 지식 그래프</b>로 — <b>작성하는 순간</b> 그래프가 되고, 변경·탐색·감리·온보딩이 따라온다.</p>
           <p class="meta">상세 아키텍처는 산출물 ② <span class="tag">02-architecture.html</span> · 데모는 ③ <span class="tag">03-demo.html</span></p>
         </div>

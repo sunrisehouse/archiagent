@@ -41,6 +41,8 @@
     .card { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
     .card h3 { margin: 0 0 .3em; font-size: .82em; }
     .card p, .card li { font-size: .64em; margin: .2em 0; }
+    .card.warn { border-left-color: var(--warn); }
+    .card.warn h3 { color: var(--warn); }
     .mermaid { text-align: center; margin: 0 auto; }
     .mermaid svg { max-height: 440px; width: auto !important; max-width: 100%; height: auto; }
     .split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; align-items: center; }
@@ -51,15 +53,14 @@
     .reveal .title-wrap .sub { font-size: .9em; color: var(--muted); margin-top: .4em; font-weight: 500; }
     .reveal .title-wrap .meta { margin-top: 1.4em; font-size: .62em; color: var(--muted); }
     .center { text-align: center; }
-    /* Comparison table */
-    .reveal table.cmp .x { color: var(--warn); font-weight: 800; margin-right: 5px; }
-    .reveal table.cmp .o { color: var(--ok); font-weight: 800; margin-right: 5px; }
-    .reveal table.cmp td:nth-child(3) { background: #f0fdf4; }
-    .reveal table.cmp tr:nth-child(even) td:nth-child(3) { background: #eafbf0; }
     /* SI lifecycle phase strip */
     .phasestrip { display: flex; gap: 6px; align-items: center; margin: 4px 0 12px; flex-wrap: wrap; }
     .phasestrip .ph { font-size: .62em; font-weight: 700; color: var(--accent); background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 999px; padding: 4px 12px; }
     .phasestrip .arr { color: var(--muted); font-weight: 700; font-size: .7em; }
+    /* step flow on title */
+    .stepflow { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 1.2em; }
+    .stepflow .st { font-size: .6em; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 5px 14px; }
+    .stepflow .arr { color: var(--muted); align-self: center; font-size: .7em; }
   </style>
 </head>
 <body>
@@ -73,13 +74,19 @@
           <span class="kicker">산출물 ① · Product Brief</span>
           <h1>기획 의도 및 주요 기능</h1>
           <p class="sub"><strong>archiagent</strong> — 아키텍처 산출물을 <strong>문서</strong>가 아닌 <strong>살아있는 지식 그래프</strong>로.<br/>설계(의도)와 실제(배포)를 잇는 멀티 에이전트.</p>
-          <p class="meta">문제 정의 · 기획 의도 · 주요 기능(시나리오) &nbsp;|&nbsp; Built on Claude Agent SDK</p>
+          <div class="stepflow">
+            <span class="st">① 현황</span><span class="arr">→</span>
+            <span class="st">② 문제점</span><span class="arr">→</span>
+            <span class="st">③ 해결방안</span><span class="arr">→</span>
+            <span class="st">④ 실제 시나리오</span>
+          </div>
+          <p class="meta">Built on Claude Agent SDK</p>
         </div>
       </section>
 
-      <!-- SI lifecycle × architect deliverables -->
+      <!-- ① 현황 -->
       <section>
-        <span class="kicker">Context · SI 산출물</span>
+        <span class="kicker">① 현황 · SI 산출물</span>
         <h2 class="bar">SI 생애주기 × 아키텍트 산출물</h2>
         <div class="phasestrip">
           <span class="ph">분석</span><span class="arr">→</span>
@@ -98,57 +105,51 @@
             <tr><td><b>이행</b></td><td>전체 산출물</td><td>인수인계 자료</td></tr>
           </tbody>
         </table>
-        <p class="muted" style="margin-top:1em; font-size:.72em;">아키텍트는 SI 전 단계에 걸쳐 이런 문서를 만든다. archiagent는 이 산출물을 <b>그대로 지식 그래프의 입력</b>으로 삼는다 <span class="muted">(적재 과정은 뒤에서)</span>.</p>
+        <p class="muted" style="margin-top:1em; font-size:.72em;">아키텍트는 SI 전 단계에 걸쳐 이런 문서를 만든다. 그런데 이 산출물이 <b>'문서'</b>라서 — 다음 문제가 생긴다.</p>
       </section>
 
-      <!-- Problem -->
+      <!-- ② 문제점 -->
       <section>
-        <span class="kicker">Problem</span>
-        <h2 class="bar">문제 정의 — 산출물이 "문서"라서 생기는 일</h2>
-        <table>
-          <thead><tr><th style="width:60px">#</th><th style="width:160px">문제</th><th>증상</th></tr></thead>
-          <tbody>
-            <tr><td><b>P1</b></td><td>문서가 실제와 안 맞음</td><td>시스템은 계속 배포·변경되는데 문서는 갱신이 늦음 → 설계와 실제의 <b>괴리(drift)</b></td></tr>
-            <tr><td><b>P2</b></td><td>변경 영향 범위를 모름</td><td>컴포넌트 간 의존성·영향 범위를 문서에서 추적 불가. "이거 바꾸면 뭐가 깨지지?"에 답 못함</td></tr>
-            <tr><td><b>P3</b></td><td>결정 이유가 안 남음</td><td>설계 의도(why)는 문서에, 실제 운영 상태(what-is)는 인프라 콘솔에. 서로 연결 안 됨</td></tr>
-            <tr><td><b>P4</b></td><td>자연어로 못 물어봄</td><td>"현재 결제 도메인 구조 알려줘" 같은 자연어 질의·온보딩 설명을 매번 수작업</td></tr>
-          </tbody>
-        </table>
+        <span class="kicker">② 문제점</span>
+        <h2 class="bar">문서라서 — 변경·탐색에 약하다</h2>
+        <div class="grid cols-2">
+          <div class="card warn"><h3>변경 영향을 모름</h3><p>한 컴포넌트를 바꾸면 <b>어디까지 고쳐야</b> 하나? 문서엔 의존 관계가 흩어져 있어 끝까지 추적 못 함.</p></div>
+          <div class="card warn"><h3>찾기가 어려움</h3><p>"이 부분 지금 어떻게 돼 있지?" 궁금할 때마다 여러 문서를 사람이 직접 뒤져야 함.</p></div>
+          <div class="card warn"><h3>감리 추적이 안 됨</h3><p>요구사항 정의서의 항목이 <b>어느 설계서에 반영</b>되고 <b>실제로 구축</b>됐는지 — 증빙을 짚기 어렵다.</p></div>
+          <div class="card warn"><h3>설계 변경 연쇄</h3><p>개발·인프라 중 용량 한계(노드 수·디스크↑)로 <b>설계부터 바꿔야</b> 할 때, 무엇을 어디까지 고칠지 막막.</p></div>
+        </div>
         <p class="muted" style="margin-top:1em; font-size:.72em;">근본 원인 — 산출물이 <b>연결된 구조(graph)</b>가 아니라 <b>납작한 텍스트(doc)</b>로 저장되고, <b>실제 시스템 상태</b>와 분리되어 있다.</p>
       </section>
 
-      <!-- Comparison -->
+      <!-- ③ 해결방안 — 개요 -->
       <section>
-        <span class="kicker">Why archiagent</span>
-        <h2 class="bar">기존 문서 산출물 vs archiagent</h2>
-        <table class="cmp">
-          <thead><tr><th style="width:130px">관점</th><th>기존 문서 산출물 <span style="font-weight:400; opacity:.8">· Confluence·PPT·정적 다이어그램</span></th><th style="width:300px">archiagent</th></tr></thead>
-          <tbody>
-            <tr><td><b>최신성</b> <span class="muted">P1</span></td><td><span class="x">✕</span> 작성 시점에 고정 → 금방 낡음</td><td><span class="o">✓</span> 실제 배포와 대조해 <b>drift 자동 탐지</b></td></tr>
-            <tr><td><b>추적성</b> <span class="muted">P2</span></td><td><span class="x">✕</span> 납작한 텍스트, 의존성 수동 추적</td><td><span class="o">✓</span> <b>그래프 탐색</b>으로 다단계 영향 분석</td></tr>
-            <tr><td><b>의도+실제</b> <span class="muted">P3</span></td><td><span class="x">✕</span> why는 문서, what은 콘솔 — 분리</td><td><span class="o">✓</span> 두 에이전트가 <b>교차 결합</b></td></tr>
-            <tr><td><b>질의·온보딩</b> <span class="muted">P4</span></td><td><span class="x">✕</span> 사람이 매번 읽고 해석</td><td><span class="o">✓</span> <b>자연어 질의</b>로 즉시 응답</td></tr>
-          </tbody>
-        </table>
-        <p class="muted center" style="margin-top:1.1em; font-size:.74em;">문서는 한 번 찍는 <b>스냅샷</b>, archiagent는 <b>살아있고 질의 가능한 구조</b>.</p>
-      </section>
-
-      <!-- Intent -->
-      <section>
-        <span class="kicker">Intent</span>
-        <h2 class="bar">기획 의도</h2>
-        <div class="grid cols-2">
-          <div class="card"><h3>① 문서 → 지식 그래프</h3><p>컴포넌트·의존성·결정(ADR)을 노드·엣지로(Graph DB) + 자연어 의미검색(Vector DB). <span class="muted">→ P2·P4</span></p></div>
-          <div class="card"><h3>② 설계 ↔ 실제 연계</h3><p>설계를 아는 <b>Agent A</b> + 배포 상태를 아는 <b>Agent B</b>를 오케스트레이터로 묶어 "의도 vs 실제"를 교차 질의. <span class="muted">→ P1·P3</span></p></div>
-          <div class="card"><h3>③ 반복 작업 보조</h3><p>영향분석 · 현황 파악 · 온보딩 설명 같은 아키텍트의 반복 업무를 에이전트가 대신.</p></div>
-          <div class="card"><h3>④ 시나리오 중심 PoC</h3><p>완성형 제품이 아니라, 몇 가지 시나리오로 <b>에이전트 간 연계의 가치</b>를 시연.</p></div>
+        <span class="kicker">③ 해결방안</span>
+        <h2 class="bar">산출물을 살아있는 지식 그래프로</h2>
+        <div class="split">
+          <pre class="mermaid">
+flowchart TB
+  U["Architect"] --> O["Orchestrator<br/>의도 분해·라우팅·합성"]
+  O -->|subagent| A["Agent A<br/>아키텍처 지식 에이전트"]
+  O -. MCP tool .-> B["Agent B<br/>시스템 상태 에이전트"]
+  A --> KB[("Graph DB + Vector DB<br/>산출물·의존성·추적성")]
+  B --> INF["Cloud / Infra<br/>실제 배포·용량"]
+  classDef ours fill:#eef2ff,stroke:#4f46e5,stroke-width:2px,color:#1e293b;
+  classDef ext fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
+  class O,A,KB ours;
+  class B,INF ext;
+          </pre>
+          <div>
+            <div class="card" style="margin-bottom:10px;"><h3>① 문서 → 지식 그래프</h3><p>산출물을 <b>Artifact 노드</b> + 의존성·<b>추적성</b>(요구→설계→구축) 엣지로. 자연어 의미검색까지.</p></div>
+            <div class="card" style="margin-bottom:10px;"><h3>② 설계 ↔ 실제 교차</h3><p>설계를 아는 <b>Agent A</b> + 배포·용량을 아는 <b>Agent B</b>를 오케스트레이터가 묶어 "의도 vs 실제"를 교차 질의.</p></div>
+            <div class="card"><h3>③ 자연어로 질의</h3><p>변경 영향·감리 추적·현황 설명을 <b>물어보면</b> 답하는 형태로.</p></div>
+          </div>
         </div>
       </section>
 
-      <!-- Scenario 0 · 산출물 적재 -->
+      <!-- ③ 해결방안 — 적재 -->
       <section>
-        <span class="kicker">시나리오 ⓪ · 지식 그래프 구축</span>
-        <h2 class="bar">산출물 적재 <span class="muted" style="font-size:.6em;">— 문서를 그래프로</span></h2>
+        <span class="kicker">③ 해결방안 · 적재</span>
+        <h2 class="bar">산출물이 그래프가 되는 법 <span class="muted" style="font-size:.6em;">— 문서를 그래프로</span></h2>
         <div class="split">
           <pre class="mermaid">
 sequenceDiagram
@@ -167,68 +168,85 @@ sequenceDiagram
   O-->>U: "설계서 → 요구사항 추적성 연결됨"
           </pre>
           <div>
-            <p><b>상황</b> <span class="muted">설계 산출물을 지식 그래프에 적재.</span></p>
+            <p><b>핵심</b> <span class="muted">문서를 통째로 넣지 않고, 의미 단위로 쪼개 연결한다.</span></p>
             <p style="margin-top:.5em;"><b>생성되는 추적성(예시)</b></p>
             <ul>
               <li>아키텍처 설계서 <span class="muted">—DERIVED_FROM→</span> 요구사항 정의서</li>
               <li>아키텍처 설계서 <span class="muted">—DEFINES→</span> OrderService · ADR-009</li>
               <li>성능 테스트 결과서 <span class="muted">—VALIDATES→</span> OrderService</li>
             </ul>
-            <p class="muted" style="font-size:.64em;">이 추적성이 <b>P2 영향도</b>·<b>P1 drift</b> 분석의 토대가 된다.</p>
+            <p class="muted" style="font-size:.64em;">이 추적성이 아래 시나리오 전부의 토대가 된다.</p>
           </div>
         </div>
       </section>
 
-      <!-- System overview -->
+      <!-- ④ 시나리오 1 · 감리 추적성 -->
       <section>
-        <span class="kicker">System Overview</span>
-        <h2 class="bar">해법 — 두 에이전트 + 오케스트레이터</h2>
+        <span class="kicker">④ 시나리오 1 · 감리 대응</span>
+        <h2 class="bar">요구사항 추적성 <span class="muted" style="font-size:.6em;">— 요구 → 설계 → 구축</span></h2>
         <div class="split">
           <pre class="mermaid">
-flowchart TB
-  U["Architect"] --> O["Orchestrator<br/>의도 분해·라우팅·합성"]
-  O -->|subagent| A["Agent A<br/>아키텍처 지식 에이전트"]
-  O -. MCP tool .-> B["Agent B<br/>시스템 상태 에이전트"]
-  A --> KB[("Graph DB + Vector DB<br/>설계 의도·의존성·ADR")]
-  B --> INF["Cloud / Infra<br/>실제 배포 상태"]
-  classDef ours fill:#eef2ff,stroke:#4f46e5,stroke-width:2px,color:#1e293b;
-  classDef ext fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
-  class O,A,KB ours;
-  class B,INF ext;
+sequenceDiagram
+  actor U as Architect
+  participant O as Orchestrator
+  participant A as Agent A
+  participant B as Agent B
+  U->>O: "요구사항 R-12, 설계·구축 어디 반영됐나?"
+  O->>A: kb_graph_query(R-12 추적성)
+  A-->>O: R-12 →DEFINES→ 설계서§4.2 → OrderService
+  O->>B: state_get_component(OrderService)
+  B-->>O: 실제 배포됨 · live
+  O-->>U: 요구→설계→구축 추적 체인 + 검증 링크
           </pre>
           <div>
-            <table>
-              <tbody>
-                <tr><td><b>Agent A</b><br/><span class="muted">우리가 만드는 핵심</span></td><td>산출물을 Graph+Vector DB로 관리·질의·갱신</td></tr>
-                <tr><td><b>Agent B</b><br/><span class="muted">외부 팀·별도 스택</span></td><td>실제 배포 상태 조회. <b>추상 계약(MCP)</b>으로 연계, 미완성 시 <b>모킹</b></td></tr>
-                <tr><td><b>Orchestrator</b></td><td>의도 분해 → 두 에이전트 호출·조합 → 답변 합성</td></tr>
-              </tbody>
-            </table>
-            <p class="muted" style="font-size:.64em; margin-top:.8em;">단일 에이전트로는 못 푸는, <b>설계+실제</b>가 모두 필요한 작업에 집중.</p>
+            <p><b>상황</b> <span class="muted">감리 — 요구사항이 실제로 반영·구축됐는지 증빙 필요.</span></p>
+            <p style="margin-top:.5em;"><b>산출 — 추적 체인(예시)</b></p>
+            <ul>
+              <li>요구사항 정의서 <b>R-12</b> <span class="muted">(분석)</span></li>
+              <li>→ 아키텍처 설계서 <b>§4.2</b> <span class="muted">(설계 · DERIVED_FROM)</span></li>
+              <li>→ <b>OrderService</b> 구축·live <span class="muted">(Agent B 확인)</span></li>
+              <li>→ 성능 테스트 결과서 <b>VALIDATES</b> <span class="muted">(검증)</span></li>
+            </ul>
+            <p class="muted" style="font-size:.64em;">"어디에 반영됐나"를 클릭 한 번으로.</p>
           </div>
         </div>
       </section>
 
-      <!-- Scenario mapping -->
+      <!-- ④ 시나리오 2 · 설계 변경 영향도 -->
       <section>
-        <span class="kicker">주요 기능 · 시나리오 개요</span>
-        <h2 class="bar">문제별 시나리오 매핑</h2>
-        <table>
-          <thead><tr><th style="width:150px">문제</th><th style="width:215px">시나리오</th><th>한 줄 요약</th></tr></thead>
-          <tbody>
-            <tr><td><b>P1</b> 문서가 실제와 안 맞음</td><td>① 설계 vs 실제 Drift 탐지</td><td>설계서와 배포 현실의 차이를 즉시 리포트</td></tr>
-            <tr><td><b>P2</b> 변경 영향 범위를 모름</td><td>② 변경 영향도 분석</td><td>"바꾸면 어디가 깨지나" + 실제 가동 여부로 우선순위</td></tr>
-            <tr><td><b>P3</b> 결정 이유가 안 남음</td><td>③ 의사결정 지원</td><td>과거 결정(why) + 현재 실측(what)을 한 화면에</td></tr>
-            <tr><td><b>P4</b> 자연어로 못 물어봄</td><td>④ 아키텍처 Q&amp;A / 온보딩</td><td>자연어로 현재 구조를 설명</td></tr>
-          </tbody>
-        </table>
-        <p class="muted" style="margin-top:1em; font-size:.72em;">각 시나리오는 <b>Agent A(설계) + Agent B(실제)</b>를 오케스트레이터가 조합해야만 풀리는, 단일 에이전트로는 불가능한 작업이다.</p>
+        <span class="kicker">④ 시나리오 2 · 설계 변경</span>
+        <h2 class="bar">설계 변경 영향도 <span class="muted" style="font-size:.6em;">— 용량 한계에서 시작</span></h2>
+        <div class="split">
+          <pre class="mermaid">
+sequenceDiagram
+  actor U as Architect
+  participant O as Orchestrator
+  participant A as Agent A
+  participant B as Agent B
+  U->>O: "OrderDB 디스크 한계 — 샤딩 추가하면 설계 어디부터?"
+  O->>B: state_get_component(OrderDB)
+  B-->>O: 디스크 92% · 증설/샤딩 필요
+  O->>A: 역방향 DEFINES* (OrderDB 관련 설계·서비스)
+  A-->>O: 설계서§5 데이터계층 · OrderService · ADR-021
+  O-->>U: 수정 대상 설계서 + 영향 서비스 + 갱신 체크리스트
+          </pre>
+          <div>
+            <p><b>상황</b> <span class="muted">개발·인프라 중 용량 한계 → 설계부터 변경해야 함.</span></p>
+            <p style="margin-top:.5em;"><b>산출 — 변경 가이드(예시)</b></p>
+            <ul>
+              <li><b>먼저 고칠 설계</b> 아키텍처 설계서 §5 (데이터 계층)</li>
+              <li><b>영향 서비스</b> OrderService · PaymentService</li>
+              <li><b>연쇄 갱신</b> ADR-021 · 용량 산정서 · 배포 토폴로지</li>
+            </ul>
+            <p class="muted" style="font-size:.64em;">실제 용량(Agent B) + 설계 추적성(Agent A)을 합쳐야 풀린다.</p>
+          </div>
+        </div>
       </section>
 
-      <!-- Scenario 1 · P1 -->
+      <!-- ④ 시나리오 3 · Drift -->
       <section>
-        <span class="kicker">시나리오 ① · P1 문서가 실제와 안 맞음</span>
-        <h2 class="bar">설계 vs 실제 Drift 탐지 <span class="muted" style="font-size:.6em;">— 연계의 핵심 가치</span></h2>
+        <span class="kicker">④ 시나리오 3 · 최신성</span>
+        <h2 class="bar">설계 vs 실제 Drift 탐지</h2>
         <div class="split">
           <pre class="mermaid">
 sequenceDiagram
@@ -252,78 +270,14 @@ sequenceDiagram
               <li><span class="pill-warn">추가</span> PayoutWorker — 실제O / 설계X</li>
               <li><span class="pill-warn">불일치</span> LedgerService v1.0 → v1.1</li>
             </ul>
-            <p class="muted" style="font-size:.64em;">해소: <b>P1 불일치 · P3 이유 부재</b></p>
+            <p class="muted" style="font-size:.64em;">설계서와 배포 현실의 차이를 즉시 리포트.</p>
           </div>
         </div>
       </section>
 
-      <!-- Scenario 2 · P2 -->
+      <!-- ④ 시나리오 4 · Q&A -->
       <section>
-        <span class="kicker">시나리오 ② · P2 변경 영향 범위를 모름</span>
-        <h2 class="bar">변경 영향도 분석</h2>
-        <div class="split">
-          <pre class="mermaid">
-sequenceDiagram
-  actor U as Architect
-  participant O as Orchestrator
-  participant A as Agent A
-  participant B as Agent B
-  U->>O: "Auth 토큰 검증 IF 변경 영향 범위?"
-  O->>A: 역방향 DEPENDS_ON* (Auth)
-  A-->>O: Order·Payment·Notif·Admin +ADR-017
-  O->>B: state_get_component(각 서비스)
-  B-->>O: Order=live·高 · Notif=idle
-  O-->>U: 영향 범위 + 우선순위
-          </pre>
-          <div>
-            <p><b>상황</b> <span class="muted">Auth 토큰 포맷 변경 검토.</span></p>
-            <p style="margin-top:.4em;"><b>산출 — 영향 목록(예시)</b></p>
-            <table>
-              <thead><tr><th>서비스</th><th>실제 상태</th><th>우선순위</th></tr></thead>
-              <tbody>
-                <tr><td>OrderService</td><td>live · 高트래픽</td><td><b>높음</b></td></tr>
-                <tr><td>PaymentService</td><td>live</td><td>높음</td></tr>
-                <tr><td>AdminPortal</td><td>live · 低트래픽</td><td>중</td></tr>
-                <tr><td>NotificationSvc</td><td>idle</td><td>낮음</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- Scenario 3 · P3 -->
-      <section>
-        <span class="kicker">시나리오 ③ · P3 결정 이유가 안 남음</span>
-        <h2 class="bar">의사결정 지원 <span class="muted" style="font-size:.6em;">— why + what</span></h2>
-        <div class="split">
-          <pre class="mermaid">
-sequenceDiagram
-  actor U as Architect
-  participant O as Orchestrator
-  participant A as Agent A
-  participant B as Agent B
-  U->>O: "주문 조회 왜 DB 직접? 캐시 OK?"
-  O->>A: kb_vector_search(조회 캐시 결정)
-  A-->>O: ADR-009 "일관성 우선·캐시 보류"
-  O->>B: state_get_component(OrderService)
-  B-->>O: 트래픽 ×10 · P99 지연 ↑
-  O-->>U: why + what → 재결정 근거
-          </pre>
-          <div>
-            <p><b>상황</b> <span class="muted">신규 캐시 레이어 도입 논의.</span></p>
-            <p style="margin-top:.5em;"><b>산출 — 결정 컨텍스트(예시)</b></p>
-            <ul>
-              <li><b>why(과거)</b> ADR-009: 저트래픽 → 일관성 우선, 캐시 보류</li>
-              <li><b>what(현재)</b> 트래픽 10배 · P99 지연 상승</li>
-              <li><b>결론</b> 전제가 깨짐 → <b>캐시 도입 근거 충분</b>, ADR 갱신 제안</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Scenario 4 · P4 -->
-      <section>
-        <span class="kicker">시나리오 ④ · P4 자연어로 못 물어봄</span>
+        <span class="kicker">④ 시나리오 4 · 온보딩</span>
         <h2 class="bar">아키텍처 Q&amp;A / 온보딩</h2>
         <div class="split">
           <pre class="mermaid">
@@ -347,22 +301,19 @@ sequenceDiagram
               <li>주문 도메인 그래프 뷰로 시각적 이해</li>
               <li>관련 ADR · 소유 팀까지 한 번에</li>
             </ul>
-            <p class="muted" style="font-size:.64em;">해소: <b>P3 이유 부재 · P4 질의</b></p>
+            <p class="muted" style="font-size:.64em;">자연어로 현재 구조를 설명.</p>
           </div>
         </div>
       </section>
 
-      <!-- Success criteria -->
+      <!-- 닫기 -->
       <section>
-        <span class="kicker">Wrap-up</span>
-        <h2 class="bar">PoC 성공 기준</h2>
-        <ul>
-          <li>4개 시나리오 각각에서 오케스트레이터가 두 에이전트를 호출·조합해 기대 산출 생성</li>
-          <li>Drift 리포트가 <b>누락 / 추가 / 불일치</b> 세 범주를 구분</li>
-          <li>영향도 분석이 그래프 <b>다단계 의존성</b>을 따라가고, 실제 가동 여부로 우선순위화</li>
-          <li>Agent B는 <b>모킹된 System State Contract</b> 응답으로 대체 가능(외부 스택 미정 대응)</li>
-        </ul>
-        <p class="muted" style="text-align:center; margin-top:1.4em; font-size:.7em;">상세 아키텍처는 산출물 ② <span class="tag">02-architecture.html</span> 참고</p>
+        <div class="title-wrap">
+          <span class="kicker">Next</span>
+          <h2 class="bar center" style="display:inline-block;">현황 → 문제점 → 해결방안 → 시나리오</h2>
+          <p class="sub" style="margin-top:1em;">산출물을 <b>문서</b>가 아닌 <b>연결된 지식 그래프</b>로 — 변경·탐색·감리·온보딩을 한 곳에서.</p>
+          <p class="meta">상세 아키텍처는 산출물 ② <span class="tag">02-architecture.html</span> · 데모는 ③ <span class="tag">03-demo.html</span></p>
+        </div>
       </section>
 
     </div>

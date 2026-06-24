@@ -72,7 +72,7 @@
         <div class="title-wrap">
           <span class="kicker">산출물 ③ · Demo</span>
           <h1>시나리오별 데모 영상</h1>
-          <p class="sub"><strong>archiagent</strong> — 문제(P1~P4)별 시나리오를 영상으로 시연.<br/>각 시나리오의 설명과 데모 영상을 함께 제공.</p>
+          <p class="sub"><strong>archiagent</strong> — 산출물 적재부터 감리·설계변경·온보딩까지 시나리오를 영상으로 시연.<br/>각 시나리오의 설명과 데모 영상을 함께 제공.</p>
           <p class="meta">※ 영상은 추후 삽입 — 현재는 <strong>플레이스홀더(빈 상자)</strong></p>
         </div>
       </section>
@@ -82,13 +82,13 @@
         <span class="kicker">Index</span>
         <h2 class="bar">데모 구성</h2>
         <table>
-          <thead><tr><th style="width:90px">데모</th><th style="width:160px">문제 / 토대</th><th>시나리오</th></tr></thead>
+          <thead><tr><th style="width:90px">데모</th><th style="width:150px">구분</th><th>시나리오</th></tr></thead>
           <tbody>
-            <tr><td><b>Demo 0</b></td><td>지식 그래프 구축</td><td>SI 산출물 → Artifact 노드 적재 + 추적성</td></tr>
-            <tr><td><b>Demo 1</b></td><td>P1 문서가 실제와 안 맞음</td><td>설계 vs 실제 Drift 탐지</td></tr>
-            <tr><td><b>Demo 2</b></td><td>P2 변경 영향 범위를 모름</td><td>변경 영향도 분석</td></tr>
-            <tr><td><b>Demo 3</b></td><td>P3 결정 이유가 안 남음</td><td>의사결정 지원 (why + what)</td></tr>
-            <tr><td><b>Demo 4</b></td><td>P4 자연어로 못 물어봄</td><td>아키텍처 Q&amp;A / 온보딩</td></tr>
+            <tr><td><b>Demo 0</b></td><td>해결방안 · 적재</td><td>SI 산출물 → Artifact 노드 적재 + 추적성</td></tr>
+            <tr><td><b>Demo 1</b></td><td>감리 대응</td><td>요구사항 추적성 (요구→설계→구축)</td></tr>
+            <tr><td><b>Demo 2</b></td><td>설계 변경</td><td>설계 변경 영향도 (용량 한계 → 설계부터)</td></tr>
+            <tr><td><b>Demo 3</b></td><td>최신성</td><td>설계 vs 실제 Drift 탐지</td></tr>
+            <tr><td><b>Demo 4</b></td><td>온보딩</td><td>아키텍처 Q&amp;A / 온보딩</td></tr>
           </tbody>
         </table>
         <p class="muted" style="margin-top:1em; font-size:.72em;">시나리오 상세는 산출물 ① <span class="tag">01-product-brief.html</span>, 아키텍처는 ② <span class="tag">02-architecture.html</span> 참고.</p>
@@ -117,9 +117,55 @@
         </div>
       </section>
 
-      <!-- Demo 1 -->
+      <!-- Demo 1 · 감리 추적성 -->
       <section>
-        <span class="kicker">Demo 1 · P1 문서가 실제와 안 맞음</span>
+        <span class="kicker">Demo 1 · 감리 대응</span>
+        <h2 class="bar">요구사항 추적성 <span class="muted" style="font-size:.6em;">— 요구 → 설계 → 구축</span></h2>
+        <div class="demo-grid">
+          <div>
+            <div class="quote">"요구사항 R-12, 설계·구축 어디에 반영됐어?"</div>
+            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
+            <ul style="font-size:.72em;">
+              <li>Agent A가 추적성 탐색 — R-12 →DEFINES→ 설계서 §4.2 → OrderService</li>
+              <li>Agent B가 OrderService <b>실제 구축·live</b> 확인</li>
+              <li>요구→설계→구축→검증 <b>추적 체인</b>을 감리 증빙으로 제시</li>
+            </ul>
+          </div>
+          <div class="video-ph">
+            <div class="badge">16:9 · 데모 영상</div>
+            <div class="play">▶</div>
+            <div class="cap">데모 영상 (준비 중)</div>
+            <div class="sub">Demo 1 · 감리 추적성</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Demo 2 · 설계 변경 영향도 -->
+      <section>
+        <span class="kicker">Demo 2 · 설계 변경</span>
+        <h2 class="bar">설계 변경 영향도 <span class="muted" style="font-size:.6em;">— 용량 한계에서 시작</span></h2>
+        <div class="demo-grid">
+          <div>
+            <div class="quote">"OrderDB 디스크 한계 — 샤딩 추가하면 설계 어디부터 바꿔?"</div>
+            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
+            <ul style="font-size:.72em;">
+              <li>Agent B가 실제 용량 확인 — 디스크 92% · 샤딩 필요</li>
+              <li>Agent A가 역방향 추적(<span class="tag">DEFINES*</span>) — 수정 대상 설계서·서비스</li>
+              <li><b>먼저 고칠 설계 + 영향 서비스 + 연쇄 갱신 체크리스트</b></li>
+            </ul>
+          </div>
+          <div class="video-ph">
+            <div class="badge">16:9 · 데모 영상</div>
+            <div class="play">▶</div>
+            <div class="cap">데모 영상 (준비 중)</div>
+            <div class="sub">Demo 2 · 설계 변경 영향도</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Demo 3 · Drift -->
+      <section>
+        <span class="kicker">Demo 3 · 최신성</span>
         <h2 class="bar">설계 vs 실제 Drift 탐지</h2>
         <div class="demo-grid">
           <div>
@@ -135,60 +181,14 @@
             <div class="badge">16:9 · 데모 영상</div>
             <div class="play">▶</div>
             <div class="cap">데모 영상 (준비 중)</div>
-            <div class="sub">Demo 1 · Drift 탐지</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Demo 2 -->
-      <section>
-        <span class="kicker">Demo 2 · P2 변경 영향 범위를 모름</span>
-        <h2 class="bar">변경 영향도 분석</h2>
-        <div class="demo-grid">
-          <div>
-            <div class="quote">"Auth 토큰 검증 인터페이스 바꾸면 영향 범위는?"</div>
-            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
-            <ul style="font-size:.72em;">
-              <li>Agent A가 역방향 의존성(<span class="tag">DEPENDS_ON*</span>) 탐색</li>
-              <li>Agent B가 후보들의 실제 가동·트래픽 확인</li>
-              <li>"운영 중인 것 먼저" 우선순위화된 영향 목록</li>
-            </ul>
-          </div>
-          <div class="video-ph">
-            <div class="badge">16:9 · 데모 영상</div>
-            <div class="play">▶</div>
-            <div class="cap">데모 영상 (준비 중)</div>
-            <div class="sub">Demo 2 · 영향도 분석</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Demo 3 -->
-      <section>
-        <span class="kicker">Demo 3 · P3 결정 이유가 안 남음</span>
-        <h2 class="bar">의사결정 지원 <span class="muted" style="font-size:.6em;">— why + what</span></h2>
-        <div class="demo-grid">
-          <div>
-            <div class="quote">"주문 조회가 왜 DB 직접이야? 캐시 추가해도 돼?"</div>
-            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
-            <ul style="font-size:.72em;">
-              <li>Agent A가 과거 결정(ADR-009, why) 검색</li>
-              <li>Agent B가 현재 트래픽·지연(what) 측정</li>
-              <li>전제 변화 → <b>근거 있는 재결정</b> 제시</li>
-            </ul>
-          </div>
-          <div class="video-ph">
-            <div class="badge">16:9 · 데모 영상</div>
-            <div class="play">▶</div>
-            <div class="cap">데모 영상 (준비 중)</div>
-            <div class="sub">Demo 3 · 의사결정 지원</div>
+            <div class="sub">Demo 3 · Drift 탐지</div>
           </div>
         </div>
       </section>
 
       <!-- Demo 4 -->
       <section>
-        <span class="kicker">Demo 4 · P4 자연어로 못 물어봄</span>
+        <span class="kicker">Demo 4 · 온보딩</span>
         <h2 class="bar">아키텍처 Q&amp;A / 온보딩</h2>
         <div class="demo-grid">
           <div>

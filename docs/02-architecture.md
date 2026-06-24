@@ -8,7 +8,7 @@
 ## 1. 타이틀
 
 - **목차 제목:** 산출물 ② · Architecture
-- **거버닝 메시지:** archiagent — Claude Agent SDK 기반 멀티 에이전트 구성. Front · Runtime · Model · MCP · Tools · Knowledge Base · Pipeline.
+- **거버닝 메시지:** archiagent는 Claude Agent SDK 기반의 멀티 에이전트로 구성한다. Front와 Runtime, Model, MCP, Tools, Knowledge Base, Pipeline으로 이루어진다.
 - **내부 컨텐츠:**
   - 제목: **아키텍처 구성도**
   - 메모: Agent B(시스템 상태)는 외부 팀·별도 스택 → **MCP 연계 계약**으로 추상화
@@ -16,7 +16,7 @@
 ## 2. 전체 구성
 
 - **목차 제목:** Overview
-- **거버닝 메시지:** Chat UI → Orchestrator → (Agent A subagent · Agent B MCP tool) → Graph/Vector DB, 외부 관측 상태는 Reconcile로 동기화하는 전체 흐름.
+- **거버닝 메시지:** Chat UI가 Orchestrator를 호출하고, Orchestrator가 Agent A(subagent)와 Agent B(MCP tool)를 묶어 Graph DB와 Vector DB를 다루며, 외부 관측 상태는 Reconcile로 동기화한다.
 - **내부 컨텐츠:**
   - > 다이어그램: 7개 묶음으로 구성
   - ① Front — Chat UI · 그래프 뷰어 · 설계·실제 차이 리포트
@@ -30,7 +30,7 @@
 ## 3. ① Front — Front 구성
 
 - **목차 제목:** ① Front
-- **거버닝 메시지:** Front는 **표현만**. 모든 추론·조합은 Runtime이 담당.
+- **거버닝 메시지:** Front는 표현만 맡는다. 모든 추론과 조합은 Runtime이 담당한다.
 - **내부 컨텐츠:** (카드)
   - **대화 뷰** — 아키텍트의 자연어 질의 입력 / 답변 출력. PoC에선 웹 챗 또는 CLI로 충분.
   - **그래프 뷰** — Agent A의 서브그래프 시각화 (컴포넌트·의존성 관계)
@@ -40,7 +40,7 @@
 ## 4. ② Agent Runtime — Orchestration · Instruction
 
 - **목차 제목:** ② Agent Runtime
-- **거버닝 메시지:** Orchestrator가 의도를 분해·라우팅하고, 설계는 Agent A·실제는 Agent B에서 받아 비교·합성한다.
+- **거버닝 메시지:** Orchestrator가 의도를 분해하고 라우팅하며, 설계는 Agent A에서 받고 실제는 Agent B에서 받아 비교하고 합성한다.
 - **내부 컨텐츠:**
   - **Orchestration 부문:**
     - SDK `query()` 루프 진입점
@@ -57,7 +57,7 @@
 ## 5. ③④⑤ Provider · MCP · Tools — 모델 · MCP · 도구
 
 - **목차 제목:** ③④⑤ Provider · MCP · Tools
-- **거버닝 메시지:** `kb_*`는 설계 · `state_*`는 실제 — 모델·MCP·도구를 용도로 분리하고 에이전트가 구분한다.
+- **거버닝 메시지:** `kb_*`는 설계를 다루고 `state_*`는 실제를 다루며, 모델과 MCP와 도구를 용도별로 분리하고 에이전트가 구분한다.
 - **내부 컨텐츠:**
   - **③ Model Provider** (용도 | 모델):
     - 오케스트레이션·영향도(기본) | `claude-opus-4-8`
@@ -78,7 +78,7 @@
 ## 6. ⑥ Knowledge Base — 그래프 데이터 모델
 
 - **목차 제목:** ⑥ Knowledge Base
-- **거버닝 메시지:** 설계 노드와 관측 노드(DeployedComponent)를 분리 저장 → 설계·실제 차이 비교의 기반.
+- **거버닝 메시지:** 설계 노드와 관측 노드인 DeployedComponent를 분리해서 저장하고, 이것이 설계와 실제의 차이 비교의 기반이 된다.
 - **내부 컨텐츠:**
   - > 다이어그램: Artifact(요구·분석·설계·테스트) —DERIVED_FROM→ Artifact / —DEFINES→ Service·Component(DEPENDS_ON, EXPOSES API, STORES_IN Datastore, OWNED_BY Team) / ADR·Decision —AFFECTS→ Service / Artifact -.VALIDATES.-> Service / Service -.DEPLOYED_AS.-> DeployedComponent(observed · Agent B)
   - **Graph DB** (예: Neo4j): Artifact 노드는 `phase`·`type` 속성으로 SI 단계 표현. DERIVED_FROM으로 요구→설계→테스트 추적성, DEFINES/VALIDATES로 설계 엔티티 연결. 설계 노드와 관측 노드(DeployedComponent) 분리 저장 → 설계·실제 차이 비교 기반.
@@ -87,7 +87,7 @@
 ## 7. ⑦ Data Pipeline — 작성·적재 → 그래프, 그리고 최신 유지
 
 - **목차 제목:** ⑦ Data Pipeline
-- **거버닝 메시지:** 작성·적재로 Artifact·추적성을 채우고, Agent B 관측을 Reconcile해 Graph/Vector DB를 항상 최신으로 유지.
+- **거버닝 메시지:** 작성과 적재로 Artifact와 추적성을 채우고, Agent B의 관측을 Reconcile해서 Graph DB와 Vector DB를 항상 최신으로 유지한다.
 - **내부 컨텐츠:**
   - > 다이어그램: 대화·인터뷰 → 초안(kb_doc_generate) →승인→ Upsert / 기존 SI 산출물 → LLM 추출(Haiku) → Upsert(Artifact 노드 + 추적성 엣지) → Graph/Vector DB / Agent B observed → Reconcile(DeployedComponent 갱신) → Graph DB
   - **작성·적재** (`kb_doc_generate` · `kb_artifact_ingest`): 작성 — 대화·인터뷰→초안→승인 후 Upsert. 적재 — 기존 문서→LLM 추출→Artifact+추적성 Upsert.
@@ -96,7 +96,7 @@
 ## 8. Open Questions — 남은 결정
 
 - **목차 제목:** Open
-- **거버닝 메시지:** 기획 의도·시나리오는 산출물 ① `01-product-brief.html` 참고.
+- **거버닝 메시지:** 기획 의도와 시나리오는 산출물 ① `01-product-brief.html`을 참고한다.
 - **내부 컨텐츠:**
   - Graph DB / Vector DB 제품 선정 (Neo4j vs 대안, pgvector vs Qdrant)
   - Front 형태(웹 챗 vs CLI) 확정

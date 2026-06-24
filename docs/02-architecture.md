@@ -19,7 +19,7 @@
 - **거버닝 메시지:** Chat UI → Orchestrator → (Agent A subagent · Agent B MCP tool) → Graph/Vector DB, 외부 관측 상태는 Reconcile로 동기화하는 전체 흐름.
 - **내부 컨텐츠:**
   - > 다이어그램: 7개 묶음으로 구성
-  - ① Front — Chat UI · 그래프 뷰어 · Drift 리포트
+  - ① Front — Chat UI · 그래프 뷰어 · 설계·실제 차이 리포트
   - ② Agent Runtime (Claude Agent SDK) — Orchestrator Agent + Agent A(subagent)
   - ③ Model Provider — Anthropic Claude (Opus 4.8 / Sonnet 4.6 / Haiku 4.5)
   - ④ MCP Servers — Graph/KB MCP(내부) · System State MCP = Agent B(외부)
@@ -34,7 +34,7 @@
 - **내부 컨텐츠:** (카드)
   - **대화 뷰** — 아키텍트의 자연어 질의 입력 / 답변 출력. PoC에선 웹 챗 또는 CLI로 충분.
   - **그래프 뷰** — Agent A의 서브그래프 시각화 (컴포넌트·의존성 관계)
-  - **Drift 리포트 뷰** — 설계 vs 실제 비교 결과 (추가/누락/불일치)
+  - **설계·실제 차이 리포트 뷰** — 설계 vs 실제 비교 결과 (추가/누락/불일치)
   - **책임 분리** — Front는 표현만, 추론·조합은 Runtime
 
 ## 4. ② Agent Runtime — Orchestration · Instruction
@@ -44,7 +44,7 @@
 - **내부 컨텐츠:**
   - **Orchestration 부문:**
     - SDK `query()` 루프 진입점
-    - 의도 분해 → 시나리오 라우팅(drift/영향도/Q&A)
+    - 의도 분해 → 시나리오 라우팅(설계·실제 차이/영향도/Q&A)
     - Agent A = subagent, Agent B = MCP tool
     - 정지 조건: 최대 반복 · 실패 시 graceful degrade
     - 비가역 작업(그래프 쓰기)은 `AskUserQuestion` 확인
@@ -78,10 +78,10 @@
 ## 6. ⑥ Knowledge Base — 그래프 데이터 모델
 
 - **목차 제목:** ⑥ Knowledge Base
-- **거버닝 메시지:** 설계 노드와 관측 노드(DeployedComponent)를 분리 저장 → drift 비교의 기반.
+- **거버닝 메시지:** 설계 노드와 관측 노드(DeployedComponent)를 분리 저장 → 설계·실제 차이 비교의 기반.
 - **내부 컨텐츠:**
   - > 다이어그램: Artifact(요구·분석·설계·테스트) —DERIVED_FROM→ Artifact / —DEFINES→ Service·Component(DEPENDS_ON, EXPOSES API, STORES_IN Datastore, OWNED_BY Team) / ADR·Decision —AFFECTS→ Service / Artifact -.VALIDATES.-> Service / Service -.DEPLOYED_AS.-> DeployedComponent(observed · Agent B)
-  - **Graph DB** (예: Neo4j): Artifact 노드는 `phase`·`type` 속성으로 SI 단계 표현. DERIVED_FROM으로 요구→설계→테스트 추적성, DEFINES/VALIDATES로 설계 엔티티 연결. 설계 노드와 관측 노드(DeployedComponent) 분리 저장 → drift 비교 기반.
+  - **Graph DB** (예: Neo4j): Artifact 노드는 `phase`·`type` 속성으로 SI 단계 표현. DERIVED_FROM으로 요구→설계→테스트 추적성, DEFINES/VALIDATES로 설계 엔티티 연결. 설계 노드와 관측 노드(DeployedComponent) 분리 저장 → 설계·실제 차이 비교 기반.
   - **Vector DB** (예: pgvector/Qdrant): 문서 청크·노드 설명 임베딩 → 자연어 질의를 그래프 진입점으로 변환.
 
 ## 7. ⑦ Data Pipeline — 작성·적재 → 그래프, 그리고 최신 유지
@@ -91,7 +91,7 @@
 - **내부 컨텐츠:**
   - > 다이어그램: 대화·인터뷰 → 초안(kb_doc_generate) →승인→ Upsert / 기존 SI 산출물 → LLM 추출(Haiku) → Upsert(Artifact 노드 + 추적성 엣지) → Graph/Vector DB / Agent B observed → Reconcile(DeployedComponent 갱신) → Graph DB
   - **작성·적재** (`kb_doc_generate` · `kb_artifact_ingest`): 작성 — 대화·인터뷰→초안→승인 후 Upsert. 적재 — 기존 문서→LLM 추출→Artifact+추적성 Upsert.
-  - **Reconcile(주기):** Agent B 관측 상태로 `DeployedComponent` 갱신 → drift 항상 최신.
+  - **Reconcile(주기):** Agent B 관측 상태로 `DeployedComponent` 갱신 → 설계·실제 차이 항상 최신.
 
 ## 8. Open Questions — 남은 결정
 

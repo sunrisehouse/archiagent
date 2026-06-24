@@ -143,6 +143,7 @@ flowchart TB
               <ul>
                 <li><b>Orchestrator:</b> 역할·라우팅 휴리스틱·"설계는 A, 실제는 B"</li>
                 <li><b>Agent A:</b> 그래프 모델·질의 패턴, "없으면 없다고", <span class="tag">concise|detailed</span></li>
+                <li><b>작성:</b> As-Is 그래프 제약(노드 대수·용량) 읽어 ToBe 초안·<b>충돌 경고</b></li>
               </ul>
             </div>
           </div>
@@ -190,7 +191,7 @@ sequenceDiagram
               <thead><tr><th>도구</th><th>설명</th></tr></thead>
               <tbody>
                 <tr><td><span class="tag">kb_artifact_ingest</span></td><td>산출물 문서 → Artifact·엔티티 적재(확인)</td></tr>
-                <tr><td><span class="tag">kb_doc_generate</span></td><td>그래프 → 산출물 문서 초안 생성</td></tr>
+                <tr><td><span class="tag">kb_doc_generate</span></td><td>그래프·대화 맥락 → 산출물 초안(작성·갱신)</td></tr>
                 <tr><td><span class="tag">kb_graph_query</span></td><td>의존성·패턴·추적성 탐색</td></tr>
                 <tr><td><span class="tag">kb_graph_upsert</span></td><td>노드·엣지 갱신(확인)</td></tr>
                 <tr><td><span class="tag">kb_vector_search</span></td><td>자연어 의미검색</td></tr>
@@ -237,10 +238,12 @@ flowchart LR
       <!-- Data Pipeline -->
       <section>
         <span class="kicker">⑦ Data Pipeline</span>
-        <h2 class="bar">문서 → 그래프, 그리고 최신 유지</h2>
+        <h2 class="bar">작성·적재 → 그래프, 그리고 최신 유지</h2>
         <pre class="mermaid">
 flowchart LR
-  DOC["SI 산출물<br/>요구·분석·설계·테스트·인수인계"] --> EXT["LLM 추출 (Haiku)<br/>Artifact·엔티티·관계 식별"]
+  CHAT["대화·인터뷰"] --> DRAFT["초안 (kb_doc_generate)<br/>작성·갱신"]
+  DRAFT -->|승인| UP
+  DOC["기존 SI 산출물<br/>요구·분석·설계·테스트·인수인계"] --> EXT["LLM 추출 (Haiku)<br/>Artifact·엔티티·관계 식별"]
   EXT --> UP["Upsert<br/>Artifact 노드 + 추적성 엣지"]
   UP --> GDB[("Graph DB")]
   UP --> VDB[("Vector DB")]
@@ -250,7 +253,7 @@ flowchart LR
   class B ext;
         </pre>
         <div class="grid cols-2" style="margin-top:.6em;">
-          <div class="card"><h3>인제스트 (<span class="tag">kb_artifact_ingest</span>)</h3><p>문서 → LLM 추출 → <b>Artifact 노드</b> + 엔티티 + <b>DERIVED_FROM/DEFINES</b> 추적성 엣지 Upsert</p></div>
+          <div class="card"><h3>작성·적재 (<span class="tag">kb_doc_generate</span> · <span class="tag">kb_artifact_ingest</span>)</h3><p><b>작성</b>: 대화·인터뷰 → 초안 → 승인 후 Upsert. <b>적재</b>: 기존 문서 → LLM 추출 → <b>Artifact</b>+추적성 Upsert</p></div>
           <div class="card"><h3>Reconcile (주기)</h3><p>Agent B 관측 상태로 <span class="tag">DeployedComponent</span> 갱신 → drift 항상 최신</p></div>
         </div>
       </section>

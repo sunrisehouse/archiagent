@@ -50,12 +50,6 @@
     .reveal .title-wrap { text-align: center; }
     .reveal .title-wrap .sub { font-size: .9em; color: var(--muted); margin-top: .4em; font-weight: 500; }
     .reveal .title-wrap .meta { margin-top: 1.4em; font-size: .62em; color: var(--muted); }
-    /* Real-case story */
-    .story { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-    .scene { display: grid; grid-template-columns: 54px 1fr 92px; gap: 12px; align-items: center; background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 9px 13px; }
-    .scene .time { font-family: ui-monospace, monospace; font-weight: 700; color: var(--accent); font-size: .68em; }
-    .scene .body { font-size: .66em; line-height: 1.45; }
-    .scene .ptag { justify-self: end; font-size: .58em; font-weight: 700; color: var(--warn); background: #fef2f2; border: 1px solid #fecaca; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
     .center { text-align: center; }
     /* Comparison table */
     .reveal table.cmp .x { color: var(--warn); font-weight: 800; margin-right: 5px; }
@@ -83,34 +77,28 @@
         </div>
       </section>
 
-      <!-- Real case · 금융권 아키텍트 -->
+      <!-- SI lifecycle × architect deliverables -->
       <section>
-        <span class="kicker">Real Case · 금융권 아키텍트</span>
-        <h2 class="bar">어느 은행 결제팀 아키텍트의 하루</h2>
-        <p class="muted" style="font-size:.72em; margin-top:-.2em;">분기 아키텍처 리뷰와 감사(audit) 대응이 겹친 날. 모든 답을 결국 <b>"문서"</b>에서 찾아야 한다.</p>
-        <div class="story">
-          <div class="scene">
-            <div class="time">09:00</div>
-            <div class="body"><b>분기 리뷰 준비</b> — 6개월 전 결제 설계서를 연다. 그림엔 <b>FraudCheck(이상거래 탐지)</b>가 있는데, 지금도 운영에 살아있는지 확신이 없다. <span class="muted">"이 그림, 지금도 맞나?"</span></div>
-            <div class="ptag">P1 불일치</div>
-          </div>
-          <div class="scene">
-            <div class="time">11:00</div>
-            <div class="body"><b>규제 대응 변경</b> — "Auth 토큰 포맷을 바꾸면 어디가 깨지죠?" 결제·정산까지 영향이 갈 텐데, 문서로는 의존 서비스를 끝까지 추적할 수 없다.</div>
-            <div class="ptag">P2 영향범위</div>
-          </div>
-          <div class="scene">
-            <div class="time">14:00</div>
-            <div class="body"><b>성능 개선 논의</b> — "주문/거래 조회는 예전에 왜 DB 직접으로 정했더라?" 그 결정의 이유(ADR)가 어디 적혔는지 아무도 모른다.</div>
-            <div class="ptag">P3 이유 부재</div>
-          </div>
-          <div class="scene">
-            <div class="time">17:00</div>
-            <div class="body"><b>신규 입사자 온보딩</b> — "결제 시스템 구조 좀 설명해 주세요." 매번 사람이 문서를 읽고 구두로 설명한다.</div>
-            <div class="ptag">P4 질의</div>
-          </div>
+        <span class="kicker">Context · SI 산출물</span>
+        <h2 class="bar">SI 생애주기 × 아키텍트 산출물</h2>
+        <div class="phasestrip">
+          <span class="ph">분석</span><span class="arr">→</span>
+          <span class="ph">설계</span><span class="arr">→</span>
+          <span class="ph">개발</span><span class="arr">→</span>
+          <span class="ph">테스트</span><span class="arr">→</span>
+          <span class="ph">이행</span>
         </div>
-        <p class="muted center" style="margin-top:14px; font-size:.78em;">하루 종일 막히는 진짜 이유 — 산출물이 <b>'문서'</b>라서.</p>
+        <table>
+          <thead><tr><th style="width:80px">단계</th><th style="width:170px">입력</th><th>아키텍트가 만드는 산출물(문서)</th></tr></thead>
+          <tbody>
+            <tr><td><b>분석</b></td><td>고객 인터뷰 · RFP</td><td>요구사항 정의서 · 현행 시스템 분석서</td></tr>
+            <tr><td><b>설계</b></td><td>분석 산출물</td><td>아키텍처 정의서 · 아키텍처 설계서 <span class="muted">(활동: 개발 인프라 구성)</span></td></tr>
+            <tr><td><b>개발</b></td><td>설계서</td><td><span class="muted">문서 산출물 없음 — 개발자 지원 · 설계 준수 점검</span></td></tr>
+            <tr><td><b>테스트</b></td><td>구현체</td><td>가용성 테스트 결과서 · 성능 테스트 결과서</td></tr>
+            <tr><td><b>이행</b></td><td>전체 산출물</td><td>인수인계 자료</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top:1em; font-size:.72em;">아키텍트는 SI 전 단계에 걸쳐 이런 문서를 만든다. archiagent는 이 산출물을 <b>그대로 지식 그래프의 입력</b>으로 삼는다 <span class="muted">(적재 과정은 뒤에서)</span>.</p>
       </section>
 
       <!-- Problem -->
@@ -155,30 +143,6 @@
           <div class="card"><h3>③ 반복 작업 보조</h3><p>영향분석 · 현황 파악 · 온보딩 설명 같은 아키텍트의 반복 업무를 에이전트가 대신.</p></div>
           <div class="card"><h3>④ 시나리오 중심 PoC</h3><p>완성형 제품이 아니라, 몇 가지 시나리오로 <b>에이전트 간 연계의 가치</b>를 시연.</p></div>
         </div>
-      </section>
-
-      <!-- SI lifecycle × architect deliverables -->
-      <section>
-        <span class="kicker">Input · SI 산출물</span>
-        <h2 class="bar">SI 생애주기 × 아키텍트 산출물</h2>
-        <div class="phasestrip">
-          <span class="ph">분석</span><span class="arr">→</span>
-          <span class="ph">설계</span><span class="arr">→</span>
-          <span class="ph">개발</span><span class="arr">→</span>
-          <span class="ph">테스트</span><span class="arr">→</span>
-          <span class="ph">이행</span>
-        </div>
-        <table>
-          <thead><tr><th style="width:80px">단계</th><th style="width:170px">입력</th><th>아키텍트 산출물 <span style="font-weight:400; opacity:.85">→ 지식 그래프의 입력</span></th></tr></thead>
-          <tbody>
-            <tr><td><b>분석</b></td><td>고객 인터뷰 · RFP</td><td>요구사항 정의서 · 현행 시스템 분석서</td></tr>
-            <tr><td><b>설계</b></td><td>분석 산출물</td><td>아키텍처 정의서 · 아키텍처 설계서 <span class="muted">(활동: 개발 인프라 구성)</span></td></tr>
-            <tr><td><b>개발</b></td><td>설계서</td><td><span class="muted">문서 산출물 없음 — 개발자 지원 · 설계 준수 점검</span></td></tr>
-            <tr><td><b>테스트</b></td><td>구현체</td><td>가용성 테스트 결과서 · 성능 테스트 결과서</td></tr>
-            <tr><td><b>이행</b></td><td>전체 산출물</td><td>인수인계 자료</td></tr>
-          </tbody>
-        </table>
-        <p class="muted" style="margin-top:1em; font-size:.72em;">이 산출물들이 곧 <b>지식 그래프의 입력</b> — 각 문서를 <b>Artifact 노드</b>로 적재하고 <b>요구→설계→테스트</b> 추적성으로 잇는다.</p>
       </section>
 
       <!-- Scenario 0 · 산출물 적재 -->

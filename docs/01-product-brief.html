@@ -50,6 +50,18 @@
     .reveal .title-wrap { text-align: center; }
     .reveal .title-wrap .sub { font-size: .9em; color: var(--muted); margin-top: .4em; font-weight: 500; }
     .reveal .title-wrap .meta { margin-top: 1.4em; font-size: .62em; color: var(--muted); }
+    /* Real-case story */
+    .story { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .scene { display: grid; grid-template-columns: 54px 1fr 92px; gap: 12px; align-items: center; background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 9px 13px; }
+    .scene .time { font-family: ui-monospace, monospace; font-weight: 700; color: var(--accent); font-size: .68em; }
+    .scene .body { font-size: .66em; line-height: 1.45; }
+    .scene .ptag { justify-self: end; font-size: .58em; font-weight: 700; color: var(--warn); background: #fef2f2; border: 1px solid #fecaca; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+    .center { text-align: center; }
+    /* Comparison table */
+    .reveal table.cmp .x { color: var(--warn); font-weight: 800; margin-right: 5px; }
+    .reveal table.cmp .o { color: var(--ok); font-weight: 800; margin-right: 5px; }
+    .reveal table.cmp td:nth-child(3) { background: #f0fdf4; }
+    .reveal table.cmp tr:nth-child(even) td:nth-child(3) { background: #eafbf0; }
   </style>
 </head>
 <body>
@@ -67,6 +79,36 @@
         </div>
       </section>
 
+      <!-- Real case · 금융권 아키텍트 -->
+      <section>
+        <span class="kicker">Real Case · 금융권 아키텍트</span>
+        <h2 class="bar">어느 은행 결제팀 아키텍트의 하루</h2>
+        <p class="muted" style="font-size:.72em; margin-top:-.2em;">분기 아키텍처 리뷰와 감사(audit) 대응이 겹친 날. 모든 답을 결국 <b>"문서"</b>에서 찾아야 한다.</p>
+        <div class="story">
+          <div class="scene">
+            <div class="time">09:00</div>
+            <div class="body"><b>분기 리뷰 준비</b> — 6개월 전 결제 설계서를 연다. 그림엔 <b>FraudCheck(이상거래 탐지)</b>가 있는데, 지금도 운영에 살아있는지 확신이 없다. <span class="muted">"이 그림, 지금도 맞나?"</span></div>
+            <div class="ptag">P1 불일치</div>
+          </div>
+          <div class="scene">
+            <div class="time">11:00</div>
+            <div class="body"><b>규제 대응 변경</b> — "Auth 토큰 포맷을 바꾸면 어디가 깨지죠?" 결제·정산까지 영향이 갈 텐데, 문서로는 의존 서비스를 끝까지 추적할 수 없다.</div>
+            <div class="ptag">P2 영향범위</div>
+          </div>
+          <div class="scene">
+            <div class="time">14:00</div>
+            <div class="body"><b>성능 개선 논의</b> — "주문/거래 조회는 예전에 왜 DB 직접으로 정했더라?" 그 결정의 이유(ADR)가 어디 적혔는지 아무도 모른다.</div>
+            <div class="ptag">P3 이유 부재</div>
+          </div>
+          <div class="scene">
+            <div class="time">17:00</div>
+            <div class="body"><b>신규 입사자 온보딩</b> — "결제 시스템 구조 좀 설명해 주세요." 매번 사람이 문서를 읽고 구두로 설명한다.</div>
+            <div class="ptag">P4 질의</div>
+          </div>
+        </div>
+        <p class="muted center" style="margin-top:14px; font-size:.78em;">하루 종일 막히는 진짜 이유 — 산출물이 <b>'문서'</b>라서.</p>
+      </section>
+
       <!-- Problem -->
       <section>
         <span class="kicker">Problem</span>
@@ -74,13 +116,29 @@
         <table>
           <thead><tr><th style="width:60px">#</th><th style="width:160px">문제</th><th>증상</th></tr></thead>
           <tbody>
-            <tr><td><b>P1</b></td><td>최신성 붕괴</td><td>시스템은 계속 배포·변경되는데 문서는 갱신이 늦음 → 설계와 실제의 <b>괴리(drift)</b></td></tr>
-            <tr><td><b>P2</b></td><td>추적 불가</td><td>컴포넌트 간 의존성·영향 범위를 문서에서 추적 불가. "이거 바꾸면 뭐가 깨지지?"에 답 못함</td></tr>
-            <tr><td><b>P3</b></td><td>의도-실제 단절</td><td>설계 의도(why)는 문서에, 실제 운영 상태(what-is)는 인프라 콘솔에. 서로 연결 안 됨</td></tr>
-            <tr><td><b>P4</b></td><td>질의 불가</td><td>"현재 결제 도메인 구조 알려줘" 같은 자연어 질의·온보딩 설명을 매번 수작업</td></tr>
+            <tr><td><b>P1</b></td><td>문서가 실제와 안 맞음</td><td>시스템은 계속 배포·변경되는데 문서는 갱신이 늦음 → 설계와 실제의 <b>괴리(drift)</b></td></tr>
+            <tr><td><b>P2</b></td><td>변경 영향 범위를 모름</td><td>컴포넌트 간 의존성·영향 범위를 문서에서 추적 불가. "이거 바꾸면 뭐가 깨지지?"에 답 못함</td></tr>
+            <tr><td><b>P3</b></td><td>결정 이유가 안 남음</td><td>설계 의도(why)는 문서에, 실제 운영 상태(what-is)는 인프라 콘솔에. 서로 연결 안 됨</td></tr>
+            <tr><td><b>P4</b></td><td>자연어로 못 물어봄</td><td>"현재 결제 도메인 구조 알려줘" 같은 자연어 질의·온보딩 설명을 매번 수작업</td></tr>
           </tbody>
         </table>
         <p class="muted" style="margin-top:1em; font-size:.72em;">근본 원인 — 산출물이 <b>연결된 구조(graph)</b>가 아니라 <b>납작한 텍스트(doc)</b>로 저장되고, <b>실제 시스템 상태</b>와 분리되어 있다.</p>
+      </section>
+
+      <!-- Comparison -->
+      <section>
+        <span class="kicker">Why archiagent</span>
+        <h2 class="bar">기존 문서 산출물 vs archiagent</h2>
+        <table class="cmp">
+          <thead><tr><th style="width:130px">관점</th><th>기존 문서 산출물 <span style="font-weight:400; opacity:.8">· Confluence·PPT·정적 다이어그램</span></th><th style="width:300px">archiagent</th></tr></thead>
+          <tbody>
+            <tr><td><b>최신성</b> <span class="muted">P1</span></td><td><span class="x">✕</span> 작성 시점에 고정 → 금방 낡음</td><td><span class="o">✓</span> 실제 배포와 대조해 <b>drift 자동 탐지</b></td></tr>
+            <tr><td><b>추적성</b> <span class="muted">P2</span></td><td><span class="x">✕</span> 납작한 텍스트, 의존성 수동 추적</td><td><span class="o">✓</span> <b>그래프 탐색</b>으로 다단계 영향 분석</td></tr>
+            <tr><td><b>의도+실제</b> <span class="muted">P3</span></td><td><span class="x">✕</span> why는 문서, what은 콘솔 — 분리</td><td><span class="o">✓</span> 두 에이전트가 <b>교차 결합</b></td></tr>
+            <tr><td><b>질의·온보딩</b> <span class="muted">P4</span></td><td><span class="x">✕</span> 사람이 매번 읽고 해석</td><td><span class="o">✓</span> <b>자연어 질의</b>로 즉시 응답</td></tr>
+          </tbody>
+        </table>
+        <p class="muted center" style="margin-top:1.1em; font-size:.74em;">문서는 한 번 찍는 <b>스냅샷</b>, archiagent는 <b>살아있고 질의 가능한 구조</b>.</p>
       </section>
 
       <!-- Intent -->
@@ -132,10 +190,10 @@ flowchart TB
         <table>
           <thead><tr><th style="width:150px">문제</th><th style="width:215px">시나리오</th><th>한 줄 요약</th></tr></thead>
           <tbody>
-            <tr><td><b>P1</b> 최신성 붕괴</td><td>① 설계 vs 실제 Drift 탐지</td><td>설계서와 배포 현실의 차이를 즉시 리포트</td></tr>
-            <tr><td><b>P2</b> 추적 불가</td><td>② 변경 영향도 분석</td><td>"바꾸면 어디가 깨지나" + 실제 가동 여부로 우선순위</td></tr>
-            <tr><td><b>P3</b> 의도-실제 단절</td><td>③ 의사결정 지원</td><td>과거 결정(why) + 현재 실측(what)을 한 화면에</td></tr>
-            <tr><td><b>P4</b> 질의 불가</td><td>④ 아키텍처 Q&amp;A / 온보딩</td><td>자연어로 현재 구조를 설명</td></tr>
+            <tr><td><b>P1</b> 문서가 실제와 안 맞음</td><td>① 설계 vs 실제 Drift 탐지</td><td>설계서와 배포 현실의 차이를 즉시 리포트</td></tr>
+            <tr><td><b>P2</b> 변경 영향 범위를 모름</td><td>② 변경 영향도 분석</td><td>"바꾸면 어디가 깨지나" + 실제 가동 여부로 우선순위</td></tr>
+            <tr><td><b>P3</b> 결정 이유가 안 남음</td><td>③ 의사결정 지원</td><td>과거 결정(why) + 현재 실측(what)을 한 화면에</td></tr>
+            <tr><td><b>P4</b> 자연어로 못 물어봄</td><td>④ 아키텍처 Q&amp;A / 온보딩</td><td>자연어로 현재 구조를 설명</td></tr>
           </tbody>
         </table>
         <p class="muted" style="margin-top:1em; font-size:.72em;">각 시나리오는 <b>Agent A(설계) + Agent B(실제)</b>를 오케스트레이터가 조합해야만 풀리는, 단일 에이전트로는 불가능한 작업이다.</p>
@@ -143,7 +201,7 @@ flowchart TB
 
       <!-- Scenario 1 · P1 -->
       <section>
-        <span class="kicker">시나리오 ① · P1 최신성 붕괴</span>
+        <span class="kicker">시나리오 ① · P1 문서가 실제와 안 맞음</span>
         <h2 class="bar">설계 vs 실제 Drift 탐지 <span class="muted" style="font-size:.6em;">— 연계의 핵심 가치</span></h2>
         <div class="split">
           <pre class="mermaid">
@@ -168,14 +226,14 @@ sequenceDiagram
               <li><span class="pill-warn">추가</span> PayoutWorker — 실제O / 설계X</li>
               <li><span class="pill-warn">불일치</span> LedgerService v1.0 → v1.1</li>
             </ul>
-            <p class="muted" style="font-size:.64em;">해소: <b>P1 최신성 · P3 단절</b></p>
+            <p class="muted" style="font-size:.64em;">해소: <b>P1 불일치 · P3 이유 부재</b></p>
           </div>
         </div>
       </section>
 
       <!-- Scenario 2 · P2 -->
       <section>
-        <span class="kicker">시나리오 ② · P2 추적 불가</span>
+        <span class="kicker">시나리오 ② · P2 변경 영향 범위를 모름</span>
         <h2 class="bar">변경 영향도 분석</h2>
         <div class="split">
           <pre class="mermaid">
@@ -209,7 +267,7 @@ sequenceDiagram
 
       <!-- Scenario 3 · P3 -->
       <section>
-        <span class="kicker">시나리오 ③ · P3 의도-실제 단절</span>
+        <span class="kicker">시나리오 ③ · P3 결정 이유가 안 남음</span>
         <h2 class="bar">의사결정 지원 <span class="muted" style="font-size:.6em;">— why + what</span></h2>
         <div class="split">
           <pre class="mermaid">
@@ -239,7 +297,7 @@ sequenceDiagram
 
       <!-- Scenario 4 · P4 -->
       <section>
-        <span class="kicker">시나리오 ④ · P4 질의 불가</span>
+        <span class="kicker">시나리오 ④ · P4 자연어로 못 물어봄</span>
         <h2 class="bar">아키텍처 Q&amp;A / 온보딩</h2>
         <div class="split">
           <pre class="mermaid">
@@ -263,7 +321,7 @@ sequenceDiagram
               <li>주문 도메인 그래프 뷰로 시각적 이해</li>
               <li>관련 ADR · 소유 팀까지 한 번에</li>
             </ul>
-            <p class="muted" style="font-size:.64em;">해소: <b>P3 단절 · P4 질의</b></p>
+            <p class="muted" style="font-size:.64em;">해소: <b>P3 이유 부재 · P4 질의</b></p>
           </div>
         </div>
       </section>

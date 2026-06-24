@@ -82,8 +82,9 @@
         <span class="kicker">Index</span>
         <h2 class="bar">데모 구성</h2>
         <table>
-          <thead><tr><th style="width:90px">데모</th><th style="width:160px">문제</th><th>시나리오</th></tr></thead>
+          <thead><tr><th style="width:90px">데모</th><th style="width:160px">문제 / 토대</th><th>시나리오</th></tr></thead>
           <tbody>
+            <tr><td><b>Demo 0</b></td><td>지식 그래프 구축</td><td>SI 산출물 → Artifact 노드 적재 + 추적성</td></tr>
             <tr><td><b>Demo 1</b></td><td>P1 문서가 실제와 안 맞음</td><td>설계 vs 실제 Drift 탐지</td></tr>
             <tr><td><b>Demo 2</b></td><td>P2 변경 영향 범위를 모름</td><td>변경 영향도 분석</td></tr>
             <tr><td><b>Demo 3</b></td><td>P3 결정 이유가 안 남음</td><td>의사결정 지원 (why + what)</td></tr>
@@ -91,6 +92,29 @@
           </tbody>
         </table>
         <p class="muted" style="margin-top:1em; font-size:.72em;">시나리오 상세는 산출물 ① <span class="tag">01-product-brief.html</span>, 아키텍처는 ② <span class="tag">02-architecture.html</span> 참고.</p>
+      </section>
+
+      <!-- Demo 0 -->
+      <section>
+        <span class="kicker">Demo 0 · 지식 그래프 구축</span>
+        <h2 class="bar">산출물 적재 <span class="muted" style="font-size:.6em;">— 모든 데모의 토대</span></h2>
+        <div class="demo-grid">
+          <div>
+            <div class="quote">"아키텍처 설계서 적재해줘" <span class="muted">(+ 문서 업로드)</span></div>
+            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
+            <ul style="font-size:.72em;">
+              <li>SI 산출물(요구·분석·설계·테스트)을 <span class="tag">kb_artifact_ingest</span>로 적재</li>
+              <li>LLM 추출 → <b>Artifact 노드</b> + 엔티티 + 추적성 엣지</li>
+              <li>적재 확인(AskUserQuestion) 후 <b>요구→설계→테스트</b> 추적성 연결</li>
+            </ul>
+          </div>
+          <div class="video-ph">
+            <div class="badge">16:9 · 데모 영상</div>
+            <div class="play">▶</div>
+            <div class="cap">데모 영상 (준비 중)</div>
+            <div class="sub">Demo 0 · 산출물 적재</div>
+          </div>
+        </div>
       </section>
 
       <!-- Demo 1 -->

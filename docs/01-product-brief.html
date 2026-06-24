@@ -62,6 +62,10 @@
     .reveal table.cmp .o { color: var(--ok); font-weight: 800; margin-right: 5px; }
     .reveal table.cmp td:nth-child(3) { background: #f0fdf4; }
     .reveal table.cmp tr:nth-child(even) td:nth-child(3) { background: #eafbf0; }
+    /* SI lifecycle phase strip */
+    .phasestrip { display: flex; gap: 6px; align-items: center; margin: 4px 0 12px; flex-wrap: wrap; }
+    .phasestrip .ph { font-size: .62em; font-weight: 700; color: var(--accent); background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 999px; padding: 4px 12px; }
+    .phasestrip .arr { color: var(--muted); font-weight: 700; font-size: .7em; }
   </style>
 </head>
 <body>
@@ -150,6 +154,64 @@
           <div class="card"><h3>② 설계 ↔ 실제 연계</h3><p>설계를 아는 <b>Agent A</b> + 배포 상태를 아는 <b>Agent B</b>를 오케스트레이터로 묶어 "의도 vs 실제"를 교차 질의. <span class="muted">→ P1·P3</span></p></div>
           <div class="card"><h3>③ 반복 작업 보조</h3><p>영향분석 · 현황 파악 · 온보딩 설명 같은 아키텍트의 반복 업무를 에이전트가 대신.</p></div>
           <div class="card"><h3>④ 시나리오 중심 PoC</h3><p>완성형 제품이 아니라, 몇 가지 시나리오로 <b>에이전트 간 연계의 가치</b>를 시연.</p></div>
+        </div>
+      </section>
+
+      <!-- SI lifecycle × architect deliverables -->
+      <section>
+        <span class="kicker">Input · SI 산출물</span>
+        <h2 class="bar">SI 생애주기 × 아키텍트 산출물</h2>
+        <div class="phasestrip">
+          <span class="ph">분석</span><span class="arr">→</span>
+          <span class="ph">설계</span><span class="arr">→</span>
+          <span class="ph">개발</span><span class="arr">→</span>
+          <span class="ph">테스트</span><span class="arr">→</span>
+          <span class="ph">이행</span>
+        </div>
+        <table>
+          <thead><tr><th style="width:80px">단계</th><th style="width:170px">입력</th><th>아키텍트 산출물 <span style="font-weight:400; opacity:.85">→ 지식 그래프의 입력</span></th></tr></thead>
+          <tbody>
+            <tr><td><b>분석</b></td><td>고객 인터뷰 · RFP</td><td>요구사항 정의서 · 현행 시스템 분석서</td></tr>
+            <tr><td><b>설계</b></td><td>분석 산출물</td><td>아키텍처 정의서 · 아키텍처 설계서 <span class="muted">(활동: 개발 인프라 구성)</span></td></tr>
+            <tr><td><b>개발</b></td><td>설계서</td><td><span class="muted">문서 산출물 없음 — 개발자 지원 · 설계 준수 점검</span></td></tr>
+            <tr><td><b>테스트</b></td><td>구현체</td><td>가용성 테스트 결과서 · 성능 테스트 결과서</td></tr>
+            <tr><td><b>이행</b></td><td>전체 산출물</td><td>인수인계 자료</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top:1em; font-size:.72em;">이 산출물들이 곧 <b>지식 그래프의 입력</b> — 각 문서를 <b>Artifact 노드</b>로 적재하고 <b>요구→설계→테스트</b> 추적성으로 잇는다.</p>
+      </section>
+
+      <!-- Scenario 0 · 산출물 적재 -->
+      <section>
+        <span class="kicker">시나리오 ⓪ · 지식 그래프 구축</span>
+        <h2 class="bar">산출물 적재 <span class="muted" style="font-size:.6em;">— 문서를 그래프로</span></h2>
+        <div class="split">
+          <pre class="mermaid">
+sequenceDiagram
+  actor U as Architect
+  participant O as Orchestrator
+  participant A as Agent A
+  participant K as Graph + Vector DB
+  U->>O: "아키텍처 설계서 적재해줘" + 문서
+  O->>A: kb_artifact_ingest(설계서)
+  A->>A: LLM 추출 — Artifact·엔티티·관계
+  A-->>O: 추출 미리보기(노드/엣지)
+  O->>U: 적재 확인? (AskUserQuestion)
+  U-->>O: 승인
+  A->>K: upsert(Artifact + DERIVED_FROM/DEFINES)
+  A-->>O: 추적성 연결 완료
+  O-->>U: "설계서 → 요구사항 추적성 연결됨"
+          </pre>
+          <div>
+            <p><b>상황</b> <span class="muted">설계 산출물을 지식 그래프에 적재.</span></p>
+            <p style="margin-top:.5em;"><b>생성되는 추적성(예시)</b></p>
+            <ul>
+              <li>아키텍처 설계서 <span class="muted">—DERIVED_FROM→</span> 요구사항 정의서</li>
+              <li>아키텍처 설계서 <span class="muted">—DEFINES→</span> OrderService · ADR-009</li>
+              <li>성능 테스트 결과서 <span class="muted">—VALIDATES→</span> OrderService</li>
+            </ul>
+            <p class="muted" style="font-size:.64em;">이 추적성이 <b>P2 영향도</b>·<b>P1 drift</b> 분석의 토대가 된다.</p>
+          </div>
         </div>
       </section>
 

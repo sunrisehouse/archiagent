@@ -74,6 +74,19 @@
     .result ul { margin: .1em 0 0; padding-left: 1.1em; }
     .result li { font-size: .76em; margin: .18em 0; line-height: 1.5; }
     .result .note { font-size: .66em; color: var(--muted); margin: .5em 0 0; }
+    /* scenario 1 — staged authoring pipeline */
+    .pipe { display: flex; flex-direction: column; gap: 3px; margin: .3em 0 .7em; }
+    .pipe .stage { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 9px 14px; }
+    .pipe .stage.hl { background: var(--accent-soft); }
+    .pipe .ph { flex: none; font-size: .58em; font-weight: 800; color: var(--accent); background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 999px; padding: 4px 11px; }
+    .pipe .ph.design { color: #b45309; background: #fef3c7; border-color: #fcd34d; }
+    .pipe .stage .body { font-size: .82em; }
+    .pipe .stage .body b { color: var(--ink); }
+    .pipe .stage .io { display: block; font-size: .76em; color: var(--muted); margin-top: .2em; }
+    .pipe .stage .io .in { color: var(--ink); }
+    .pipe .stage .io .g { color: var(--accent); font-weight: 700; }
+    .pipe .down { font-size: .68em; color: var(--accent); font-weight: 800; padding: 1px 0 1px 10px; }
+    .pipe .down span { color: var(--muted); font-weight: 500; margin-left: 6px; }
   </style>
 </head>
 <body>
@@ -218,22 +231,33 @@ sequenceDiagram
       <!-- ④ 시나리오 1 · 문서 작성 -->
       <section>
         <span class="kicker">④ 시나리오 1 · 문서 작성</span>
-        <h2 class="bar">문서 작성 <span class="muted" style="font-size:.6em;">— 분석 → 설계, 자연어로</span></h2>
-        <div class="ask">💬 "고객 인터뷰 내용으로 요구사항 정리하고, ToBe는 AsIs처럼 노드 대수 유지해서 설계서까지 써줘"</div>
-        <div class="story">
-          <div class="step"><span class="n">① 묻는다</span><b>인터뷰 메모 + 자연어 지시</b><p>"AsIs처럼 노드 대수 유지" 같은 제약을 말로 던진다.</p></div>
-          <div class="arr">→</div>
-          <div class="step"><span class="n">② 에이전트가 한다</span><b>분석 → 설계 순서로 작성</b><p>요구사항 정의서·현행 분석서를 그래프에 쌓고, As-Is 노드 대수·용량을 읽어 ToBe 설계서 초안.</p></div>
-          <div class="arr">→</div>
-          <div class="step"><span class="n">③ 받는다</span><b>설계서 초안 + 추적성</b><p>요구→설계 연결이 자동으로 붙은 초안. 제약 위반 시 경고.</p></div>
+        <h2 class="bar">문서 작성 <span class="muted" style="font-size:.6em;">— 요구 → 현행 → 설계, 단계마다 그래프에 쌓으며</span></h2>
+        <div class="ask">💬 "인터뷰·RFP로 요구사항 잡고 → 현행 시스템 분석하고 → ToBe는 AsIs처럼 노드 대수 유지해서 설계서까지"</div>
+        <div class="pipe">
+          <div class="stage">
+            <span class="ph">분석</span>
+            <div class="body"><b>① 요구사항 정의서</b>
+              <span class="io"><span class="in">고객 인터뷰 + RFP</span> → 요구 항목 <b>R-1..n</b> 작성 → <span class="g">그래프 적재</span></span>
+            </div>
+          </div>
+          <div class="down">↓<span>그래프에 쌓여 다음 단계 입력이 된다</span></div>
+          <div class="stage">
+            <span class="ph">분석</span>
+            <div class="body"><b>② 현행 시스템 분석서</b>
+              <span class="io"><span class="in">현행 시스템 문서 + 인터뷰</span> → <b>As-Is</b> 노드 대수·토폴로지·용량 작성 → <span class="g">그래프 적재</span></span>
+            </div>
+          </div>
+          <div class="down">↓<span>현행 + 요구가 그래프에 함께</span></div>
+          <div class="stage hl">
+            <span class="ph design">설계</span>
+            <div class="body"><b>③ 아키텍처 설계서</b>
+              <span class="io"><span class="in">그래프(현행+요구) + 자연어 "AsIs처럼 노드 대수 유지"</span> → <b>ToBe 설계서</b> 초안 → <span class="g">요구→설계 추적성 자동</span></span>
+            </div>
+          </div>
         </div>
         <div class="result">
-          <p class="rhead">받는 결과 (예시)</p>
-          <ul>
-            <li>요구사항 정의서(R-1..n) · 현행 분석서(As-Is) · <b>아키텍처 설계서(ToBe)</b> 초안</li>
-            <li>"노드 대수 유지" 제약 충족 여부까지 표시 — 어기면 <b>경고</b></li>
-          </ul>
-          <p class="note">신규 작성도, 기존 산출물 갱신·재생성도 같은 방식 — 사람은 "작성"이 아니라 "검토"만.</p>
+          <p class="rhead">핵심</p>
+          <p class="note" style="margin-top:0;">각 산출물이 그래프에 <b>쌓여 다음 단계의 입력</b>이 된다 — 문서가 아니라 연결된 그래프라서 가능. ③에서 자연어 제약(노드 대수)을 어기면 <b>경고</b>. 사람은 "작성"이 아니라 "검토"만.</p>
         </div>
       </section>
 

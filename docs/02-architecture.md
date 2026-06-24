@@ -73,7 +73,7 @@
     - `kb_graph_upsert` | 노드·엣지 갱신(확인)
     - `kb_vector_search` | 자연어 의미검색
     - `state_*` | Agent B 상태 계약
-    - `drift_compare` | 설계 vs 관측 비교
+    - `compare_design_actual` | 설계 vs 관측 비교
 
 ## 6. ⑥ Knowledge Base — 그래프 데이터 모델
 

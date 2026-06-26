@@ -16,77 +16,58 @@
       --ink: #1e293b;
       --muted: #64748b;
       --line: #e2e8f0;
-      --ok: #16a34a;
       --warn: #dc2626;
     }
     .reveal { font-family: "Pretendard", system-ui, sans-serif; color: var(--ink); }
     .reveal .slides { text-align: left; }
     .reveal h1, .reveal h2, .reveal h3 { font-family: "Pretendard", sans-serif; color: var(--ink); text-transform: none; letter-spacing: -0.02em; font-weight: 800; }
-    .reveal h1 { font-size: 2.4em; line-height: 1.15; }
-    .reveal h2 { font-size: 1.55em; margin-bottom: .5em; }
-    .reveal h3 { font-size: 1.1em; color: var(--accent); }
-    .reveal p, .reveal li { font-size: .8em; line-height: 1.5; }
+    .reveal h1 { font-size: 2.3em; line-height: 1.15; }
+    .reveal h2 { font-size: 1.4em; line-height: 1.3; margin: 0 0 .7em; font-weight: 700; }
+    .reveal p, .reveal li { font-size: .8em; line-height: 1.55; }
     .reveal .muted { color: var(--muted); }
-    .reveal section { padding: 10px 14px; }
-    .reveal h2.bar { position: relative; padding-bottom: .35em; }
-    .reveal h2.bar::after { content: ""; position: absolute; left: 0; bottom: 0; width: 64px; height: 5px; background: var(--accent); border-radius: 3px; }
-    .reveal .kicker { display: inline-block; font-size: .62em; font-weight: 700; letter-spacing: .08em; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 999px; margin-bottom: .6em; text-transform: uppercase; }
-    .reveal table { font-size: .62em; border-collapse: collapse; width: 100%; }
-    .reveal table th { background: var(--accent); color: #fff; font-weight: 700; padding: 8px 10px; border: none; }
-    .reveal table td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .reveal section { padding: 14px 18px; }
+    .reveal .kicker { display: inline-block; font-size: .58em; font-weight: 700; letter-spacing: .06em; color: var(--accent); background: var(--accent-soft); padding: 5px 14px; border-radius: 999px; margin-bottom: .8em; }
+    .reveal h2.gov { position: relative; padding-left: 16px; }
+    .reveal h2.gov::before { content: ""; position: absolute; left: 0; top: .12em; bottom: .12em; width: 5px; background: var(--accent); border-radius: 3px; }
+
+    .reveal table { font-size: .64em; border-collapse: collapse; width: 100%; }
+    .reveal table th { background: var(--accent); color: #fff; font-weight: 700; padding: 8px 11px; text-align: left; }
+    .reveal table td { padding: 7px 11px; border-bottom: 1px solid var(--line); vertical-align: top; }
     .reveal table tr:nth-child(even) td { background: #f8fafc; }
-    .reveal .tag { font-family: ui-monospace, monospace; font-size: .92em; background: #f1f5f9; padding: 1px 6px; border-radius: 5px; color: var(--accent); }
-    .grid { display: grid; gap: 14px; }
-    .grid.cols-2 { grid-template-columns: 1fr 1fr; }
-    .card { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
-    .card h3 { margin: 0 0 .3em; font-size: .82em; }
-    .card p, .card li { font-size: .64em; margin: .2em 0; }
+
+    .grid { display: grid; gap: 12px; }
+    .grid.c2 { grid-template-columns: 1fr 1fr; }
+    .grid.c3 { grid-template-columns: 1fr 1fr 1fr; }
+    .card { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 11px 14px; }
+    .card h3 { margin: 0 0 .3em; font-size: .8em; color: var(--accent); }
+    .card p { font-size: .66em; margin: 0; line-height: 1.5; }
     .card.warn { border-left-color: var(--warn); }
     .card.warn h3 { color: var(--warn); }
-    .mermaid { text-align: center; margin: 0 auto; }
-    .mermaid svg { max-height: 440px; width: auto !important; max-width: 100%; height: auto; }
-    .split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; align-items: center; }
-    .split .mermaid svg { max-height: 420px; }
-    .reveal .pill-warn { color: var(--warn); font-weight: 700; }
+
+    .strip { display: flex; gap: 6px; align-items: center; margin: 0 0 14px; flex-wrap: wrap; }
+    .strip .ph { font-size: .6em; font-weight: 700; color: var(--accent); background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 999px; padding: 4px 13px; }
+    .strip .arr { color: var(--muted); font-weight: 700; }
+    .note { color: var(--muted); font-size: .72em; margin-top: 1em; }
+
+    /* simple flow boxes (해결방안) */
+    .flow { display: flex; align-items: center; gap: 10px; justify-content: center; margin: .2em 0 1em; flex-wrap: wrap; }
+    .flow .box { background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 10px; padding: 10px 14px; font-size: .68em; font-weight: 700; color: var(--ink); text-align: center; }
+    .flow .box.ext { background: #f8fafc; border-style: dashed; border-color: #94a3b8; color: #475569; }
+    .flow .db { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: .66em; color: var(--ink); text-align: center; }
+    .flow .arr { color: var(--accent); font-weight: 800; font-size: 1.1em; }
+
+    /* scenario layout */
+    .sc { display: grid; gap: 9px; }
+    .sc .row { display: grid; grid-template-columns: 110px 1fr; gap: 14px; align-items: start; }
+    .sc .lab { font-size: .64em; font-weight: 800; color: var(--accent); background: var(--accent-soft); border-radius: 8px; padding: 6px 8px; text-align: center; }
+    .sc .row p { font-size: .72em; margin: .1em 0; }
+    .sc .asks { display: grid; gap: 5px; }
+    .sc .ask { font-size: .72em; font-weight: 600; background: #f8fafc; border-left: 3px solid var(--accent); border-radius: 7px; padding: 6px 11px; }
+
     .footer { position: fixed; bottom: 10px; left: 18px; font-size: 12px; color: var(--muted); z-index: 30; }
     .reveal .title-wrap { text-align: center; }
-    .reveal .title-wrap .sub { font-size: .9em; color: var(--muted); margin-top: .4em; font-weight: 500; }
-    .reveal .title-wrap .meta { margin-top: 1.4em; font-size: .62em; color: var(--muted); }
-    .center { text-align: center; }
-    /* SI lifecycle phase strip */
-    .phasestrip { display: flex; gap: 6px; align-items: center; margin: 4px 0 12px; flex-wrap: wrap; }
-    .phasestrip .ph { font-size: .62em; font-weight: 700; color: var(--accent); background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 999px; padding: 4px 12px; }
-    .phasestrip .arr { color: var(--muted); font-weight: 700; font-size: .7em; }
-    /* step flow on title */
-    .stepflow { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 1.2em; }
-    .stepflow .st { font-size: .6em; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 5px 14px; }
-    .stepflow .arr { color: var(--muted); align-self: center; font-size: .7em; }
-    /* easy 3-step scenario story */
-    .ask { font-size: .92em; font-weight: 700; background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 12px; padding: 10px 16px; margin: .3em 0 .9em; }
-    .story { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 8px; align-items: stretch; margin-bottom: .9em; }
-    .story .step { background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 12px; padding: 12px 14px; }
-    .story .step .n { font-weight: 800; color: var(--accent); font-size: .78em; }
-    .story .step b { display: block; font-size: .82em; margin: .15em 0 .35em; }
-    .story .step p { font-size: .66em; color: var(--muted); margin: 0; line-height: 1.45; }
-    .story .arr { align-self: center; color: var(--accent); font-weight: 800; font-size: 1.2em; }
-    .result { background: #f0fdf4; border-left: 4px solid var(--ok); border-radius: 10px; padding: 10px 16px; }
-    .result .rhead { font-size: .72em; font-weight: 700; color: var(--ok); margin: 0 0 .35em; }
-    .result ul { margin: .1em 0 0; padding-left: 1.1em; }
-    .result li { font-size: .76em; margin: .18em 0; line-height: 1.5; }
-    .result .note { font-size: .66em; color: var(--muted); margin: .5em 0 0; }
-    /* scenario 1 — staged authoring pipeline */
-    .pipe { display: flex; flex-direction: column; gap: 3px; margin: .3em 0 .7em; }
-    .pipe .stage { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 9px 14px; }
-    .pipe .stage.hl { background: var(--accent-soft); }
-    .pipe .ph { flex: none; font-size: .58em; font-weight: 800; color: var(--accent); background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 999px; padding: 4px 11px; }
-    .pipe .ph.design { color: #b45309; background: #fef3c7; border-color: #fcd34d; }
-    .pipe .stage .body { font-size: .82em; }
-    .pipe .stage .body b { color: var(--ink); }
-    .pipe .stage .io { display: block; font-size: .76em; color: var(--muted); margin-top: .2em; }
-    .pipe .stage .io .in { color: var(--ink); }
-    .pipe .stage .io .g { color: var(--accent); font-weight: 700; }
-    .pipe .down { font-size: .68em; color: var(--accent); font-weight: 800; padding: 1px 0 1px 10px; }
-    .pipe .down span { color: var(--muted); font-weight: 500; margin-left: 6px; }
+    .reveal .title-wrap .sub { font-size: .82em; color: var(--muted); margin-top: .6em; font-weight: 500; line-height: 1.5; }
+    .reveal .title-wrap .meta { margin-top: 1.6em; font-size: .6em; color: var(--muted); }
   </style>
 </head>
 <body>
@@ -94,28 +75,21 @@
   <div class="reveal">
     <div class="slides">
 
-      <!-- Title -->
+      <!-- 1 · Title -->
       <section>
         <div class="title-wrap">
           <span class="kicker">산출물 ① · Product Brief</span>
           <h1>기획 의도 및 주요 기능</h1>
-          <p class="sub"><strong>archiagent</strong> — 아키텍처 산출물을 <strong>문서</strong>가 아닌 <strong>살아있는 지식 그래프</strong>로.<br/>설계(의도)와 실제(배포)를 잇는 멀티 에이전트.</p>
-          <div class="stepflow">
-            <span class="st">① 현황</span><span class="arr">→</span>
-            <span class="st">② 문제점</span><span class="arr">→</span>
-            <span class="st">③ 해결방안</span><span class="arr">→</span>
-            <span class="st">④ 기능</span><span class="arr">→</span>
-            <span class="st">⑤ 시나리오</span>
-          </div>
+          <p class="sub"><strong>archiagent</strong>는 아키텍처 산출물을 문서가 아니라 살아있는 지식 그래프로 다룬다.<br/>공식 산출물과 비공식 자료를 함께 관리하면서 작성과 변경, 추적, 출력을 돕는 에이전트다.</p>
           <p class="meta">Built on Claude Agent SDK</p>
         </div>
       </section>
 
-      <!-- ① 현황 -->
+      <!-- 2 · 소개 -->
       <section>
-        <span class="kicker">① 현황 · SI 산출물</span>
-        <h2 class="bar">SI 생애주기 × 아키텍트 산출물</h2>
-        <div class="phasestrip">
+        <span class="kicker">1 · Introduction · 소개</span>
+        <h2 class="gov">아키텍트는 SI 전 단계에 걸쳐 여러 산출물을 만든다.</h2>
+        <div class="strip">
           <span class="ph">분석</span><span class="arr">→</span>
           <span class="ph">설계</span><span class="arr">→</span>
           <span class="ph">개발</span><span class="arr">→</span>
@@ -123,262 +97,139 @@
           <span class="ph">이행</span>
         </div>
         <table>
-          <thead><tr><th style="width:80px">단계</th><th style="width:170px">입력</th><th>아키텍트가 만드는 산출물(문서)</th></tr></thead>
+          <thead><tr><th style="width:80px">단계</th><th style="width:200px">입력</th><th>아키텍트가 만드는 산출물</th></tr></thead>
           <tbody>
-            <tr><td><b>분석</b></td><td>고객 인터뷰 · RFP</td><td>요구사항 정의서 · 현행 시스템 분석서</td></tr>
-            <tr><td><b>설계</b></td><td>분석 산출물</td><td>아키텍처 정의서 · 아키텍처 설계서 <span class="muted">(활동: 개발 인프라 구성)</span></td></tr>
-            <tr><td><b>개발</b></td><td>설계서</td><td><span class="muted">문서 산출물 없음 — 개발자 지원 · 설계 준수 점검</span></td></tr>
-            <tr><td><b>테스트</b></td><td>구현체</td><td>가용성 테스트 결과서 · 성능 테스트 결과서</td></tr>
+            <tr><td><b>분석</b></td><td>고객 인터뷰, RFP</td><td>요구사항 정의서, 현행 시스템 분석서</td></tr>
+            <tr><td><b>설계</b></td><td>분석 산출물</td><td>아키텍처 정의서, 아키텍처 설계서</td></tr>
+            <tr><td><b>개발</b></td><td>설계서</td><td>문서 산출물은 없고 개발 지원과 설계 준수 점검을 한다</td></tr>
+            <tr><td><b>테스트</b></td><td>구현체</td><td>가용성 테스트 결과서, 성능 테스트 결과서</td></tr>
             <tr><td><b>이행</b></td><td>전체 산출물</td><td>인수인계 자료</td></tr>
           </tbody>
         </table>
-        <p class="muted" style="margin-top:1em; font-size:.72em;">아키텍트는 SI 전 단계에 걸쳐 이런 문서를 만든다. 그런데 이 산출물이 <b>'문서'</b>라서 — 다음 문제가 생긴다.</p>
+        <p class="note">이런 공식 산출물 외에도 회의록과 메모, 결정 기록 같은 비공식 자료가 함께 쌓인다.</p>
       </section>
 
-      <!-- ② 문제점 -->
+      <!-- 3 · 문제점 -->
       <section>
-        <span class="kicker">② 문제점</span>
-        <h2 class="bar">문서라서 — 만들기도, 고치기도, 찾기도 어렵다</h2>
-        <div class="card warn" style="margin-bottom:14px;"><h3>문서 작성부터 노동집약적</h3><p>단계마다 요구·설계·테스트 문서를 사람이 <b>손으로 작성</b>하고, 무언가 바뀌면 여러 문서를 <b>다시 고쳐 써야</b> 한다. 문서 간 정합성 유지도 전부 수작업.</p></div>
-        <div class="grid cols-2">
-          <div class="card warn"><h3>변경 영향을 모름</h3><p>한 컴포넌트를 바꾸면 <b>어디까지 고쳐야</b> 하나? 문서엔 의존 관계가 흩어져 있어 끝까지 추적 못 함.</p></div>
-          <div class="card warn"><h3>찾기가 어려움</h3><p>"이 부분 지금 어떻게 돼 있지?" 궁금할 때마다 여러 문서를 사람이 직접 뒤져야 함.</p></div>
-          <div class="card warn"><h3>감리 추적이 안 됨</h3><p>요구사항 정의서의 항목이 <b>어느 설계서에 반영</b>되고 <b>실제로 구축</b>됐는지 — 증빙을 짚기 어렵다.</p></div>
-          <div class="card warn"><h3>설계 변경 연쇄</h3><p>개발·인프라 중 용량 한계(노드 수·디스크↑)로 <b>설계부터 바꿔야</b> 할 때, 무엇을 어디까지 고칠지 막막.</p></div>
-        </div>
-        <p class="muted" style="margin-top:1em; font-size:.72em;">근본 원인 — 산출물이 <b>연결된 구조(graph)</b>가 아니라 <b>납작한 텍스트(doc)</b>로 저장되고, <b>실제 시스템 상태</b>와 분리되어 있다.</p>
-      </section>
-
-      <!-- ③ 해결방안 — 개요 -->
-      <section>
-        <span class="kicker">③ 해결방안</span>
-        <h2 class="bar">산출물을 살아있는 지식 그래프로</h2>
-        <div class="split">
-          <pre class="mermaid">
-flowchart TB
-  U["Architect"] --> O["Orchestrator<br/>의도 분해·라우팅·합성"]
-  O -->|subagent| A["Agent A<br/>아키텍처 지식 에이전트"]
-  O -. MCP tool .-> B["Agent B<br/>시스템 상태 에이전트"]
-  A --> KB[("Graph DB + Vector DB<br/>산출물·의존성·추적성")]
-  B --> INF["Cloud / Infra<br/>실제 배포·용량"]
-  classDef ours fill:#eef2ff,stroke:#4f46e5,stroke-width:2px,color:#1e293b;
-  classDef ext fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
-  class O,A,KB ours;
-  class B,INF ext;
-          </pre>
-          <div>
-            <div class="card" style="margin-bottom:10px;"><h3>① 작성·적재로 그래프 구축</h3><p>신규 산출물은 <b>인터뷰로 작성</b>하며 그래프를 채우고, 기존 문서는 <b>적재</b>한다. 어느 쪽이든 <b>Artifact 노드</b>·<b>추적성</b>(요구→설계→구축)으로 연결 — 작성·갱신이 쉬워진다.</p></div>
-            <div class="card" style="margin-bottom:10px;"><h3>② 설계 ↔ 실제 교차</h3><p>설계를 아는 <b>Agent A</b> + 배포·용량을 아는 <b>Agent B</b>를 오케스트레이터가 묶어 "의도 vs 실제"를 교차 질의.</p></div>
-            <div class="card"><h3>③ 자연어로 질의</h3><p>변경 영향·감리 추적·현황 설명을 <b>물어보면</b> 답하는 형태로.</p></div>
-          </div>
+        <span class="kicker">2 · 문제점</span>
+        <h2 class="gov">근본 원인은 산출물이 서로 연결된 그래프가 아니라 흩어진 문서로 저장된다는 점이다.</h2>
+        <div class="grid c2">
+          <div class="card warn"><h3>작성이 힘들다</h3><p>단계마다 문서를 사람이 직접 쓰고, 무언가 바뀌면 여러 문서를 다시 고쳐야 한다.</p></div>
+          <div class="card warn"><h3>변경 영향을 모른다</h3><p>요건 하나가 바뀌면 어떤 문서와 설계까지 손봐야 하는지 끝까지 추적하기 어렵다.</p></div>
+          <div class="card warn"><h3>찾기가 어렵다</h3><p>어떤 내용이 지금 어떻게 돼 있는지 알려면 여러 문서를 사람이 직접 뒤져야 한다.</p></div>
+          <div class="card warn"><h3>감리 추적이 안 된다</h3><p>요구 항목이 어느 설계에 반영되고 실제로 구축됐는지 증빙하기 어렵다.</p></div>
+          <div class="card warn" style="grid-column:1/3;"><h3>비공식 자료가 흩어진다</h3><p>회의록과 메모처럼 결정의 맥락을 담은 자료가 문서 밖에 흩어져, 산출물과의 연관 관계를 파악하기 어렵다.</p></div>
         </div>
       </section>
 
-      <!-- ③ 해결방안 — 토대(작성·적재) -->
+      <!-- 4 · 해결방안 -->
       <section>
-        <span class="kicker">③ 해결방안 · 토대</span>
-        <h2 class="bar">산출물이 그래프가 되는 법 <span class="muted" style="font-size:.6em;">— 작성하며 채우고, 기존 문서는 적재</span></h2>
-        <div class="split">
-          <pre class="mermaid">
-sequenceDiagram
-  actor U as Architect
-  participant O as Orchestrator
-  participant A as Agent A
-  participant K as Graph + Vector DB
-  U->>O: "아키텍처 설계서 적재해줘" + 문서
-  O->>A: kb_artifact_ingest(설계서)
-  A->>A: LLM 추출 — Artifact·엔티티·관계
-  A-->>O: 추출 미리보기(노드/엣지)
-  O->>U: 적재 확인? (AskUserQuestion)
-  U-->>O: 승인
-  A->>K: upsert(Artifact + DERIVED_FROM/DEFINES)
-  A-->>O: 추적성 연결 완료
-  O-->>U: "설계서 → 요구사항 추적성 연결됨"
-          </pre>
-          <div>
-            <p><b>두 경로 — 결과는 같은 그래프</b></p>
-            <ul>
-              <li><b>① 작성</b> <span class="muted">신규 — 인터뷰로 문서를 만들며 그래프에 적재 (시나리오 1)</span></li>
-              <li><b>② 적재</b> <span class="muted">기존 문서를 의미 단위로 쪼개 연결 (좌측 시퀀스)</span></li>
-            </ul>
-            <p style="margin-top:.5em;"><b>생성되는 추적성(예시)</b></p>
-            <ul>
-              <li>아키텍처 설계서 <span class="muted">—DERIVED_FROM→</span> 요구사항 정의서</li>
-              <li>아키텍처 설계서 <span class="muted">—DEFINES→</span> OrderService · ADR-009</li>
-              <li>성능 테스트 결과서 <span class="muted">—VALIDATES→</span> OrderService</li>
-            </ul>
-            <p class="muted" style="font-size:.64em;">어느 경로든 같은 Artifact·추적성으로 — 이 추적성이 모든 시나리오의 토대.</p>
-          </div>
+        <span class="kicker">3 · 해결방안</span>
+        <h2 class="gov">지식 에이전트가 공식 산출물과 비공식 자료를 함께 그래프로 관리해서, 작성과 변경, 추적, 출력을 한곳에서 처리한다.</h2>
+        <div class="flow">
+          <div class="box">Architect</div>
+          <span class="arr">⇄</span>
+          <div class="box">지식 에이전트</div>
+          <span class="arr">→</span>
+          <div class="db">Graph DB + Vector DB<br/><span class="muted" style="font-size:.85em;">산출물 · 비공식 자료 · 연관 관계</span></div>
+          <span class="arr">⋯</span>
+          <div class="box ext">외부 인프라 에이전트<br/><span style="font-size:.85em;">실제 시스템 상태</span></div>
         </div>
+        <div class="grid c3">
+          <div class="card"><h3>산출물을 그래프로 관리한다</h3><p>요구사항 정의서와 현행 분석서, 설계서 같은 산출물을 노드로 만들고 서로의 연관 관계를 연결한다.</p></div>
+          <div class="card"><h3>비공식 자료까지 함께 묶는다</h3><p>회의록과 메모, 결정 기록도 그래프에 넣어 산출물과 연결하므로, 왜 그렇게 정했는지까지 같이 추적한다.</p></div>
+          <div class="card"><h3>자연어로 시킨다</h3><p>작성과 변경, 영향도 확인, 추적을 사람이 말로 요청하면 에이전트가 처리한다.</p></div>
+        </div>
+        <p class="note">실제 배포 상태가 필요한 일은 외부 인프라 에이전트가 맡고, 지식 에이전트가 그 결과를 받아 함께 활용한다.</p>
       </section>
 
-      <!-- ④ 주요 기능 -->
+      <!-- 5 · 기능 -->
       <section>
-        <span class="kicker">④ 기능 · 에이전트가 할 수 있는 것</span>
-        <h2 class="bar">주요 기능 <span class="muted" style="font-size:.6em;">— 에이전트가 하는 9가지</span></h2>
+        <span class="kicker">4 · 기능</span>
+        <h2 class="gov">지식 에이전트는 산출물을 작성하고, 바뀌면 영향도를 분석해 반영하며, 어디에 반영됐는지 추적하고, 문서로 출력한다.</h2>
         <table>
-          <thead><tr><th style="width:190px">기능</th><th>하는 일</th></tr></thead>
+          <thead><tr><th style="width:170px">기능</th><th>하는 일</th></tr></thead>
           <tbody>
-            <tr><td><b>산출물 작성·갱신</b></td><td>자연어로 요구·현행·설계 초안 작성, 단계별 그래프 누적, As-Is 제약 검증·경고</td></tr>
-            <tr><td><b>산출물 적재</b></td><td>기존 문서를 Artifact·엔티티·추적성으로 그래프화</td></tr>
-            <tr><td><b>추적성 탐색</b></td><td>요구↔설계↔구축↔검증 양방향 추적</td></tr>
-            <tr><td><b>변경 영향도 분석</b></td><td>역방향 의존 추적 + 영향 범위·갱신 체크리스트</td></tr>
-            <tr><td><b>자연어 질의·설명</b></td><td>의미검색 → 그래프, 의도(why)+실제(what) 통합 설명</td></tr>
-            <tr><td><b>실제 시스템 연계</b></td><td>실제 배포·용량·헬스 확인 (외부 Agent B)</td></tr>
-            <tr><td><b>Drift 비교</b></td><td>설계 vs 실제 차이 — 누락·추가·불일치</td></tr>
-            <tr><td><b>사람 확인 게이트</b></td><td>비가역 작업(그래프 쓰기·산출물 확정) 전 승인</td></tr>
-            <tr><td><b>그래프 시각화</b></td><td>서브그래프·의존성 뷰로 시각적 이해</td></tr>
+            <tr><td><b>산출물 작성</b></td><td>RFP와 인터뷰, 현행 시스템 문서를 읽어서 요구사항 정의서와 현행 분석서, 설계서를 작성한다</td></tr>
+            <tr><td><b>비공식 자료 관리</b></td><td>회의록과 메모 같은 비공식 자료를 그래프에 넣고 산출물과 연결한다</td></tr>
+            <tr><td><b>연관 관계 분석</b></td><td>요구와 설계, 구축 사이의 연결을 따라가며 무엇이 무엇과 엮였는지 분석한다</td></tr>
+            <tr><td><b>설계 질의응답</b></td><td>설계에 관해 물어보면 그래프에서 찾아 정리해서 답한다</td></tr>
+            <tr><td><b>변경 영향도 분석</b></td><td>요건이 바뀌면 영향받는 문서와 설계의 범위를 찾아낸다</td></tr>
+            <tr><td><b>변경 반영</b></td><td>바뀐 요건을 요구사항 정의서와 설계서에 반영해 갱신한다</td></tr>
+            <tr><td><b>추적성 탐색</b></td><td>특정 요건이 어느 산출물에 반영됐는지 한 번에 찾아 감리에 대응한다</td></tr>
+            <tr><td><b>산출물 출력</b></td><td>그래프에 쌓인 산출물을 문서별 HTML 같은 형태로 만들어 낸다</td></tr>
+            <tr><td><b>사람 확인 게이트</b></td><td>그래프에 쓰거나 산출물을 확정하는 비가역 작업 전에 사람에게 확인을 받는다</td></tr>
           </tbody>
         </table>
-        <p class="muted" style="margin-top:.8em; font-size:.72em;">다음 장부터 이 기능들을 <b>시나리오로 엮어</b> 시연.</p>
       </section>
 
-      <!-- ⑤ 시나리오 한눈에 -->
+      <!-- 6 · 5.1 산출물 작성 -->
       <section>
-        <span class="kicker">⑤ 시나리오 · 한눈에</span>
-        <h2 class="bar">시나리오 한눈에 <span class="muted" style="font-size:.6em;">— 이렇게 묻고, 이런 걸 받는다</span></h2>
-        <table>
-          <thead><tr><th style="width:120px">시나리오</th><th style="width:130px">이런 상황에서</th><th>이렇게 물으면</th><th>이런 걸 받는다</th></tr></thead>
-          <tbody>
-            <tr><td><b>1 · 문서 작성</b></td><td>신규 SI, 백지에서</td><td>"AsIs처럼 노드 대수 유지해서 설계서까지 써줘"</td><td>요구·현행·설계서 초안 + 추적성 자동 연결</td></tr>
-            <tr><td><b>2 · 감리 대응</b></td><td>감리 증빙 필요</td><td>"요구 R-12, 어디에 반영됐어?"</td><td>요구→설계→구축 추적 체인</td></tr>
-            <tr><td><b>3 · 설계 변경</b></td><td>용량 한계 도달</td><td>"샤딩 추가하면 설계 뭐부터 고쳐?"</td><td>변경 대상 설계 + 영향도 체크리스트</td></tr>
-            <tr><td><b>4 · Drift 탐지</b></td><td>설계서가 오래됨</td><td>"설계랑 실제 배포 차이 알려줘"</td><td>누락·추가·불일치 리포트</td></tr>
-            <tr><td><b>5 · Q&amp;A/온보딩</b></td><td>신규 입사자</td><td>"이 시스템 구조 설명해줘"</td><td>설계 의도+실제 상태 통합 설명 + 그래프 뷰</td></tr>
-          </tbody>
-        </table>
-        <p class="muted" style="margin-top:1em; font-size:.72em;">공통 — 모두 <b>작성하며 쌓인 그래프</b> 위에서 동작. 다음 장부터 하나씩 자세히.</p>
+        <span class="kicker">5.1 시나리오 - 산출물 작성</span>
+        <h2 class="gov">RFP와 인터뷰로 요구사항 정의서를 쓰고, 현행 문서로 현행 시스템 분석서를 쓴 다음, 둘을 기반으로 설계서를 작성한다.</h2>
+        <div class="sc">
+          <div class="row"><span class="lab">상황</span><p>신규 SI 프로젝트의 산출물을 처음부터 작성한다.</p></div>
+          <div class="row"><span class="lab">묻는다</span><div class="asks">
+            <div class="ask">💬 "이 RFP를 읽고 요구사항 정의서를 작성해."</div>
+            <div class="ask">💬 "이 고객 인터뷰 내용을 읽고 요구사항 정의서를 작성해."</div>
+            <div class="ask">💬 "현행 시스템 문서를 읽고 현행 시스템 분석서를 작성해."</div>
+            <div class="ask">💬 "요구사항과 현행 시스템 분석서를 기반으로 설계서를 작성해."</div>
+          </div></div>
+          <div class="row"><span class="lab">에이전트가 한다</span><p>RFP와 인터뷰에서 요구 항목을 뽑아 요구사항 정의서를 쓰고, 현행 문서에서 구성과 용량을 읽어 현행 시스템 분석서를 쓴다. 그다음 두 산출물을 기반으로 설계서를 작성하고, 요구와 설계 사이의 연결을 자동으로 만든다.</p></div>
+          <div class="row"><span class="lab">받는다</span><p>요구사항 정의서와 현행 시스템 분석서, 설계서를 받는다. 모든 산출물이 그래프로 연결되어 있어서 서로 어떻게 이어지는지 바로 보인다.</p></div>
+        </div>
       </section>
 
-      <!-- ⑤ 시나리오 1 · 문서 작성 -->
+      <!-- 7 · 5.2 변경 대응 -->
       <section>
-        <span class="kicker">⑤ 시나리오 1 · 문서 작성</span>
-        <h2 class="bar">문서 작성 <span class="muted" style="font-size:.6em;">— 요구 → 현행 → 설계, 단계마다 그래프에 쌓으며</span></h2>
-        <div class="ask">💬 "인터뷰·RFP로 요구사항 잡고 → 현행 시스템 분석하고 → ToBe는 AsIs처럼 노드 대수 유지해서 설계서까지"</div>
-        <div class="pipe">
-          <div class="stage">
-            <span class="ph">분석</span>
-            <div class="body"><b>① 요구사항 정의서</b>
-              <span class="io"><span class="in">고객 인터뷰 + RFP</span> → 요구 항목 <b>R-1..n</b> 작성 → <span class="g">그래프 적재</span></span>
-            </div>
-          </div>
-          <div class="down">↓<span>그래프에 쌓여 다음 단계 입력이 된다</span></div>
-          <div class="stage">
-            <span class="ph">분석</span>
-            <div class="body"><b>② 현행 시스템 분석서</b>
-              <span class="io"><span class="in">현행 시스템 문서 + 인터뷰</span> → <b>As-Is</b> 노드 대수·토폴로지·용량 작성 → <span class="g">그래프 적재</span></span>
-            </div>
-          </div>
-          <div class="down">↓<span>현행 + 요구가 그래프에 함께</span></div>
-          <div class="stage hl">
-            <span class="ph design">설계</span>
-            <div class="body"><b>③ 아키텍처 설계서</b>
-              <span class="io"><span class="in">그래프(현행+요구) + 자연어 "AsIs처럼 노드 대수 유지"</span> → <b>ToBe 설계서</b> 초안 → <span class="g">요구→설계 추적성 자동</span></span>
-            </div>
-          </div>
-        </div>
-        <div class="result">
-          <p class="rhead">핵심</p>
-          <p class="note" style="margin-top:0;">각 산출물이 그래프에 <b>쌓여 다음 단계의 입력</b>이 된다 — 문서가 아니라 연결된 그래프라서 가능. ③에서 자연어 제약(노드 대수)을 어기면 <b>경고</b>. 사람은 "작성"이 아니라 "검토"만.</p>
+        <span class="kicker">5.2 시나리오 - 변경 대응</span>
+        <h2 class="gov">요건 변경이 발생하면 영향받는 범위를 먼저 보여주고, 확정되면 요구사항 정의서와 설계서까지 반영한다.</h2>
+        <div class="sc">
+          <div class="row"><span class="lab">상황</span><p>고객이 요건 변경을 요청해서, 영향 범위를 파악하고 산출물에 반영해야 한다.</p></div>
+          <div class="row"><span class="lab">묻는다</span><div class="asks">
+            <div class="ask">💬 "이렇게 요건 변경이 요청됐는데 영향도가 어떻게 돼?"</div>
+            <div class="ask">💬 "이렇게 요건이 변경됐어. 요구사항 정의서와 설계서에 반영해."</div>
+          </div></div>
+          <div class="row"><span class="lab">에이전트가 한다</span><p>먼저 바뀌는 요건과 연결된 산출물과 설계를 그래프에서 따라가며 영향받는 부분을 모두 찾는다. 변경이 확정되면 요구사항 정의서를 갱신하고 그와 연결된 설계서도 함께 고친 다음, 무엇을 어떻게 바꿨는지와 새 연결을 그래프에 다시 쌓는다.</p></div>
+          <div class="row"><span class="lab">받는다</span><p>먼저 영향받는 요구사항과 설계, 함께 고쳐야 할 산출물 목록을 받는다. 그다음 실제로 갱신된 요구사항 정의서와 설계서를 받고, 무엇을 왜 바꿨는지도 함께 기록된다.</p></div>
         </div>
       </section>
 
-      <!-- ⑤ 시나리오 2 · 감리 추적성 -->
+      <!-- 8 · 5.3 설계 질의응답 -->
       <section>
-        <span class="kicker">⑤ 시나리오 2 · 감리 대응</span>
-        <h2 class="bar">요구사항 추적성 <span class="muted" style="font-size:.6em;">— 요구 → 설계 → 구축</span></h2>
-        <div class="ask">💬 "요구사항 R-12, 설계랑 구축 어디에 반영됐어?"</div>
-        <div class="story">
-          <div class="step"><span class="n">① 묻는다</span><b>요구사항 번호 하나</b><p>"R-12 어디 갔어?"</p></div>
-          <div class="arr">→</div>
-          <div class="step"><span class="n">② 에이전트가 한다</span><b>연결을 따라간다</b><p>요구→설계→서비스로 이어진 추적성을 따라가고, 실제로 구축돼 돌아가는지 확인.</p></div>
-          <div class="arr">→</div>
-          <div class="step"><span class="n">③ 받는다</span><b>추적 체인 + 증빙</b><p>요구부터 검증까지 한 줄로 이어진 증빙.</p></div>
-        </div>
-        <div class="result">
-          <p class="rhead">받는 결과 (예시)</p>
-          <ul>
-            <li>요구 <b>R-12</b> → 아키텍처 설계서 <b>§4.2</b> → <b>OrderService</b>(구축·운영 중) → 성능 테스트 통과</li>
-          </ul>
-          <p class="note">"어디에 반영됐나"를 사람이 문서 뒤지지 않고 한 번에.</p>
+        <span class="kicker">5.3 시나리오 - 설계 질의응답</span>
+        <h2 class="gov">설계에 관해 물어보면 그래프에 쌓인 산출물에서 찾아 정리해서 답한다.</h2>
+        <div class="sc">
+          <div class="row"><span class="lab">상황</span><p>산출물 곳곳에 흩어진 설계 정보를 빠르게 확인해야 한다.</p></div>
+          <div class="row"><span class="lab">묻는다</span><div class="asks">
+            <div class="ask">💬 "운영 환경 노드마다 IP랑 CPU, 메모리, 디스크 크기를 정리해줘."</div>
+          </div></div>
+          <div class="row"><span class="lab">에이전트가 한다</span><p>그래프에 쌓인 현행 시스템 분석서와 설계서에서 운영 환경 노드와 각 노드의 사양을 찾아 한 표로 모은다.</p></div>
+          <div class="row"><span class="lab">받는다</span><p>노드별 IP와 CPU, 메모리, 디스크 크기를 정리한 표를 받는다. 문서를 일일이 뒤지지 않고 한 번에 확인한다.</p></div>
         </div>
       </section>
 
-      <!-- ⑤ 시나리오 3 · 설계 변경 영향도 -->
+      <!-- 9 · 5.4 산출물 출력 -->
       <section>
-        <span class="kicker">⑤ 시나리오 3 · 설계 변경</span>
-        <h2 class="bar">설계 변경 영향도 <span class="muted" style="font-size:.6em;">— 용량 한계에서 시작</span></h2>
-        <div class="ask">💬 "OrderDB 디스크가 꽉 차가는데, 샤딩 추가하면 설계 뭐부터 고쳐?"</div>
-        <div class="story">
-          <div class="step"><span class="n">① 묻는다</span><b>바꾸려는 부분</b><p>용량 한계 상황을 말로.</p></div>
-          <div class="arr">→</div>
-          <div class="step"><span class="n">② 에이전트가 한다</span><b>실제 + 설계를 거꾸로 추적</b><p>실제 용량을 확인하고, 그 컴포넌트와 엮인 설계서·서비스를 역방향으로 추적.</p></div>
-          <div class="arr">→</div>
-          <div class="step"><span class="n">③ 받는다</span><b>변경 가이드</b><p>어디부터 고치고, 무엇이 영향받는지.</p></div>
-        </div>
-        <div class="result">
-          <p class="rhead">받는 결과 (예시)</p>
-          <ul>
-            <li><b>먼저 고칠 설계</b> — 아키텍처 설계서 §5 (데이터 계층), 디스크 92%</li>
-            <li><b>영향 서비스</b> — OrderService · PaymentService</li>
-            <li><b>연쇄 갱신</b> — ADR-021 · 용량 산정서 · 배포 토폴로지</li>
-          </ul>
-          <p class="note">실제 용량 + 설계 추적성을 합쳐야 풀린다.</p>
+        <span class="kicker">5.4 시나리오 - 산출물 출력</span>
+        <h2 class="gov">그래프에 쌓인 산출물을 문서별로 깔끔하게 출력한다.</h2>
+        <div class="sc">
+          <div class="row"><span class="lab">상황</span><p>지금까지 작성한 산출물을 제출용 문서로 정리해야 한다.</p></div>
+          <div class="row"><span class="lab">묻는다</span><div class="asks">
+            <div class="ask">💬 "현재 산출물을 문서별로 HTML로 만들어."</div>
+          </div></div>
+          <div class="row"><span class="lab">에이전트가 한다</span><p>그래프에 있는 각 산출물을 문서 단위로 모아서 HTML 형태로 만들어 낸다.</p></div>
+          <div class="row"><span class="lab">받는다</span><p>요구사항 정의서와 현행 시스템 분석서, 설계서가 문서별 HTML로 출력된다. 내용은 그래프에서 오기 때문에 항상 최신 상태로 맞춰진다.</p></div>
         </div>
       </section>
 
-      <!-- ⑤ 시나리오 4 · Drift -->
-      <section>
-        <span class="kicker">⑤ 시나리오 4 · 최신성</span>
-        <h2 class="bar">설계 vs 실제 Drift 탐지</h2>
-        <div class="ask">💬 "결제 도메인, 설계랑 실제 배포가 얼마나 달라?"</div>
-        <div class="story">
-          <div class="step"><span class="n">① 묻는다</span><b>도메인 하나</b><p>"결제 쪽 차이 알려줘."</p></div>
-          <div class="arr">→</div>
-          <div class="step"><span class="n">② 에이전트가 한다</span><b>설계 vs 실제 비교</b><p>설계서상 구조와 실제 배포된 구조를 나란히 맞대본다.</p></div>
-          <div class="arr">→</div>
-          <div class="step"><span class="n">③ 받는다</span><b>Drift 리포트</b><p>누락·추가·불일치 3가지로 정리.</p></div>
-        </div>
-        <div class="result">
-          <p class="rhead">받는 결과 (예시)</p>
-          <ul>
-            <li><span class="pill-warn">누락</span> FraudCheck — 설계엔 있는데 실제 없음</li>
-            <li><span class="pill-warn">추가</span> PayoutWorker — 실제엔 있는데 설계 없음</li>
-            <li><span class="pill-warn">불일치</span> LedgerService v1.0 → v1.1</li>
-          </ul>
-          <p class="note">6개월 된 설계서와 배포 현실의 차이를 즉시.</p>
-        </div>
-      </section>
-
-      <!-- ⑤ 시나리오 5 · Q&A -->
-      <section>
-        <span class="kicker">⑤ 시나리오 5 · 온보딩</span>
-        <h2 class="bar">아키텍처 Q&amp;A / 온보딩</h2>
-        <div class="ask">💬 "주문 시스템 구조 좀 설명해줘" <span class="muted" style="font-weight:500;">(신규 입사자)</span></div>
-        <div class="story">
-          <div class="step"><span class="n">① 묻는다</span><b>자연어로 궁금한 것</b><p>구조가 뭔지 말로 물어봄.</p></div>
-          <div class="arr">→</div>
-          <div class="step"><span class="n">② 에이전트가 한다</span><b>의도 + 실제를 모은다</b><p>설계 의도(why)와 실제 배포 상태(what)를 함께 끌어와 설명.</p></div>
-          <div class="arr">→</div>
-          <div class="step"><span class="n">③ 받는다</span><b>통합 설명 + 그래프</b><p>글 설명과 그림을 한 번에.</p></div>
-        </div>
-        <div class="result">
-          <p class="rhead">받는 결과 (예시)</p>
-          <ul>
-            <li>설계 의도(<b>why</b>) + 현재 상태(<b>what</b>) 통합 설명</li>
-            <li>주문 도메인 <b>그래프 뷰</b>로 시각적 이해 · 관련 ADR · 담당 팀까지</li>
-          </ul>
-          <p class="note">문서 더미 대신 자연어로 현재 구조를 설명.</p>
-        </div>
-      </section>
-
-      <!-- 닫기 -->
+      <!-- 10 · 닫기 -->
       <section>
         <div class="title-wrap">
           <span class="kicker">Next</span>
-          <h2 class="bar center" style="display:inline-block;">현황 → 문제점 → 해결방안 → 기능 → 시나리오</h2>
-          <p class="sub" style="margin-top:1em;">산출물을 <b>문서</b>가 아닌 <b>연결된 지식 그래프</b>로 — <b>작성하는 순간</b> 그래프가 되고, 변경·탐색·감리·온보딩이 따라온다.</p>
-          <p class="meta">상세 아키텍처는 산출물 ② <span class="tag">02-architecture.html</span> · 데모는 ③ <span class="tag">03-demo.html</span></p>
+          <h2 style="display:inline-block; margin-top:.3em;">산출물을 문서가 아니라 연결된 지식 그래프로</h2>
+          <p class="sub">공식 산출물과 비공식 자료가 함께 묶이면서<br/>작성과 변경, 추적, 출력이 한곳에서 이뤄진다.</p>
+          <p class="meta">상세 아키텍처는 산출물 ② <code>02-architecture.html</code> · 데모는 ③ <code>03-demo.html</code></p>
         </div>
       </section>
 
@@ -386,21 +237,7 @@ sequenceDiagram
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-      startOnLoad: false, theme: 'base',
-      themeVariables: {
-        fontFamily: 'Pretendard, sans-serif', primaryColor: '#eef2ff', primaryBorderColor: '#4f46e5',
-        primaryTextColor: '#1e293b', lineColor: '#94a3b8', actorBkg: '#eef2ff', actorBorder: '#4f46e5',
-        actorTextColor: '#1e293b', signalColor: '#475569', signalTextColor: '#334155',
-      },
-    });
-    const blocks = [...document.querySelectorAll('pre.mermaid')];
-    for (let i = 0; i < blocks.length; i++) {
-      try { const { svg } = await mermaid.render('mmd-' + i, blocks[i].textContent.trim()); blocks[i].innerHTML = svg; }
-      catch (e) { blocks[i].innerHTML = '<pre style="color:#dc2626">Mermaid error: ' + e.message + '</pre>'; }
-    }
+  <script>
     Reveal.initialize({ hash: true, slideNumber: 'c/t', transition: 'slide', width: 1280, height: 720, margin: 0.04 });
   </script>
 </body>

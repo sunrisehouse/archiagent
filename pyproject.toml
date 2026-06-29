@@ -1,0 +1,25 @@
+[project]
+name = "archiagent"
+version = "0.1.0"
+description = "아키텍트를 돕는 에이전트 — SI 산출물을 자연어로 작성·변경·추적·출력 (PoC, 시나리오 5.1 버티컬 슬라이스)"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+archiagent = "archiagent.cli:main"
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+markers = ["integration: 실제 Claude 모델을 호출하는 테스트 (자격 없으면 skip)"]
+testpaths = ["tests"]
+# 기본 실행은 오프라인(통합 제외). 실모델 검증은 `pytest -m integration`.
+addopts = "-m 'not integration'"

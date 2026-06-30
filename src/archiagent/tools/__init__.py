@@ -1,13 +1,15 @@
 """에이전트 도구 (kb_*). 각 도구는 순수 함수이고 입력/출력이 명확하다.
 
-슬라이스(5.1) 범위: kb_artifact_ingest, kb_graph_upsert, kb_graph_query, kb_doc_generate.
+구현 범위: 산출물 작성·조회·생성·저장(5.1), 변경 영향도(5.2), 산출물 출력(5.4).
 (kb_vector_search · compare_design_actual · state_* 는 후속 단계)
 """
 
 from archiagent.tools.kb_artifact_ingest import kb_artifact_ingest
+from archiagent.tools.kb_doc_export import kb_doc_export
 from archiagent.tools.kb_doc_generate import kb_doc_generate
 from archiagent.tools.kb_graph_query import (
     design_context,
+    impact,
     next_requirement_id,
     requirements,
     system_nodes,
@@ -18,8 +20,10 @@ __all__ = [
     "kb_artifact_ingest",
     "kb_graph_upsert",
     "kb_doc_generate",
+    "kb_doc_export",
     "requirements",
     "system_nodes",
     "design_context",
+    "impact",
     "next_requirement_id",
 ]

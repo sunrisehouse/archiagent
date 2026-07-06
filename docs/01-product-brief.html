@@ -64,6 +64,13 @@
     .sc .asks { display: grid; gap: 5px; }
     .sc .ask { font-size: .72em; font-weight: 600; background: #f8fafc; border-left: 3px solid var(--accent); border-radius: 7px; padding: 6px 11px; }
 
+    /* 산출물 실물 미리보기 */
+    .preview { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: .3em; }
+    .preview figure { margin: 0; }
+    .preview figcaption { font-size: .62em; font-weight: 700; color: var(--accent); margin: 0 0 6px; }
+    .preview .frame { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; height: 470px; box-shadow: 0 2px 10px rgba(30,41,59,.08); background: #fff; }
+    .preview iframe { width: 200%; height: 940px; border: 0; transform: scale(.5); transform-origin: top left; }
+
     .footer { position: fixed; bottom: 10px; left: 18px; font-size: 12px; color: var(--muted); z-index: 30; }
     .reveal .title-wrap { text-align: center; }
     .reveal .title-wrap .sub { font-size: .82em; color: var(--muted); margin-top: .6em; font-weight: 500; line-height: 1.5; }
@@ -221,6 +228,23 @@
           <div class="row"><span class="lab">에이전트가 한다</span><p>그래프에 있는 각 산출물을 문서 단위로 모아서 HTML 형태로 만들어 낸다.</p></div>
           <div class="row"><span class="lab">받는다</span><p>요구사항 정의서와 현행 시스템 분석서, 설계서가 문서별 HTML로 출력된다. 내용은 그래프에서 오기 때문에 항상 최신 상태로 맞춰진다.</p></div>
         </div>
+      </section>
+
+      <!-- 9b · 5.4 산출물 출력 결과 미리보기 -->
+      <section>
+        <span class="kicker">5.4 시나리오 - 출력 결과</span>
+        <h2 class="gov">에이전트가 실제로 출력한 산출물이다. 요구사항 정의서와 아키텍처 설계서가 문서로 만들어진다.</h2>
+        <div class="preview">
+          <figure>
+            <figcaption>요구사항 정의서</figcaption>
+            <div class="frame"><iframe src="sample-requirements.html" title="요구사항 정의서" loading="lazy"></iframe></div>
+          </figure>
+          <figure>
+            <figcaption>아키텍처 설계서 (요구 추적성 포함)</figcaption>
+            <div class="frame"><iframe src="sample-design.html" title="아키텍처 설계서" loading="lazy"></iframe></div>
+          </figure>
+        </div>
+        <p class="note">은행 차세대 시스템 시나리오로 실제 생성한 산출물이다. 내용은 그래프에서 오기 때문에 변경이 반영되면 출력도 함께 최신으로 맞춰진다.</p>
       </section>
 
       <!-- 10 · 닫기 -->

@@ -1,0 +1,38 @@
+<!doctype html><html lang='ko'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>요구사항 정의서</title><style>*{box-sizing:border-box}
+:root{--bg:#f5f7fa;--surface:#ffffff;--ink:#141b2b;--muted:#5c6675;
+--line:#e4e8f0;--accent:#1f52d6;--soft:#eef3ff;--shadow:rgba(20,30,60,.05)}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1320;--surface:#171f30;
+--ink:#e7ecf5;--muted:#98a3b8;--line:#28324a;--accent:#7aa2ff;
+--soft:#1a2540;--shadow:rgba(0,0,0,.3)}}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif;
+line-height:1.72;-webkit-font-smoothing:antialiased}
+.doc{max-width:880px;margin:0 auto;padding:0 22px 96px}
+.cover{padding:60px 0 26px;border-bottom:1px solid var(--line)}
+.eyebrow{color:var(--accent);font-weight:700;font-size:.76rem;
+letter-spacing:.14em;text-transform:uppercase;margin:0}
+.title{font-size:2.1rem;line-height:1.15;letter-spacing:-.02em;margin:.5rem 0 .8rem}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;color:var(--muted);font-size:.86rem;margin:0}
+.meta span{display:inline-flex;gap:.4rem}
+.meta b{color:var(--ink);font-weight:600}
+section{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+padding:24px 28px;margin:20px 0;box-shadow:0 1px 3px var(--shadow)}
+section>h2:first-child{margin-top:0}
+h2{font-size:1.16rem;margin:1.6rem 0 .9rem;padding-bottom:.55rem;
+border-bottom:1px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1rem;color:var(--accent);margin:1.3rem 0 .35rem}
+p{margin:.55rem 0}ul{margin:.4rem 0;padding-left:1.15rem}li{margin:.3rem 0}
+table{border-collapse:collapse;width:100%;margin:.9rem 0;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:.6rem .75rem;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600}
+.reqlist{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.reqlist li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:baseline;
+padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.badge{display:inline-block;background:var(--accent);color:#fff;font-weight:700;
+font-size:.72rem;padding:4px 10px;border-radius:999px;white-space:nowrap}
+@media(prefers-color-scheme:dark){.badge{color:#0e1320}}
+.trace{background:var(--soft);border-color:transparent}
+.trace .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem}
+.note{color:var(--muted);font-size:.86rem;margin-top:.6rem}
+@media print{body{background:#fff}section{box-shadow:none;break-inside:avoid;border-radius:0}}</style></head><body><div class='doc'><header class='cover'><p class='eyebrow'>은행 차세대 시스템 구축</p><h1 class='title'>요구사항 정의서</h1><p class='meta'><span>단계 <b>분석</b></span><span>요구 항목 <b>10건</b></span></p></header><section><ul class='reqlist'><li><span class='badge'>R-1</span><span>현행 온프레미스 시스템을 클라우드 플랫폼으로 전환한다.</span></li><li><span class='badge'>R-2</span><span>핵심 업무 기능을 마이크로서비스 아키텍처로 분해·구현한다.</span></li><li><span class='badge'>R-3</span><span>실시간 모니터링을 통해 장애를 빠르게 감지하는 체계를 구축한다.</span></li><li><span class='badge'>R-4</span><span>24시간 무중단 운영을 위해 고가용성을 보장한다.</span></li><li><span class='badge'>R-5</span><span>금융 보안 규제 요건을 준수하는 보안 체계를 구축한다.</span></li><li><span class='badge'>R-6</span><span>시스템은 피크 시간대에도 응답 지연 없이 안정적인 성능을 유지해야 한다.</span></li><li><span class='badge'>R-7</span><span>장애 발생 시 운영팀에 즉시 알림을 전달하는 모니터링 및 알림 기능이 필요하다.</span></li><li><span class='badge'>R-8</span><span>개별 서비스의 독립적인 확장성을 지원하여 특정 서비스만 선택적으로 확장할 수 있어야 한다.</span></li><li><span class='badge'>R-9</span><span>배포 중에도 서비스 중단 없이 무중단 배포가 가능해야 한다.</span></li><li><span class='badge'>R-10</span><span>감사 및 규제 준수를 위해 모든 주요 작업 로그를 상세하게 기록해야 한다.</span></li></ul></section></div></body></html>

@@ -155,13 +155,27 @@ def design_html(store: GraphStore) -> str:
             "<p>이 설계가 반영한 요구입니다.</p>"
             f"<div class='chips'>{chips}</div></section>"
         )
-    body = _design_body_html(doc.props.get("body", ""))
+    body = _design_body_html(_strip_title(doc.props.get("body", ""), doc.title))
     return _document(
         _PROJECT,
         doc.title,
         [("단계", "설계"), ("반영 요구", f"{len(linked)}건")],
         body + trace,
     )
+
+
+def _strip_title(body: str, title: str) -> str:
+    """본문 첫 줄이 문서 제목과 같은 제목이면 제거한다(커버 제목과 중복 방지)."""
+    lines = body.splitlines()
+    i = 0
+    while i < len(lines) and not lines[i].strip():
+        i += 1
+    if i < len(lines):
+        first = lines[i].strip()
+        if first.startswith("#") and first.lstrip("#").strip() == title.strip():
+            lines.pop(i)
+            return "\n".join(lines)
+    return body
 
 
 def _design_body_html(text: str) -> str:

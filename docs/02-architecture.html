@@ -72,9 +72,15 @@
     .flow .node small { display: block; font-weight: 500; color: var(--muted); font-size: .8em; margin-top: 2px; }
     .flow .db { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: .88rem; text-align: center; box-shadow: 0 1px 3px rgba(30,41,59,.06); }
     .flow .arr { color: var(--accent); font-weight: 800; font-size: 1.25rem; }
-    .side { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
-    .side .chip { font-size: .82rem; color: var(--ink-soft); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; }
-    .side .chip b { color: var(--accent); }
+    .arch { max-width: 780px; margin: 4px auto 0; }
+    .arch svg { width: 100%; height: auto; display: block; }
+    .arch .bx { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+    .arch .bx.em { fill: #e0e7ff; stroke-width: 2; }
+    .arch .bx.sup { fill: var(--surface); stroke: #cbd5e1; stroke-width: 1.5; }
+    .arch .t { fill: var(--ink); font-weight: 700; }
+    .arch .s { fill: var(--muted); font-weight: 500; }
+    .arch .ln { stroke: var(--accent2); stroke-width: 1.6; fill: none; }
+    .arch .lbl { fill: var(--muted); font-weight: 600; }
 
     /* sequence steps */
     .seq { display: grid; gap: 8px; }
@@ -118,18 +124,51 @@
     <div class="slide-inner">
       <span class="kicker">Overview</span>
       <h2 class="gov">Chat UI가 Orchestrator를 호출하고, Orchestrator가 그래프 조회·작성 도구를 묶어 Graph DB와 Vector DB를 다룬다.</h2>
-      <div class="flow">
-        <div class="node">① Front<small>Chat UI · 그래프 뷰어</small></div>
-        <span class="arr">→</span>
-        <div class="node">② Agent Runtime<small>Orchestrator + 그래프 조회·작성</small></div>
-        <span class="arr">→</span>
-        <div class="node">④ Graph/KB MCP</div>
-        <span class="arr">→</span>
-        <div class="db">⑥ Knowledge Base<br/><small>Graph DB · Vector DB</small></div>
-      </div>
-      <div class="side">
-        <div class="chip"><b>③ Model Provider</b> — Runtime가 Claude 호출 (Opus 4.8 / Sonnet 4.6 / Haiku 4.5)</div>
-        <div class="chip"><b>⑦ Data Pipeline</b> — 인제스트·LLM 추출·Upsert로 KB 적재</div>
+      <div class="arch">
+        <svg viewBox="0 0 980 500" font-family="system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" role="img" aria-label="archiagent 아키텍처 구성도">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6366f1"/>
+            </marker>
+          </defs>
+          <!-- connectors -->
+          <path class="ln" marker-end="url(#ah)" d="M440,86 L440,138"/>
+          <text class="lbl" x="452" y="118" font-size="12.5">질의 / 응답</text>
+          <path class="ln" marker-start="url(#ah)" marker-end="url(#ah)" d="M630,185 L720,185"/>
+          <text class="lbl" x="675" y="174" font-size="11.5" text-anchor="middle">Claude 호출</text>
+          <path class="ln" marker-end="url(#ah)" d="M440,232 L440,290"/>
+          <text class="lbl" x="452" y="266" font-size="12.5">도구 호출</text>
+          <path class="ln" marker-end="url(#ah)" d="M440,352 L440,398"/>
+          <path class="ln" marker-end="url(#ah)" d="M720,445 L632,445"/>
+          <text class="lbl" x="675" y="434" font-size="11.5" text-anchor="middle">적재 · Upsert</text>
+          <!-- ① Front -->
+          <rect class="bx" x="280" y="22" width="320" height="64" rx="12"/>
+          <text class="t" x="440" y="48" text-anchor="middle" font-size="17">① Front</text>
+          <text class="s" x="440" y="70" text-anchor="middle" font-size="13">Chat UI · 그래프 뷰어</text>
+          <!-- ② Agent Runtime -->
+          <rect class="bx em" x="250" y="138" width="380" height="94" rx="14"/>
+          <text class="t" x="440" y="166" text-anchor="middle" font-size="17">② Agent Runtime</text>
+          <text class="s" x="440" y="186" text-anchor="middle" font-size="12">Claude Agent SDK</text>
+          <text class="t" x="440" y="212" text-anchor="middle" font-size="13">Orchestrator + 그래프 조회·작성 도구(kb_*)</text>
+          <!-- ③ Model Provider -->
+          <rect class="bx sup" x="720" y="147" width="210" height="76" rx="12"/>
+          <text class="t" x="825" y="173" text-anchor="middle" font-size="15">③ Model Provider</text>
+          <text class="s" x="825" y="192" text-anchor="middle" font-size="12">Anthropic Claude</text>
+          <text class="s" x="825" y="209" text-anchor="middle" font-size="11">Opus 4.8 · Sonnet 4.6 · Haiku 4.5</text>
+          <!-- ④ MCP Servers -->
+          <rect class="bx" x="280" y="290" width="320" height="62" rx="12"/>
+          <text class="t" x="440" y="316" text-anchor="middle" font-size="16">④ MCP Servers</text>
+          <text class="s" x="440" y="337" text-anchor="middle" font-size="12.5">Graph/KB MCP</text>
+          <!-- ⑥ Knowledge Base -->
+          <rect class="bx" x="250" y="398" width="380" height="94" rx="14"/>
+          <text class="t" x="440" y="432" text-anchor="middle" font-size="17">⑥ Knowledge Base</text>
+          <text class="s" x="440" y="458" text-anchor="middle" font-size="13">Graph DB · Vector DB</text>
+          <!-- ⑦ Data Pipeline -->
+          <rect class="bx sup" x="720" y="408" width="210" height="76" rx="12"/>
+          <text class="t" x="825" y="434" text-anchor="middle" font-size="15">⑦ Data Pipeline</text>
+          <text class="s" x="825" y="453" text-anchor="middle" font-size="11.5">인제스트 · LLM 추출</text>
+          <text class="s" x="825" y="470" text-anchor="middle" font-size="11.5">Upsert</text>
+        </svg>
       </div>
       <div class="poc"><span class="lab">📍 현재 구현(PoC)</span> 단일 Python 에이전트가 도구(<code>kb_*</code>)를 <b>직접 호출</b>(MCP 없음). Graph는 SQLite 인메모리, Vector DB·그래프 뷰어는 후속.</div>
     </div>

@@ -18,14 +18,14 @@
 - **목차 제목:** Overview
 - **거버닝 메시지:** Chat UI가 Orchestrator를 호출하고, Orchestrator가 그래프 조회·작성 도구를 묶어 Graph DB와 Vector DB를 다룬다.
 - **내부 컨텐츠:**
-  - > 다이어그램: 6개 묶음으로 구성
+  - > 구성도(계층·연결): 아래 6개 묶음을 위→아래로 쌓고 화살표로 연결한다.
   - ① Front — Chat UI · 그래프 뷰어
   - ② Agent Runtime (Claude Agent SDK) — Orchestrator Agent + 그래프 조회·작성 도구
   - ③ Model Provider — Anthropic Claude (Opus 4.8 / Sonnet 4.6 / Haiku 4.5)
   - ④ MCP Servers — Graph/KB MCP(내부)
   - ⑥ Knowledge Base — Graph DB · Vector DB
   - ⑦ Data Pipeline — 인제스트·LLM 추출·Upsert
-  - 흐름: UI→Orchestrator→Graph/KB MCP→Graph/Vector DB / Orchestrator→Claude
+  - 연결: ① —질의/응답→ ② —도구 호출→ ④ → ⑥ / ② ←Claude 호출→ ③ / ⑥ ←적재(Upsert)— ⑦
   - 📍 현재 구현(PoC): 단일 Python 에이전트가 도구(`kb_*`)를 **직접 호출**(MCP 없음). Graph는 SQLite 인메모리, Vector DB·그래프 뷰어는 후속.
 
 ## 3. ① Front — Front 구성

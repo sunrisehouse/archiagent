@@ -4,293 +4,315 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>archiagent — 산출물 ② 아키텍처 구성도</title>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme" />
-
   <style>
     :root {
       --accent: #4f46e5;
+      --accent2: #6366f1;
       --accent-soft: #eef2ff;
       --ink: #1e293b;
+      --ink-soft: #334155;
       --muted: #64748b;
       --line: #e2e8f0;
-      --ok: #16a34a;
-      --warn: #dc2626;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --poc: #b45309;
+      --poc-soft: #fffbeb;
+      --poc-line: #fcd34d;
     }
-    .reveal { font-family: "Pretendard", system-ui, sans-serif; color: var(--ink); }
-    .reveal .slides { text-align: left; }
-    .reveal h1, .reveal h2, .reveal h3 { font-family: "Pretendard", sans-serif; color: var(--ink); text-transform: none; letter-spacing: -0.02em; font-weight: 800; }
-    .reveal h1 { font-size: 2.4em; line-height: 1.15; }
-    .reveal h2 { font-size: 1.55em; margin-bottom: .5em; }
-    .reveal h3 { font-size: 1.1em; color: var(--accent); }
-    .reveal p, .reveal li { font-size: .8em; line-height: 1.5; }
-    .reveal .muted { color: var(--muted); }
-    .reveal section { padding: 10px 14px; }
-    .reveal h2.bar { position: relative; padding-bottom: .35em; }
-    .reveal h2.bar::after { content: ""; position: absolute; left: 0; bottom: 0; width: 64px; height: 5px; background: var(--accent); border-radius: 3px; }
-    .reveal .kicker { display: inline-block; font-size: .62em; font-weight: 700; letter-spacing: .08em; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 999px; margin-bottom: .6em; text-transform: uppercase; }
-    .reveal table { font-size: .62em; border-collapse: collapse; width: 100%; }
-    .reveal table th { background: var(--accent); color: #fff; font-weight: 700; padding: 8px 10px; border: none; }
-    .reveal table td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-    .reveal table tr:nth-child(even) td { background: #f8fafc; }
-    .reveal .tag { font-family: ui-monospace, monospace; font-size: .92em; background: #f1f5f9; padding: 1px 6px; border-radius: 5px; color: var(--accent); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      color: var(--ink); background: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased;
+    }
+    .progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); z-index: 50; transition: width .2s ease; }
+    .counter { position: fixed; bottom: 18px; right: 22px; font-size: 13px; font-weight: 600; color: var(--muted); z-index: 50;
+      background: rgba(255,255,255,.8); padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); backdrop-filter: blur(6px); }
+    .brandmark { position: fixed; bottom: 18px; left: 22px; font-size: 12px; color: var(--muted); z-index: 50; }
+    .brandmark b { color: var(--accent); }
+
+    .slide { min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: center; padding: 7vh 7vw; position: relative; }
+    .slide-inner { width: 100%; max-width: 1080px; margin: 0 auto; }
+    .kicker { display: inline-block; font-size: 12.5px; font-weight: 700; letter-spacing: .06em; color: var(--accent); background: var(--accent-soft); padding: 6px 15px; border-radius: 999px; margin-bottom: 18px; }
+    h1 { font-size: clamp(1.9rem, 5vw, 3rem); line-height: 1.14; letter-spacing: -.03em; font-weight: 800; }
+    h2.gov { font-size: clamp(1.2rem, 2.4vw, 1.7rem); line-height: 1.35; font-weight: 700; letter-spacing: -.02em; position: relative; padding-left: 18px; margin-bottom: 24px; }
+    h2.gov::before { content: ""; position: absolute; left: 0; top: .15em; bottom: .15em; width: 6px; background: var(--accent); border-radius: 4px; }
+    h3 { font-size: 1rem; color: var(--accent); margin-bottom: 8px; }
+    p, li { font-size: .95rem; }
+    code, .tag { font-family: ui-monospace, "SF Mono", monospace; font-size: .86em; background: #eef1f6; padding: 1.5px 7px; border-radius: 6px; color: var(--accent); }
+
+    .cover { text-align: center; align-items: center; }
+    .cover .sub { font-size: 1.1rem; color: var(--ink-soft); margin-top: 22px; line-height: 1.7; }
+    .cover .meta { margin-top: 34px; font-size: .82rem; color: var(--muted); }
+
+    table { border-collapse: collapse; width: 100%; background: var(--surface); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(30,41,59,.06); font-size: .9rem; }
+    thead th { background: var(--accent); color: #fff; font-weight: 700; padding: 11px 15px; text-align: left; }
+    tbody td { padding: 10px 15px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:nth-child(even) td { background: #f8fafc; }
+
     .grid { display: grid; gap: 14px; }
-    .grid.cols-2 { grid-template-columns: 1fr 1fr; }
-    .card { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
-    .card h3 { margin: 0 0 .3em; font-size: .82em; }
-    .card p, .card li { font-size: .64em; margin: .2em 0; }
-    .mermaid { text-align: center; margin: 0 auto; }
-    .mermaid svg { max-height: 460px; width: auto !important; max-width: 100%; height: auto; }
-    .split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; align-items: center; }
-    .split .mermaid svg { max-height: 420px; }
-    .footer { position: fixed; bottom: 10px; left: 18px; font-size: 12px; color: var(--muted); z-index: 30; }
-    .reveal .title-wrap { text-align: center; }
-    .reveal .title-wrap .sub { font-size: .9em; color: var(--muted); margin-top: .4em; font-weight: 500; }
-    .reveal .title-wrap .meta { margin-top: 1.4em; font-size: .62em; color: var(--muted); }
+    .grid.c2 { grid-template-columns: 1fr 1fr; }
+    .grid.c3 { grid-template-columns: repeat(3, 1fr); }
+    .card { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; padding: 15px 18px; box-shadow: 0 1px 3px rgba(30,41,59,.05); }
+    .card h3 { margin-bottom: 6px; font-size: .98rem; }
+    .card p, .card li { font-size: .88rem; color: var(--ink-soft); line-height: 1.55; }
+    .card ul { padding-left: 1.1rem; }
+
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+
+    /* PoC callout */
+    .poc { margin-top: 16px; background: var(--poc-soft); border: 1px solid var(--poc-line); border-left: 4px solid var(--poc); border-radius: 10px; padding: 12px 16px; font-size: .86rem; color: #78350f; line-height: 1.55; }
+    .poc b { color: var(--poc); }
+    .poc .lab { display: inline-block; font-weight: 800; color: var(--poc); margin-right: 6px; }
+
+    /* diagram: flow of boxes */
+    .flow { display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 6px 0 4px; }
+    .flow .node { background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 12px; padding: 12px 16px; font-size: .9rem; font-weight: 700; text-align: center; }
+    .flow .node small { display: block; font-weight: 500; color: var(--muted); font-size: .8em; margin-top: 2px; }
+    .flow .db { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: .88rem; text-align: center; box-shadow: 0 1px 3px rgba(30,41,59,.06); }
+    .flow .arr { color: var(--accent); font-weight: 800; font-size: 1.25rem; }
+    .side { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .side .chip { font-size: .82rem; color: var(--ink-soft); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; }
+    .side .chip b { color: var(--accent); }
+
+    /* sequence steps */
+    .seq { display: grid; gap: 8px; }
+    .seq .step { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: .9rem; }
+    .seq .n { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: .8rem; display: flex; align-items: center; justify-content: center; }
+
+    /* relationship list (KB graph model) */
+    .rel { display: grid; gap: 9px; }
+    .rel .r { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: .9rem; }
+    .rel .r b { color: var(--ink); }
+    .rel .r em { font-style: normal; font-family: ui-monospace, monospace; font-size: .82em; color: var(--accent); background: #eef1f6; padding: 1px 7px; border-radius: 6px; margin: 0 4px; }
+
+    .status { font-size: .78rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+    .status.impl { background: #dcfce7; color: #15803d; }
+    .status.next { background: #f1f5f9; color: var(--muted); }
+    .note { color: var(--muted); font-size: .86rem; margin-top: 14px; }
+
+    @media (max-width: 860px) {
+      .split, .grid.c2, .grid.c3 { grid-template-columns: 1fr; }
+      .flow { gap: 8px; }
+    }
   </style>
 </head>
 <body>
-  <div class="footer">archiagent · 산출물 ② 아키텍처 구성도</div>
-  <div class="reveal">
-    <div class="slides">
+  <div class="progress" id="progress"></div>
+  <div class="brandmark"><b>archiagent</b> · 산출물 ② 아키텍처 구성도</div>
+  <div class="counter" id="counter">1 / 8</div>
 
-      <!-- Title -->
-      <section>
-        <div class="title-wrap">
-          <span class="kicker">산출물 ② · Architecture</span>
-          <h1>아키텍처 구성도</h1>
-          <p class="sub"><strong>archiagent</strong> — Claude Agent SDK 기반 멀티 에이전트 구성.<br/>Front · Runtime · Model · MCP · Tools · Knowledge Base · Pipeline.</p>
-          <p class="meta">Agent B(시스템 상태)는 외부 팀·별도 스택 → <strong>MCP 연계 계약</strong>으로 추상화</p>
-        </div>
-      </section>
+  <!-- 1 · Title -->
+  <section class="slide cover">
+    <div class="slide-inner">
+      <span class="kicker">산출물 ② · Architecture</span>
+      <h1>아키텍처 구성도</h1>
+      <p class="sub"><strong>archiagent</strong>는 Claude Agent SDK 기반 에이전트로 구성한다.<br/>Front · Runtime · Model · MCP · Tools · Knowledge Base · Pipeline.</p>
+      <p class="meta">📍 이 구성도는 <strong>목표 아키텍처</strong>다. 슬라이드마다 현재 PoC 구현 범위를 함께 표시한다.</p>
+    </div>
+  </section>
 
-      <!-- Overall -->
-      <section>
-        <span class="kicker">Overview</span>
-        <h2 class="bar">전체 구성</h2>
-        <pre class="mermaid">
-flowchart TB
-  subgraph FE["① Front"]
-    UI["Chat UI · 그래프 뷰어 · Drift 리포트"]
-  end
-  subgraph RT["② Agent Runtime — Claude Agent SDK"]
-    ORCH["Orchestrator Agent"]
-    AGA["Agent A (subagent)"]
-  end
-  subgraph MP["③ Model Provider"]
-    CL["Anthropic Claude<br/>Opus 4.8 / Sonnet 4.6 / Haiku 4.5"]
-  end
-  subgraph MC["④ MCP Servers"]
-    GMCP["Graph/KB MCP"]
-    BMCP["System State MCP = Agent B (외부)"]
-  end
-  subgraph KB["⑥ Knowledge Base"]
-    GDB[("Graph DB")]
-    VDB[("Vector DB")]
-  end
-  subgraph PP["⑦ Data Pipeline"]
-    ING["인제스트·LLM 추출·Upsert"]
-    SYNC["관측 동기화·Reconcile"]
-  end
-  UI --> ORCH
-  ORCH <--> AGA
-  ORCH -. tool .-> BMCP
-  AGA --> GMCP
-  GMCP --> GDB & VDB
-  ORCH --> CL
-  AGA --> CL
-  ING --> GDB & VDB
-  BMCP -. observed .-> SYNC --> GDB
-  classDef ours fill:#eef2ff,stroke:#4f46e5,color:#1e293b;
-  classDef ext fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
-  class ORCH,AGA,GMCP,GDB,VDB,ING,SYNC,UI ours;
-  class BMCP ext;
-        </pre>
-      </section>
+  <!-- 2 · Overview -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">Overview</span>
+      <h2 class="gov">Chat UI가 Orchestrator를 호출하고, Orchestrator가 그래프 조회·작성 도구를 묶어 Graph DB와 Vector DB를 다룬다.</h2>
+      <div class="flow">
+        <div class="node">① Front<small>Chat UI · 그래프 뷰어</small></div>
+        <span class="arr">→</span>
+        <div class="node">② Agent Runtime<small>Orchestrator + 그래프 조회·작성</small></div>
+        <span class="arr">→</span>
+        <div class="node">④ Graph/KB MCP</div>
+        <span class="arr">→</span>
+        <div class="db">⑥ Knowledge Base<br/><small>Graph DB · Vector DB</small></div>
+      </div>
+      <div class="side">
+        <div class="chip"><b>③ Model Provider</b> — Runtime가 Claude 호출 (Opus 4.8 / Sonnet 4.6 / Haiku 4.5)</div>
+        <div class="chip"><b>⑦ Data Pipeline</b> — 인제스트·LLM 추출·Upsert로 KB 적재</div>
+      </div>
+      <div class="poc"><span class="lab">📍 현재 구현(PoC)</span> 단일 Python 에이전트가 도구(<code>kb_*</code>)를 <b>직접 호출</b>(MCP 없음). Graph는 SQLite 인메모리, Vector DB·그래프 뷰어는 후속.</div>
+    </div>
+  </section>
 
-      <!-- Front -->
-      <section>
-        <span class="kicker">① Front</span>
-        <h2 class="bar">Front 구성</h2>
-        <div class="grid cols-2">
-          <div class="card"><h3>대화 뷰</h3><p>아키텍트의 자연어 질의 입력 / 답변 출력. PoC에선 웹 챗 또는 CLI로 충분.</p></div>
-          <div class="card"><h3>그래프 뷰</h3><p>Agent A의 서브그래프 시각화 — 컴포넌트·의존성 관계.</p></div>
-          <div class="card"><h3>Drift 리포트 뷰</h3><p>설계 vs 실제 비교 결과 — 추가/누락/불일치.</p></div>
-          <div class="card"><h3>책임 분리</h3><p>Front는 <b>표현만</b>. 모든 추론·조합은 Runtime이 담당.</p></div>
-        </div>
-      </section>
+  <!-- 3 · Front -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">① Front</span>
+      <h2 class="gov">Front는 표현만 맡는다. 모든 추론과 조합은 Runtime이 담당한다.</h2>
+      <div class="grid c3">
+        <div class="card"><h3>대화 뷰</h3><p>아키텍트의 자연어 질의 입력 / 답변 출력. PoC에선 웹 챗 또는 CLI로 충분.</p></div>
+        <div class="card"><h3>그래프 뷰</h3><p>서브그래프 시각화 — 컴포넌트·의존성 관계.</p></div>
+        <div class="card"><h3>책임 분리</h3><p>Front는 표현만. 추론·조합은 Runtime.</p></div>
+      </div>
+      <div class="poc"><span class="lab">📍 현재 구현(PoC)</span> CLI 대화만 제공. 그래프 뷰는 후속이나, 산출물을 문서 HTML로 출력하는 기능(<code>kb_doc_export</code>)은 동작.</div>
+    </div>
+  </section>
 
-      <!-- Runtime -->
-      <section>
-        <span class="kicker">② Agent Runtime</span>
-        <h2 class="bar">Orchestration · Instruction</h2>
-        <div class="split">
-          <div>
-            <div class="card" style="margin-bottom:12px;">
-              <h3>Orchestration 부문</h3>
-              <ul>
-                <li>SDK <span class="tag">query()</span> 루프 진입점</li>
-                <li>의도 분해 → 시나리오 라우팅(drift/영향도/Q&amp;A)</li>
-                <li><b>Agent A = subagent</b>, <b>Agent B = MCP tool</b></li>
-                <li>정지 조건: 최대 반복 · 실패 시 graceful degrade</li>
-                <li>비가역 작업(그래프 쓰기)은 <span class="tag">AskUserQuestion</span> 확인</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3>Agent Instruction · Prompt</h3>
-              <ul>
-                <li><b>Orchestrator:</b> 역할·라우팅 휴리스틱·"설계는 A, 실제는 B"</li>
-                <li><b>Agent A:</b> 그래프 모델·질의 패턴, "없으면 없다고", <span class="tag">concise|detailed</span></li>
-                <li><b>작성:</b> As-Is 그래프 제약(노드 대수·용량) 읽어 ToBe 초안·<b>충돌 경고</b></li>
-              </ul>
-            </div>
-          </div>
-          <pre class="mermaid">
-sequenceDiagram
-  actor U as Architect
-  participant O as Orchestrator
-  participant A as Agent A
-  participant B as Agent B
-  U->>O: 질의
-  O->>A: 설계 토폴로지
-  A-->>O: intended
-  O->>B: 실제 상태
-  B-->>O: observed
-  O->>O: 비교·합성
-  O-->>U: 통합 응답
-          </pre>
-        </div>
-      </section>
-
-      <!-- Model / MCP / Tools -->
-      <section>
-        <span class="kicker">③④⑤ Provider · MCP · Tools</span>
-        <h2 class="bar">모델 · MCP · 도구</h2>
-        <div class="grid cols-2">
-          <div>
-            <h3>③ Model Provider</h3>
-            <table>
-              <thead><tr><th>용도</th><th>모델</th></tr></thead>
-              <tbody>
-                <tr><td>오케스트레이션·영향도 (기본)</td><td><span class="tag">claude-opus-4-8</span></td></tr>
-                <tr><td>라우틴 질의·요약</td><td><span class="tag">claude-sonnet-4-6</span></td></tr>
-                <tr><td>대량 엔티티 추출</td><td><span class="tag">claude-haiku-4-5</span></td></tr>
-              </tbody>
-            </table>
-            <h3 style="margin-top:.7em;">④ MCP Server</h3>
-            <ul style="font-size:.64em;">
-              <li><b>Graph/KB MCP</b> — 우리 구현 (Agent A 백엔드)</li>
-              <li><b>System State MCP</b> = Agent B (외부). 계약: <span class="tag">state_get_topology</span> · <span class="tag">state_get_component</span> · <span class="tag">state_list_running</span></li>
+  <!-- 4 · Agent Runtime -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">② Agent Runtime</span>
+      <h2 class="gov">Orchestrator가 의도를 분해하고 라우팅하며, 그래프 조회·작성으로 설계 산출물을 다뤄 응답을 합성한다.</h2>
+      <div class="split">
+        <div>
+          <div class="card" style="margin-bottom:12px;">
+            <h3>Orchestration 부문</h3>
+            <ul>
+              <li>SDK <code>query()</code> 루프 진입점</li>
+              <li>의도 분해 → 라우팅(작성/영향도/질의응답/출력)</li>
+              <li>정지 조건: 최대 반복 · 실패 시 graceful degrade</li>
+              <li>비가역 작업(그래프 쓰기)은 확인 게이트</li>
             </ul>
           </div>
-          <div>
-            <h3>⑤ Tools <span class="muted" style="font-size:.7em;">— prefix로 용도 분리</span></h3>
-            <table>
-              <thead><tr><th>도구</th><th>설명</th></tr></thead>
-              <tbody>
-                <tr><td><span class="tag">kb_artifact_ingest</span></td><td>산출물 문서 → Artifact·엔티티 적재(확인)</td></tr>
-                <tr><td><span class="tag">kb_doc_generate</span></td><td>그래프·대화 맥락 → 산출물 초안(작성·갱신)</td></tr>
-                <tr><td><span class="tag">kb_graph_query</span></td><td>의존성·패턴·추적성 탐색</td></tr>
-                <tr><td><span class="tag">kb_graph_upsert</span></td><td>노드·엣지 갱신(확인)</td></tr>
-                <tr><td><span class="tag">kb_vector_search</span></td><td>자연어 의미검색</td></tr>
-                <tr><td><span class="tag">state_*</span></td><td>Agent B 상태 계약</td></tr>
-                <tr><td><span class="tag">drift_compare</span></td><td>설계 vs 관측 비교</td></tr>
-              </tbody>
-            </table>
-            <p class="muted" style="font-size:.6em; margin-top:.5em;"><span class="tag">kb_*</span> 설계 · <span class="tag">state_*</span> 실제 — 에이전트가 용도를 구분.</p>
+          <div class="card">
+            <h3>Agent Instruction · Prompt</h3>
+            <ul>
+              <li>Orchestrator: 역할·라우팅 휴리스틱, SI 생애주기·단계별 산출물 내장</li>
+              <li>그래프 조회·작성: 모델·질의 패턴, "없으면 없다고", <code>concise|detailed</code></li>
+              <li>작성: As-Is 제약(노드 대수·용량) 읽어 ToBe 초안·충돌 경고</li>
+            </ul>
           </div>
         </div>
-      </section>
-
-      <!-- Knowledge Base -->
-      <section>
-        <span class="kicker">⑥ Knowledge Base</span>
-        <h2 class="bar">그래프 데이터 모델</h2>
-        <div class="split">
-          <pre class="mermaid">
-flowchart LR
-  RFP["Artifact<br/>(요구·분석·설계·테스트 산출물)"] -->|DERIVED_FROM| RFP
-  RFP -->|DEFINES| SVC["Service /<br/>Component"]
-  SVC -->|DEPENDS_ON| SVC
-  SVC -->|EXPOSES| API["API"]
-  SVC -->|STORES_IN| DS[("Datastore")]
-  SVC -->|OWNED_BY| TEAM["Team"]
-  ADR["ADR / Decision"] -->|AFFECTS| SVC
-  RFP -. VALIDATES .-> SVC
-  SVC -. DEPLOYED_AS .-> DEP["DeployedComponent<br/>(observed · Agent B)"]
-  classDef art fill:#fef9c3,stroke:#ca8a04,color:#1e293b;
-  classDef obs fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
-  class RFP art;
-  class DEP obs;
-          </pre>
-          <div>
-            <p><b>Graph DB</b> <span class="muted">(예: Neo4j)</span></p>
-            <p style="font-size:.66em;"><b>Artifact 노드</b>(산출물) — <span class="tag">phase</span>·<span class="tag">type</span> 속성으로 SI 단계 표현. <b>DERIVED_FROM</b>으로 요구→설계→테스트 <b>추적성</b> 연결, <b>DEFINES/VALIDATES</b>로 설계 엔티티와 연결.</p>
-            <p style="font-size:.66em;">설계 노드와 <b>관측 노드(DeployedComponent)</b>를 분리 저장 → <b>drift 비교의 기반</b>.</p>
-            <p style="margin-top:.5em;"><b>Vector DB</b> <span class="muted">(예: pgvector/Qdrant)</span></p>
-            <p style="font-size:.66em;">문서 청크·노드 설명 임베딩 → 자연어 질의를 그래프 진입점으로 변환.</p>
-          </div>
+        <div class="seq">
+          <div class="step"><span class="n">1</span><span>Architect → Orchestrator 질의</span></div>
+          <div class="step"><span class="n">2</span><span>그래프 조회 (설계·추적성)</span></div>
+          <div class="step"><span class="n">3</span><span>Orchestrator 합성</span></div>
+          <div class="step"><span class="n">4</span><span>→ Architect 응답</span></div>
         </div>
-      </section>
-
-      <!-- Data Pipeline -->
-      <section>
-        <span class="kicker">⑦ Data Pipeline</span>
-        <h2 class="bar">작성·적재 → 그래프, 그리고 최신 유지</h2>
-        <pre class="mermaid">
-flowchart LR
-  CHAT["대화·인터뷰"] --> DRAFT["초안 (kb_doc_generate)<br/>작성·갱신"]
-  DRAFT -->|승인| UP
-  DOC["기존 SI 산출물<br/>요구·분석·설계·테스트·인수인계"] --> EXT["LLM 추출 (Haiku)<br/>Artifact·엔티티·관계 식별"]
-  EXT --> UP["Upsert<br/>Artifact 노드 + 추적성 엣지"]
-  UP --> GDB[("Graph DB")]
-  UP --> VDB[("Vector DB")]
-  B["Agent B<br/>observed state"] --> REC["Reconcile<br/>관측 → DeployedComponent 갱신"]
-  REC --> GDB
-  classDef ext fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:4 3,color:#475569;
-  class B ext;
-        </pre>
-        <div class="grid cols-2" style="margin-top:.6em;">
-          <div class="card"><h3>작성·적재 (<span class="tag">kb_doc_generate</span> · <span class="tag">kb_artifact_ingest</span>)</h3><p><b>작성</b>: 대화·인터뷰 → 초안 → 승인 후 Upsert. <b>적재</b>: 기존 문서 → LLM 추출 → <b>Artifact</b>+추적성 Upsert</p></div>
-          <div class="card"><h3>Reconcile (주기)</h3><p>Agent B 관측 상태로 <span class="tag">DeployedComponent</span> 갱신 → drift 항상 최신</p></div>
-        </div>
-      </section>
-
-      <!-- Open questions -->
-      <section>
-        <span class="kicker">Open</span>
-        <h2 class="bar">남은 결정 (Open Questions)</h2>
-        <ul>
-          <li>Graph DB / Vector DB 제품 선정 (Neo4j vs 대안, pgvector vs Qdrant)</li>
-          <li>Front 형태(웹 챗 vs CLI) 확정</li>
-          <li>Agent B 연계 계약의 상세 스키마 — 외부 팀과 합의 필요</li>
-          <li>인제스트 대상 산출물 포맷 범위(Markdown/Confluence/PPT 등)</li>
-        </ul>
-        <p class="muted" style="text-align:center; margin-top:1.4em; font-size:.7em;">기획 의도·시나리오는 산출물 ① <span class="tag">01-product-brief.html</span> 참고</p>
-      </section>
-
+      </div>
+      <div class="poc"><span class="lab">📍 현재 구현(PoC)</span> Claude Agent SDK 대신 <code>claude</code> CLI(<code>--print</code>) subprocess 호출. 단일 <code>Agent</code> 클래스가 정규식으로 의도 라우팅하고 도구를 직접 호출(subagent 없음). 영향도·조회는 모델 없이 결정적 계산. 확인 게이트는 CLI y/n.</div>
     </div>
-  </div>
+  </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-      startOnLoad: false, theme: 'base',
-      themeVariables: {
-        fontFamily: 'Pretendard, sans-serif', primaryColor: '#eef2ff', primaryBorderColor: '#4f46e5',
-        primaryTextColor: '#1e293b', lineColor: '#94a3b8', actorBkg: '#eef2ff', actorBorder: '#4f46e5',
-        actorTextColor: '#1e293b', signalColor: '#475569', signalTextColor: '#334155',
-      },
-    });
-    const blocks = [...document.querySelectorAll('pre.mermaid')];
-    for (let i = 0; i < blocks.length; i++) {
-      try { const { svg } = await mermaid.render('mmd-' + i, blocks[i].textContent.trim()); blocks[i].innerHTML = svg; }
-      catch (e) { blocks[i].innerHTML = '<pre style="color:#dc2626">Mermaid error: ' + e.message + '</pre>'; }
-    }
-    Reveal.initialize({ hash: true, slideNumber: 'c/t', transition: 'slide', width: 1280, height: 720, margin: 0.04 });
+  <!-- 5 · Provider · MCP · Tools -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">③④⑤ Provider · MCP · Tools</span>
+      <h2 class="gov"><code>kb_*</code> 도구로 산출물을 다루며, 모델과 MCP와 도구를 용도별로 분리한다.</h2>
+      <div class="split">
+        <div>
+          <h3>③ Model Provider</h3>
+          <table>
+            <thead><tr><th>용도</th><th>모델</th></tr></thead>
+            <tbody>
+              <tr><td>오케스트레이션·영향도 (기본)</td><td><code>claude-opus-4-8</code></td></tr>
+              <tr><td>라우틴 질의·요약</td><td><code>claude-sonnet-4-6</code></td></tr>
+              <tr><td>대량 엔티티 추출</td><td><code>claude-haiku-4-5</code></td></tr>
+            </tbody>
+          </table>
+          <div class="poc" style="margin-top:12px;"><span class="lab">📍 PoC</span> 모델을 인터페이스로 추상화 — 테스트는 <b>FakeModel</b>(모델 호출 0), 실행은 <b>ClaudeModel</b>(구독 CLI). 실제 사용은 추출=Haiku·설계생성=Sonnet 2종뿐, opus·오케스트레이션·영향도는 결정적 코드.</div>
+        </div>
+        <div>
+          <h3>⑤ Tools</h3>
+          <table>
+            <thead><tr><th>도구</th><th>설명</th><th>상태</th></tr></thead>
+            <tbody>
+              <tr><td><code>kb_artifact_ingest</code></td><td>문서 → Artifact 적재(확인)</td><td><span class="status impl">구현</span></td></tr>
+              <tr><td><code>kb_doc_generate</code></td><td>맥락 → 산출물 초안</td><td><span class="status impl">구현</span></td></tr>
+              <tr><td><code>kb_graph_query</code></td><td>추적성·영향도 탐색</td><td><span class="status impl">구현</span></td></tr>
+              <tr><td><code>kb_graph_upsert</code></td><td>노드·엣지 갱신(확인)</td><td><span class="status impl">구현</span></td></tr>
+              <tr><td><code>kb_doc_export</code></td><td>산출물 → 문서 HTML 출력</td><td><span class="status impl">구현</span></td></tr>
+              <tr><td><code>kb_vector_search</code></td><td>자연어 의미검색</td><td><span class="status next">후속</span></td></tr>
+            </tbody>
+          </table>
+          <div class="poc" style="margin-top:12px;"><span class="lab">📍 PoC</span> <b>④ MCP Server 없음.</b> Graph/KB 도구는 순수 Python 함수를 에이전트가 직접 호출.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · Knowledge Base -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">⑥ Knowledge Base</span>
+      <h2 class="gov">Artifact와 설계 엔티티를 노드로 저장하고, 요구→설계→테스트 추적성을 엣지로 연결한다.</h2>
+      <div class="split">
+        <div class="rel">
+          <div class="r"><b>Artifact</b> <em>DERIVED_FROM</em> <b>Artifact</b> — 요구→설계→테스트 추적성</div>
+          <div class="r"><b>Artifact</b> <em>DEFINES</em> <b>Service / Component</b> (DEPENDS_ON · EXPOSES · STORES_IN · OWNED_BY)</div>
+          <div class="r"><b>ADR / Decision</b> <em>AFFECTS</em> <b>Service</b></div>
+          <div class="r"><b>Artifact</b> <em>VALIDATES</em> <b>Service</b></div>
+        </div>
+        <div>
+          <p><b>Graph DB</b> <span class="muted">(예: Neo4j)</span></p>
+          <p style="font-size:.88rem; color:var(--ink-soft); margin:.3em 0 .8em;">Artifact 노드는 <code>phase</code>·<code>type</code> 속성으로 SI 단계 표현. DERIVED_FROM으로 추적성, DEFINES/VALIDATES로 설계 엔티티 연결.</p>
+          <p><b>Vector DB</b> <span class="muted">(예: pgvector/Qdrant)</span></p>
+          <p style="font-size:.88rem; color:var(--ink-soft); margin-top:.3em;">문서 청크·노드 설명 임베딩 → 자연어 질의를 그래프 진입점으로 변환.</p>
+        </div>
+      </div>
+      <div class="poc"><span class="lab">📍 현재 구현(PoC)</span> <b>SQLite 인메모리</b>(교체 가능). 노드 ARTIFACT·REQUIREMENT·SYSTEM_NODE, 엣지 DERIVED_FROM·DESCRIBES·DEFINES(DEFINES는 정의만·후속). Service/Component·ADR·VALIDATES·Vector DB는 후속.</div>
+    </div>
+  </section>
+
+  <!-- 7 · Data Pipeline -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">⑦ Data Pipeline</span>
+      <h2 class="gov">작성과 적재로 Artifact와 추적성을 채워 Graph DB와 Vector DB를 항상 최신으로 유지한다.</h2>
+      <div class="flow">
+        <div class="node">대화·인터뷰<small>→ 초안(kb_doc_generate)</small></div>
+        <span class="arr">→</span>
+        <div class="node">기존 SI 산출물<small>→ LLM 추출(Haiku)</small></div>
+        <span class="arr">→</span>
+        <div class="node">Upsert<small>Artifact + 추적성 엣지</small></div>
+        <span class="arr">→</span>
+        <div class="db">Graph DB · Vector DB</div>
+      </div>
+      <div class="grid c2" style="margin-top:14px;">
+        <div class="card"><h3>작성·적재 <span class="muted" style="font-size:.85em;">kb_doc_generate · kb_artifact_ingest</span></h3><p>작성 — 대화·인터뷰→초안→승인 후 Upsert. 적재 — 기존 문서→LLM 추출→Artifact+추적성 Upsert.</p></div>
+        <div class="card"><h3>출력 <span class="muted" style="font-size:.85em;">kb_doc_export · render/html.py</span></h3><p>저장된 산출물을 문서별 HTML로 렌더 — 내용은 그래프에서 오므로 항상 최신.</p></div>
+      </div>
+      <div class="poc"><span class="lab">📍 현재 구현(PoC)</span> Graph(SQLite) Upsert까지 동작. Vector DB Upsert(임베딩)는 후속.</div>
+    </div>
+  </section>
+
+  <!-- 8 · Open Questions -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">Open</span>
+      <h2 class="gov">남은 결정 (Open Questions)</h2>
+      <div class="grid c3">
+        <div class="card"><p>Graph DB / Vector DB 제품 선정 (Neo4j vs 대안, pgvector vs Qdrant)</p></div>
+        <div class="card"><p>Front 형태(웹 챗 vs CLI) 확정</p></div>
+        <div class="card"><p>인제스트 대상 산출물 포맷 범위 (Markdown / Confluence / PPT 등)</p></div>
+      </div>
+      <p class="note">기획 의도·시나리오는 산출물 ① <code>01-product-brief.html</code>, 데모는 ③ <code>03-demo.html</code> 참고.</p>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+      var counter = document.getElementById('counter');
+      var progress = document.getElementById('progress');
+      var total = slides.length;
+      function currentIndex() {
+        var mid = window.scrollY + window.innerHeight / 2;
+        for (var i = 0; i < slides.length; i++) {
+          if (slides[i].offsetTop <= mid && mid < slides[i].offsetTop + slides[i].offsetHeight) return i;
+        }
+        return Math.min(slides.length - 1, Math.round(window.scrollY / window.innerHeight));
+      }
+      function update() {
+        var i = currentIndex();
+        counter.textContent = (i + 1) + ' / ' + total;
+        progress.style.width = (total > 1 ? (i / (total - 1)) * 100 : 100) + '%';
+      }
+      function go(dir) {
+        var t = Math.max(0, Math.min(total - 1, currentIndex() + dir));
+        slides[t].scrollIntoView({ behavior: 'smooth' });
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      document.addEventListener('keydown', function (e) {
+        if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].indexOf(e.key) > -1) { e.preventDefault(); go(1); }
+        else if (['ArrowUp', 'ArrowLeft', 'PageUp'].indexOf(e.key) > -1) { e.preventDefault(); go(-1); }
+        else if (e.key === 'Home') { e.preventDefault(); slides[0].scrollIntoView({ behavior: 'smooth' }); }
+        else if (e.key === 'End') { e.preventDefault(); slides[total - 1].scrollIntoView({ behavior: 'smooth' }); }
+      });
+      update();
+    })();
   </script>
 </body>
 </html>

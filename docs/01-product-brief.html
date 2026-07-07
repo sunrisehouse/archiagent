@@ -84,8 +84,6 @@
     .flow { display: flex; align-items: center; gap: 12px; justify-content: center; margin: 6px 0 30px; flex-wrap: wrap; }
     .flow .box { background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 12px; padding: 14px 20px;
       font-size: .95rem; font-weight: 700; color: var(--ink); text-align: center; }
-    .flow .box.ext { background: #f1f5f9; border-style: dashed; border-color: #94a3b8; color: #475569; font-weight: 600; }
-    .flow .box.ext small { font-weight: 500; }
     .flow .db { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 20px;
       font-size: .92rem; color: var(--ink); text-align: center; box-shadow: 0 1px 3px rgba(30,41,59,.06); }
     .flow .db small { color: var(--muted); }
@@ -200,15 +198,12 @@
         <div class="box">지식 에이전트</div>
         <span class="arr">→</span>
         <div class="db">Graph DB + Vector DB<br/><small>산출물 · 비공식 자료 · 연관 관계</small></div>
-        <span class="arr">⋯</span>
-        <div class="box ext">외부 인프라 에이전트<br/><small>실제 시스템 상태</small></div>
       </div>
       <div class="grid c3">
         <div class="card"><h3>산출물을 그래프로 관리한다</h3><p>요구사항 정의서와 현행 분석서, 설계서 같은 산출물을 노드로 만들고 서로의 연관 관계를 연결한다.</p></div>
         <div class="card"><h3>비공식 자료까지 함께 묶는다</h3><p>회의록과 메모, 결정 기록도 그래프에 넣어 산출물과 연결하므로, 왜 그렇게 정했는지까지 같이 추적한다.</p></div>
         <div class="card"><h3>자연어로 시킨다</h3><p>작성과 변경, 영향도 확인, 추적을 사람이 말로 요청하면 에이전트가 처리한다.</p></div>
       </div>
-      <p class="note">실제 배포 상태가 필요한 일은 외부 인프라 에이전트가 맡고, 지식 에이전트가 그 결과를 받아 함께 활용한다.</p>
     </div>
   </section>
 

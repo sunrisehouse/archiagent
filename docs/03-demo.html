@@ -4,241 +4,232 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>archiagent — 산출물 ③ 시나리오별 데모 영상</title>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme" />
-
   <style>
     :root {
       --accent: #4f46e5;
       --accent-soft: #eef2ff;
       --ink: #1e293b;
+      --ink-soft: #334155;
       --muted: #64748b;
       --line: #e2e8f0;
+      --bg: #f8fafc;
+      --surface: #ffffff;
     }
-    .reveal { font-family: "Pretendard", system-ui, sans-serif; color: var(--ink); }
-    .reveal .slides { text-align: left; }
-    .reveal h1, .reveal h2, .reveal h3 { font-family: "Pretendard", sans-serif; color: var(--ink); text-transform: none; letter-spacing: -0.02em; font-weight: 800; }
-    .reveal h1 { font-size: 2.4em; line-height: 1.15; }
-    .reveal h2 { font-size: 1.5em; margin-bottom: .3em; }
-    .reveal p, .reveal li { font-size: .8em; line-height: 1.5; }
-    .reveal .muted { color: var(--muted); }
-    .reveal section { padding: 10px 14px; }
-    .reveal h2.bar { position: relative; padding-bottom: .3em; }
-    .reveal h2.bar::after { content: ""; position: absolute; left: 0; bottom: 0; width: 64px; height: 5px; background: var(--accent); border-radius: 3px; }
-    .reveal .kicker { display: inline-block; font-size: .62em; font-weight: 700; letter-spacing: .08em; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 999px; margin-bottom: .5em; text-transform: uppercase; }
-    .reveal table { font-size: .64em; border-collapse: collapse; width: 100%; }
-    .reveal table th { background: var(--accent); color: #fff; font-weight: 700; padding: 8px 10px; border: none; }
-    .reveal table td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-    .reveal table tr:nth-child(even) td { background: #f8fafc; }
-    .reveal .tag { font-family: ui-monospace, monospace; font-size: .92em; background: #f1f5f9; padding: 1px 6px; border-radius: 5px; color: var(--accent); }
-    .reveal .quote { font-size: .78em; color: var(--ink); background: #f8fafc; border-left: 4px solid var(--accent); border-radius: 8px; padding: 8px 12px; margin: .4em 0; }
-    .footer { position: fixed; bottom: 10px; left: 18px; font-size: 12px; color: var(--muted); z-index: 30; }
-    .reveal .title-wrap { text-align: center; }
-    .reveal .title-wrap .sub { font-size: .9em; color: var(--muted); margin-top: .4em; font-weight: 500; }
-    .reveal .title-wrap .meta { margin-top: 1.4em; font-size: .62em; color: var(--muted); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      color: var(--ink); background: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased;
+    }
+    .progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); z-index: 50; transition: width .2s ease; }
+    .counter { position: fixed; bottom: 18px; right: 22px; font-size: 13px; font-weight: 600; color: var(--muted); z-index: 50;
+      background: rgba(255,255,255,.8); padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); backdrop-filter: blur(6px); }
+    .brandmark { position: fixed; bottom: 18px; left: 22px; font-size: 12px; color: var(--muted); z-index: 50; }
+    .brandmark b { color: var(--accent); }
 
-    /* Video placeholder */
-    .demo-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: 20px; align-items: center; }
-    .video-ph {
-      position: relative; width: 100%; aspect-ratio: 16 / 9;
-      border: 2px dashed #cbd5e1; border-radius: 16px;
-      background:
-        repeating-linear-gradient(45deg, #f8fafc, #f8fafc 14px, #f1f5f9 14px, #f1f5f9 28px);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      color: var(--muted); gap: 10px;
-    }
-    .video-ph .play {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: #fff; border: 2px solid var(--accent);
-      color: var(--accent); display: flex; align-items: center; justify-content: center;
-      font-size: 26px; padding-left: 6px; box-shadow: 0 4px 14px rgba(79,70,229,.18);
-    }
-    .video-ph .cap { font-weight: 700; color: var(--ink); font-size: 1.0em; }
-    .video-ph .sub { font-size: .8em; }
-    .video-ph .badge { position: absolute; top: 12px; left: 12px; font-size: .62em; font-weight: 700; color: var(--muted); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
-    /* full-width variant for overview */
-    .video-ph.wide { max-width: 760px; margin: 0 auto; }
+    .slide { min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: center; padding: 7vh 7vw; position: relative; }
+    .slide-inner { width: 100%; max-width: 1080px; margin: 0 auto; }
+    .kicker { display: inline-block; font-size: 12.5px; font-weight: 700; letter-spacing: .06em; color: var(--accent); background: var(--accent-soft); padding: 6px 15px; border-radius: 999px; margin-bottom: 18px; }
+    h1 { font-size: clamp(1.9rem, 5vw, 3rem); line-height: 1.14; letter-spacing: -.03em; font-weight: 800; }
+    h2.bar { font-size: clamp(1.3rem, 2.6vw, 1.9rem); line-height: 1.3; font-weight: 800; letter-spacing: -.02em; position: relative; padding-bottom: .4em; margin-bottom: 24px; }
+    h2.bar::after { content: ""; position: absolute; left: 0; bottom: 0; width: 60px; height: 5px; background: var(--accent); border-radius: 3px; }
+    h2.bar small { font-weight: 500; color: var(--muted); font-size: .55em; letter-spacing: 0; }
+    p, li { font-size: .95rem; }
+    code, .tag { font-family: ui-monospace, "SF Mono", monospace; font-size: .86em; background: #eef1f6; padding: 1.5px 7px; border-radius: 6px; color: var(--accent); }
+
+    .cover { text-align: center; align-items: center; }
+    .cover .sub { font-size: 1.1rem; color: var(--ink-soft); margin-top: 22px; line-height: 1.7; }
+    .cover .meta { margin-top: 34px; font-size: .82rem; color: var(--muted); }
+
+    table { border-collapse: collapse; width: 100%; background: var(--surface); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(30,41,59,.06); font-size: .92rem; }
+    thead th { background: var(--accent); color: #fff; font-weight: 700; padding: 12px 16px; text-align: left; }
+    tbody td { padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:nth-child(even) td { background: #f8fafc; }
+    .note { color: var(--muted); font-size: .86rem; margin-top: 16px; }
+
+    /* demo layout */
+    .demo-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 26px; align-items: center; }
+    .quote { font-size: 1rem; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(30,41,59,.04); }
+    .demo-grid .lead { font-size: .82rem; font-weight: 700; color: var(--muted); letter-spacing: .04em; margin-bottom: 8px; }
+    .demo-grid ul { padding-left: 1.15rem; display: grid; gap: 8px; }
+    .demo-grid li { font-size: .92rem; color: var(--ink-soft); line-height: 1.55; }
+
+    .video-ph { position: relative; width: 100%; aspect-ratio: 16 / 9; border: 2px dashed #cbd5e1; border-radius: 16px;
+      background: repeating-linear-gradient(45deg, #f8fafc, #f8fafc 14px, #f1f5f9 14px, #f1f5f9 28px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); gap: 10px; }
+    .video-ph .play { width: 68px; height: 68px; border-radius: 50%; background: #fff; border: 2px solid var(--accent); color: var(--accent);
+      display: flex; align-items: center; justify-content: center; font-size: 24px; padding-left: 5px; box-shadow: 0 4px 14px rgba(79,70,229,.18); }
+    .video-ph .cap { font-weight: 700; color: var(--ink); font-size: 1rem; }
+    .video-ph .vsub { font-size: .85rem; }
+    .video-ph .badge { position: absolute; top: 12px; left: 12px; font-size: .72rem; font-weight: 700; color: var(--muted); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+
+    @media (max-width: 860px) { .demo-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <div class="footer">archiagent · 산출물 ③ 시나리오별 데모 영상</div>
-  <div class="reveal">
-    <div class="slides">
+  <div class="progress" id="progress"></div>
+  <div class="brandmark"><b>archiagent</b> · 산출물 ③ 시나리오별 데모 영상</div>
+  <div class="counter" id="counter">1 / 7</div>
 
-      <!-- Title -->
-      <section>
-        <div class="title-wrap">
-          <span class="kicker">산출물 ③ · Demo</span>
-          <h1>시나리오별 데모 영상</h1>
-          <p class="sub"><strong>archiagent</strong> — 문서 작성부터 감리·설계변경·온보딩까지 시나리오를 영상으로 시연.<br/>각 시나리오의 설명과 데모 영상을 함께 제공.</p>
-          <p class="meta">※ 영상은 추후 삽입 — 현재는 <strong>플레이스홀더(빈 상자)</strong></p>
-        </div>
-      </section>
-
-      <!-- Index -->
-      <section>
-        <span class="kicker">Index</span>
-        <h2 class="bar">데모 구성</h2>
-        <table>
-          <thead><tr><th style="width:90px">데모</th><th style="width:150px">구분</th><th>시나리오</th></tr></thead>
-          <tbody>
-            <tr><td><b>Demo 0</b></td><td>토대 · 작성·적재</td><td>그래프 구축 — 작성(신규)·적재(기존 문서)</td></tr>
-            <tr><td><b>Demo 1</b></td><td>문서 작성</td><td>분석→설계 작성 (인터뷰→요구→현행→설계, 자연어 지시)</td></tr>
-            <tr><td><b>Demo 2</b></td><td>감리 대응</td><td>요구사항 추적성 (요구→설계→구축)</td></tr>
-            <tr><td><b>Demo 3</b></td><td>설계 변경</td><td>설계 변경 영향도 (용량 한계 → 설계부터)</td></tr>
-            <tr><td><b>Demo 4</b></td><td>최신성</td><td>설계 vs 실제 Drift 탐지</td></tr>
-            <tr><td><b>Demo 5</b></td><td>온보딩</td><td>아키텍처 Q&amp;A / 온보딩</td></tr>
-          </tbody>
-        </table>
-        <p class="muted" style="margin-top:1em; font-size:.72em;">시나리오 상세는 산출물 ① <span class="tag">01-product-brief.html</span>, 아키텍처는 ② <span class="tag">02-architecture.html</span> 참고.</p>
-      </section>
-
-      <!-- Demo 0 -->
-      <section>
-        <span class="kicker">Demo 0 · 토대 · 그래프 구축</span>
-        <h2 class="bar">작성·적재 두 경로 <span class="muted" style="font-size:.6em;">— 모든 데모의 토대</span></h2>
-        <div class="demo-grid">
-          <div>
-            <div class="quote">"인터뷰로 요구사항부터 작성하자" · "기존 아키텍처 설계서 적재해줘" <span class="muted">(+ 문서)</span></div>
-            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
-            <ul style="font-size:.72em;">
-              <li><b>① 작성</b> — 신규 산출물을 인터뷰로 만들며 그래프 적재 <span class="muted">(Demo 1 상세)</span></li>
-              <li><b>② 적재</b> — 기존 문서를 <span class="tag">kb_artifact_ingest</span>로 LLM 추출 → <b>Artifact 노드</b>+추적성 엣지</li>
-              <li>어느 경로든 <b>요구→설계→테스트</b> 추적성으로 연결 — 같은 그래프</li>
-            </ul>
-          </div>
-          <div class="video-ph">
-            <div class="badge">16:9 · 데모 영상</div>
-            <div class="play">▶</div>
-            <div class="cap">데모 영상 (준비 중)</div>
-            <div class="sub">Demo 0 · 작성·적재 토대</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Demo 1 · 문서 작성 -->
-      <section>
-        <span class="kicker">Demo 1 · 문서 작성</span>
-        <h2 class="bar">문서 작성 <span class="muted" style="font-size:.6em;">— 분석 → 설계, 자연어로</span></h2>
-        <div class="demo-grid">
-          <div>
-            <div class="quote">"고객 인터뷰로 요구사항 정의서 잡고, ToBe는 AsIs처럼 노드 대수 유지해서 설계서까지"</div>
-            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
-            <ul style="font-size:.72em;">
-              <li>인터뷰 메모 → <b>요구사항 정의서</b>(R-ID) 초안, 승인 시 그래프 적재</li>
-              <li>현행 분석서 → As-Is <b>노드 대수·용량</b>이 그래프 사실로</li>
-              <li>"AsIs처럼 노드 대수 유지" 지시 → Agent A가 <span class="tag">kb_graph_query</span>로 제약 읽어 <b>ToBe 설계서</b> 초안 · 충돌 경고 · <b>DERIVED_FROM</b> 추적성 자동</li>
-            </ul>
-          </div>
-          <div class="video-ph">
-            <div class="badge">16:9 · 데모 영상</div>
-            <div class="play">▶</div>
-            <div class="cap">데모 영상 (준비 중)</div>
-            <div class="sub">Demo 1 · 문서 작성</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Demo 2 · 감리 추적성 -->
-      <section>
-        <span class="kicker">Demo 2 · 감리 대응</span>
-        <h2 class="bar">요구사항 추적성 <span class="muted" style="font-size:.6em;">— 요구 → 설계 → 구축</span></h2>
-        <div class="demo-grid">
-          <div>
-            <div class="quote">"요구사항 R-12, 설계·구축 어디에 반영됐어?"</div>
-            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
-            <ul style="font-size:.72em;">
-              <li>Agent A가 추적성 탐색 — R-12 →DEFINES→ 설계서 §4.2 → OrderService</li>
-              <li>Agent B가 OrderService <b>실제 구축·live</b> 확인</li>
-              <li>요구→설계→구축→검증 <b>추적 체인</b>을 감리 증빙으로 제시</li>
-            </ul>
-          </div>
-          <div class="video-ph">
-            <div class="badge">16:9 · 데모 영상</div>
-            <div class="play">▶</div>
-            <div class="cap">데모 영상 (준비 중)</div>
-            <div class="sub">Demo 2 · 감리 추적성</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Demo 3 · 설계 변경 영향도 -->
-      <section>
-        <span class="kicker">Demo 3 · 설계 변경</span>
-        <h2 class="bar">설계 변경 영향도 <span class="muted" style="font-size:.6em;">— 용량 한계에서 시작</span></h2>
-        <div class="demo-grid">
-          <div>
-            <div class="quote">"OrderDB 디스크 한계 — 샤딩 추가하면 설계 어디부터 바꿔?"</div>
-            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
-            <ul style="font-size:.72em;">
-              <li>Agent B가 실제 용량 확인 — 디스크 92% · 샤딩 필요</li>
-              <li>Agent A가 역방향 추적(<span class="tag">DEFINES*</span>) — 수정 대상 설계서·서비스</li>
-              <li><b>먼저 고칠 설계 + 영향 서비스 + 연쇄 갱신 체크리스트</b></li>
-            </ul>
-          </div>
-          <div class="video-ph">
-            <div class="badge">16:9 · 데모 영상</div>
-            <div class="play">▶</div>
-            <div class="cap">데모 영상 (준비 중)</div>
-            <div class="sub">Demo 3 · 설계 변경 영향도</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Demo 4 · Drift -->
-      <section>
-        <span class="kicker">Demo 4 · 최신성</span>
-        <h2 class="bar">설계 vs 실제 Drift 탐지</h2>
-        <div class="demo-grid">
-          <div>
-            <div class="quote">"결제 도메인, 설계 대비 실제 배포 차이 알려줘"</div>
-            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
-            <ul style="font-size:.72em;">
-              <li>Agent A가 설계상 결제 토폴로지 조회</li>
-              <li>Agent B가 실제 배포 컴포넌트 조회</li>
-              <li>Drift 리포트 — <b>누락·추가·불일치</b> 3범주</li>
-            </ul>
-          </div>
-          <div class="video-ph">
-            <div class="badge">16:9 · 데모 영상</div>
-            <div class="play">▶</div>
-            <div class="cap">데모 영상 (준비 중)</div>
-            <div class="sub">Demo 4 · Drift 탐지</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Demo 5 · 온보딩 -->
-      <section>
-        <span class="kicker">Demo 5 · 온보딩</span>
-        <h2 class="bar">아키텍처 Q&amp;A / 온보딩</h2>
-        <div class="demo-grid">
-          <div>
-            <div class="quote">"현재 주문 시스템 구조 설명해줘" <span class="muted">(신규 입사자)</span></div>
-            <p style="font-size:.72em;"><b>영상에서 보여줄 것</b></p>
-            <ul style="font-size:.72em;">
-              <li>Agent A가 주문 서브그래프 + 핵심 ADR 제공</li>
-              <li>Agent B가 실제 배포 토폴로지·헬스 제공</li>
-              <li>의도(why)+실제(what) 통합 설명 + 그래프 뷰</li>
-            </ul>
-          </div>
-          <div class="video-ph">
-            <div class="badge">16:9 · 데모 영상</div>
-            <div class="play">▶</div>
-            <div class="cap">데모 영상 (준비 중)</div>
-            <div class="sub">Demo 5 · Q&amp;A / 온보딩</div>
-          </div>
-        </div>
-      </section>
-
+  <!-- 1 · Title -->
+  <section class="slide cover">
+    <div class="slide-inner">
+      <span class="kicker">산출물 ③ · Demo</span>
+      <h1>시나리오별 데모 영상</h1>
+      <p class="sub"><strong>archiagent</strong> — 문서 작성부터 감리·설계 변경·온보딩까지 시나리오를 영상으로 시연한다.<br/>각 시나리오의 설명과 데모 영상을 함께 제공한다.</p>
+      <p class="meta">※ 영상은 추후 삽입 — 현재는 플레이스홀더(빈 상자)</p>
     </div>
-  </div>
+  </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <!-- 2 · Index -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">Index</span>
+      <h2 class="bar">데모 구성</h2>
+      <table>
+        <thead><tr><th style="width:100px">데모</th><th style="width:160px">구분</th><th>시나리오</th></tr></thead>
+        <tbody>
+          <tr><td><b>Demo 0</b></td><td>토대 · 작성·적재</td><td>그래프 구축 — 작성(신규)·적재(기존 문서)</td></tr>
+          <tr><td><b>Demo 1</b></td><td>문서 작성</td><td>분석→설계 작성 (인터뷰→요구→현행→설계, 자연어 지시)</td></tr>
+          <tr><td><b>Demo 2</b></td><td>감리 대응</td><td>요구사항 추적성 (요구→설계→검증)</td></tr>
+          <tr><td><b>Demo 3</b></td><td>설계 변경</td><td>설계 변경 영향도 (용량 한계 → 설계부터)</td></tr>
+          <tr><td><b>Demo 4</b></td><td>온보딩</td><td>아키텍처 Q&amp;A / 온보딩</td></tr>
+        </tbody>
+      </table>
+      <p class="note">시나리오 상세는 산출물 ① <code>01-product-brief.html</code>, 아키텍처는 ② <code>02-architecture.html</code> 참고.</p>
+    </div>
+  </section>
+
+  <!-- 3 · Demo 0 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">Demo 0 · 토대 · 그래프 구축</span>
+      <h2 class="bar">작성·적재 두 경로 <small>— 모든 데모의 토대</small></h2>
+      <div class="demo-grid">
+        <div>
+          <div class="quote">💬 "인터뷰로 요구사항부터 작성하자" · "기존 아키텍처 설계서 적재해줘" (+ 문서)</div>
+          <p class="lead">영상에서 보여줄 것</p>
+          <ul>
+            <li><b>① 작성</b> — 신규 산출물을 인터뷰로 만들며 그래프 적재 (Demo 1 상세)</li>
+            <li><b>② 적재</b> — 기존 문서를 <code>kb_artifact_ingest</code>로 LLM 추출 → Artifact 노드 + 추적성 엣지</li>
+            <li>어느 경로든 요구→설계→테스트 추적성으로 연결 — 같은 그래프</li>
+          </ul>
+        </div>
+        <div class="video-ph"><div class="badge">16:9 · 데모 영상</div><div class="play">▶</div><div class="cap">데모 영상 (준비 중)</div><div class="vsub">Demo 0 · 작성·적재 토대</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · Demo 1 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">Demo 1 · 문서 작성</span>
+      <h2 class="bar">문서 작성 <small>— 분석 → 설계, 자연어로</small></h2>
+      <div class="demo-grid">
+        <div>
+          <div class="quote">💬 "고객 인터뷰로 요구사항 정의서 잡고, ToBe는 AsIs처럼 노드 대수 유지해서 설계서까지"</div>
+          <p class="lead">영상에서 보여줄 것</p>
+          <ul>
+            <li>인터뷰 메모 → <b>요구사항 정의서</b>(R-ID) 초안, 승인 시 그래프 적재</li>
+            <li>현행 분석서 → As-Is <b>노드 대수·용량</b>이 그래프 사실로</li>
+            <li>"AsIs처럼 노드 대수 유지" 지시 → 에이전트가 <code>kb_graph_query</code>로 제약 읽어 <b>ToBe 설계서</b> 초안 · 충돌 경고 · <b>DERIVED_FROM</b> 추적성 자동</li>
+          </ul>
+        </div>
+        <div class="video-ph"><div class="badge">16:9 · 데모 영상</div><div class="play">▶</div><div class="cap">데모 영상 (준비 중)</div><div class="vsub">Demo 1 · 문서 작성</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Demo 2 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">Demo 2 · 감리 대응</span>
+      <h2 class="bar">요구사항 추적성 <small>— 요구 → 설계 → 검증</small></h2>
+      <div class="demo-grid">
+        <div>
+          <div class="quote">💬 "요구사항 R-12, 설계 어디에 반영됐어?"</div>
+          <p class="lead">영상에서 보여줄 것</p>
+          <ul>
+            <li>에이전트가 추적성 탐색 — R-12 →DEFINES→ 설계서 §4.2 → OrderService</li>
+            <li>요구→설계→검증 <b>추적 체인</b>을 감리 증빙으로 제시</li>
+          </ul>
+        </div>
+        <div class="video-ph"><div class="badge">16:9 · 데모 영상</div><div class="play">▶</div><div class="cap">데모 영상 (준비 중)</div><div class="vsub">Demo 2 · 감리 추적성</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · Demo 3 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">Demo 3 · 설계 변경</span>
+      <h2 class="bar">설계 변경 영향도 <small>— 용량 한계에서 시작</small></h2>
+      <div class="demo-grid">
+        <div>
+          <div class="quote">💬 "OrderDB 디스크 한계가 왔는데, 샤딩 추가하면 설계 어디부터 바꿔?"</div>
+          <p class="lead">영상에서 보여줄 것</p>
+          <ul>
+            <li>에이전트가 역방향 추적(<code>DEFINES*</code>) — 수정 대상 설계서·서비스</li>
+            <li><b>먼저 고칠 설계 + 영향 서비스 + 연쇄 갱신 체크리스트</b></li>
+          </ul>
+        </div>
+        <div class="video-ph"><div class="badge">16:9 · 데모 영상</div><div class="play">▶</div><div class="cap">데모 영상 (준비 중)</div><div class="vsub">Demo 3 · 설계 변경 영향도</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · Demo 4 · 온보딩 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">Demo 4 · 온보딩</span>
+      <h2 class="bar">아키텍처 Q&amp;A / 온보딩</h2>
+      <div class="demo-grid">
+        <div>
+          <div class="quote">💬 "현재 주문 시스템 구조 설명해줘" (신규 입사자)</div>
+          <p class="lead">영상에서 보여줄 것</p>
+          <ul>
+            <li>에이전트가 주문 서브그래프 + 핵심 ADR 제공</li>
+            <li>설계 의도(why)와 구조(what)를 통합 설명 + 그래프 뷰</li>
+          </ul>
+        </div>
+        <div class="video-ph"><div class="badge">16:9 · 데모 영상</div><div class="play">▶</div><div class="cap">데모 영상 (준비 중)</div><div class="vsub">Demo 4 · Q&amp;A / 온보딩</div></div>
+      </div>
+    </div>
+  </section>
+
   <script>
-    Reveal.initialize({ hash: true, slideNumber: 'c/t', transition: 'slide', width: 1280, height: 720, margin: 0.04 });
+    (function () {
+      var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+      var counter = document.getElementById('counter');
+      var progress = document.getElementById('progress');
+      var total = slides.length;
+      function currentIndex() {
+        var mid = window.scrollY + window.innerHeight / 2;
+        for (var i = 0; i < slides.length; i++) {
+          if (slides[i].offsetTop <= mid && mid < slides[i].offsetTop + slides[i].offsetHeight) return i;
+        }
+        return Math.min(slides.length - 1, Math.round(window.scrollY / window.innerHeight));
+      }
+      function update() {
+        var i = currentIndex();
+        counter.textContent = (i + 1) + ' / ' + total;
+        progress.style.width = (total > 1 ? (i / (total - 1)) * 100 : 100) + '%';
+      }
+      function go(dir) {
+        var t = Math.max(0, Math.min(total - 1, currentIndex() + dir));
+        slides[t].scrollIntoView({ behavior: 'smooth' });
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      document.addEventListener('keydown', function (e) {
+        if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].indexOf(e.key) > -1) { e.preventDefault(); go(1); }
+        else if (['ArrowUp', 'ArrowLeft', 'PageUp'].indexOf(e.key) > -1) { e.preventDefault(); go(-1); }
+        else if (e.key === 'Home') { e.preventDefault(); slides[0].scrollIntoView({ behavior: 'smooth' }); }
+        else if (e.key === 'End') { e.preventDefault(); slides[total - 1].scrollIntoView({ behavior: 'smooth' }); }
+      });
+      update();
+    })();
   </script>
 </body>
 </html>

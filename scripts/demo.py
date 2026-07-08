@@ -11,7 +11,9 @@
 
 from __future__ import annotations
 
+import itertools
 import sys
+import threading
 import time
 from pathlib import Path
 
@@ -21,6 +23,7 @@ from archiagent.store import SqliteStore
 
 TYPE = 0.035   # 글자당 타이핑 지연(초)
 PAUSE = 0.9    # 단계 사이 멈춤(초)
+_TTY = sys.stdout.isatty()
 
 
 def _type(text: str, delay: float = TYPE) -> None:
@@ -31,6 +34,60 @@ def _type(text: str, delay: float = TYPE) -> None:
     print()
 
 
+class Spinner:
+    """모델이 응답하는 동안(정지 구간) 도는 표시. 게이트 때는 pause 로 잠시 멈춘다.
+
+    TTY 가 아니면(파이프 등) 아무것도 하지 않는다.
+    """
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._active = False
+        self._paused = False
+        self._thread: threading.Thread | None = None
+
+    def _spin(self) -> None:
+        frames = itertools.cycle("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")
+        while self._active:
+            with self._lock:
+                if not self._paused:
+                    sys.stdout.write(f"\r\033[38;5;99m{next(frames)}\033[0m 처리 중…  ")
+                    sys.stdout.flush()
+            time.sleep(0.09)
+
+    def start(self) -> None:
+        if not _TTY:
+            return
+        self._active = True
+        self._paused = False
+        self._thread = threading.Thread(target=self._spin, daemon=True)
+        self._thread.start()
+
+    def pause(self) -> None:
+        if not _TTY:
+            return
+        with self._lock:
+            self._paused = True
+            sys.stdout.write("\r\033[K")
+            sys.stdout.flush()
+
+    def resume(self) -> None:
+        with self._lock:
+            self._paused = False
+
+    def stop(self) -> None:
+        self._active = False
+        if self._thread:
+            self._thread.join()
+            self._thread = None
+        if _TTY:
+            sys.stdout.write("\r\033[K")
+            sys.stdout.flush()
+
+
+_spinner = Spinner()
+
+
 def _banner(title: str) -> None:
     print(f"\n\033[38;5;99m{'─' * 64}\033[0m")
     print(f"  \033[1m{title}\033[0m")
@@ -39,12 +96,14 @@ def _banner(title: str) -> None:
 
 
 def _confirm(preview: str) -> bool:
+    _spinner.pause()
     print(preview)
     sys.stdout.write("> (y/n) ")
     sys.stdout.flush()
     time.sleep(0.6)
     _type("y", 0.06)
     time.sleep(0.3)
+    _spinner.resume()
     return True
 
 
@@ -53,8 +112,11 @@ def _ask(agent: Agent, cmd: str) -> None:
     sys.stdout.flush()
     time.sleep(0.4)
     _type(cmd)
-    time.sleep(0.4)
-    print(agent.handle(cmd, confirm=_confirm))
+    time.sleep(0.3)
+    _spinner.start()
+    resp = agent.handle(cmd, confirm=_confirm)
+    _spinner.stop()
+    print(resp)
     time.sleep(PAUSE)
 
 

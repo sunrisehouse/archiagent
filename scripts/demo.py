@@ -6,12 +6,15 @@
 사용법:
   python scripts/demo.py                # 실제 모델(있으면), 없으면 오프라인(예시)
   python scripts/demo.py --fake         # 오프라인(예시) 모드로 빠르게
+  python scripts/demo.py --slow         # 타이핑 더 천천히
+  python scripts/demo.py --fast         # 타이핑 빠르게
   python scripts/demo.py --dir examples/bank-nextgen
 """
 
 from __future__ import annotations
 
 import itertools
+import random
 import sys
 import threading
 import time
@@ -21,16 +24,24 @@ from archiagent.agent import Agent
 from archiagent.model import FakeModel, get_default_model
 from archiagent.store import SqliteStore
 
-TYPE = 0.035   # 글자당 타이핑 지연(초)
+TYPE = 0.07    # 글자당 기본 타이핑 지연(초)
 PAUSE = 0.9    # 단계 사이 멈춤(초)
+SPEED = 1.0    # 타이핑 속도 배율(작을수록 빠름) — --slow/--fast 로 조절
 _TTY = sys.stdout.isatty()
 
 
-def _type(text: str, delay: float = TYPE) -> None:
+def _type(text: str) -> None:
+    """사람이 치는 것처럼 글자마다 속도를 불규칙하게, 띄어쓰기·문장부호에서 살짝 쉰다."""
+    base = TYPE * SPEED
     for ch in text:
         sys.stdout.write(ch)
         sys.stdout.flush()
-        time.sleep(delay)
+        d = base * random.uniform(0.55, 1.7)   # 글자마다 흔들림
+        if ch == " ":
+            d += base * 1.3
+        elif ch in ".,?!…":
+            d += base * 2.5
+        time.sleep(d)
     print()
 
 
@@ -101,7 +112,7 @@ def _confirm(preview: str) -> bool:
     sys.stdout.write("> (y/n) ")
     sys.stdout.flush()
     time.sleep(0.6)
-    _type("y", 0.06)
+    _type("y")
     time.sleep(0.3)
     _spinner.resume()
     return True
@@ -121,8 +132,13 @@ def _ask(agent: Agent, cmd: str) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    global SPEED
     argv = argv if argv is not None else sys.argv[1:]
     fake = "--fake" in argv
+    if "--slow" in argv:
+        SPEED = 1.7
+    elif "--fast" in argv:
+        SPEED = 0.5
     project = "examples/bank-nextgen"
     if "--dir" in argv:
         project = argv[argv.index("--dir") + 1]

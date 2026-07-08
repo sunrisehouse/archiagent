@@ -69,7 +69,7 @@ claude --print --model claude-haiku-4-5 "OK 라고만 답해"
 python scripts/demo.py --fake      # 즉시·결정적, 모델 호출 0회
 ```
 - 5.1 → 5.2 → 5.3 → 5.4 배너와 함께 흐름을 미리 본다. 실수 없이 갈 수 있는지 확인용.
-- 타이핑이 빠르거나 느리면 `scripts/demo.py` 상단의 `TYPE`(글자 지연)·`PAUSE`(단계 간격)만 바꾼다.
+- 타이핑 속도는 `--slow`(느리게) / `--fast`(빠르게) 로 조절한다. 기본은 사람이 치는 듯 불규칙하다. 더 세밀히는 `scripts/demo.py` 상단 `TYPE`·`SPEED`·`PAUSE`.
 
 ---
 
@@ -167,6 +167,6 @@ open out/design.html out/requirements.html out/current-system.html
 
 ## 10. 조절 포인트
 
-- 타이핑/멈춤 속도: `scripts/demo.py`의 `TYPE`·`PAUSE`.
+- 타이핑 속도: `--slow` / `--fast` (또는 `scripts/demo.py`의 `TYPE`·`SPEED`·`PAUSE`).
 - 시나리오 폴더 바꾸기: `python scripts/demo.py --dir <폴더>`.
-- 필요하면 요청: `--slow`/`--fast` 옵션, 데모별 개별 실행, "무관 변경은 설계 안 건드림" 판단 컷 추가.
+- 필요하면 요청: 데모별 개별 실행, "무관 변경은 설계 안 건드림" 판단 컷 추가.

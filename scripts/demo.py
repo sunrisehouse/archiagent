@@ -108,26 +108,54 @@ def _banner(title: str) -> None:
 
 def _confirm(preview: str) -> bool:
     _spinner.pause()
+    print()
     print(preview)
-    sys.stdout.write("> (y/n) ")
+    sys.stdout.write("> (y/n) \033[1;97m")   # 사용자 답(y)은 굵게
     sys.stdout.flush()
     time.sleep(0.6)
     _type("y")
+    sys.stdout.write("\033[0m")
     time.sleep(0.3)
     _spinner.resume()
     return True
 
 
+def _open_outputs(out_dir: str) -> None:
+    """마지막에 생성된 산출물 HTML 을 브라우저로 띄운다(macOS: open)."""
+    import shutil
+    import subprocess
+
+    files = sorted(Path(out_dir).glob("*.html"))
+    if not files:
+        return
+    names = ", ".join(f.name for f in files)
+    opener = "open" if sys.platform == "darwin" else ("xdg-open" if shutil.which("xdg-open") else None)
+    if not opener:
+        print(f"\n생성된 문서: {out_dir}/  ({names})")
+        return
+    print(f"\n\033[1m생성된 산출물을 브라우저로 엽니다\033[0m — {names}")
+    time.sleep(0.6)
+    for f in files:
+        try:
+            subprocess.run([opener, str(f)], check=False)
+        except Exception:
+            pass
+
+
 def _ask(agent: Agent, cmd: str) -> None:
-    sys.stdout.write("\n\033[38;5;99m>\033[0m ")
+    # 입력한 명령: 굵고 밝게 — 답변과 확실히 구분된다.
+    sys.stdout.write("\n\033[1;38;5;170m❯\033[0m \033[1;97m")
     sys.stdout.flush()
     time.sleep(0.4)
-    _type(cmd)
+    _type(cmd)                     # 굵은 흰색으로 타이핑
+    sys.stdout.write("\033[0m")
+    sys.stdout.flush()
     time.sleep(0.3)
     _spinner.start()
     resp = agent.handle(cmd, confirm=_confirm)
     _spinner.stop()
-    print(resp)
+    print()                        # 입력과 답변 사이 빈 줄
+    print(f"\033[38;5;250m{resp}\033[0m")   # 답변은 차분한 색
     time.sleep(PAUSE)
 
 
@@ -166,6 +194,7 @@ def main(argv: list[str] | None = None) -> int:
     _banner("5.4 산출물 출력 — 문서별 HTML")
     _ask(agent, "현재 산출물을 문서별로 HTML로 만들어.")
 
+    _open_outputs(agent.out_dir)
     print()
     return 0
 

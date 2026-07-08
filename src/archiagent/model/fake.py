@@ -20,7 +20,23 @@ class FakeModel:
             return {"systems": _parse_systems(content), "note": _note(content)}
         if kind == "generate_design":
             return _design(context or {})
+        if kind == "assess_change":
+            return _assess(content)
         raise ValueError(f"unknown kind: {kind}")
+
+
+# 설계에 영향을 주는 변경으로 볼 키워드(결정적 판단용).
+_DESIGN_KEYWORDS = (
+    "클라우드", "리전", "이중화", "전환", "구조", "성능", "보안", "가용",
+    "모니터링", "MSA", "용량", "샤딩", "배포", "서버", "네트워크",
+)
+
+
+def _assess(text: str) -> dict[str, Any]:
+    hit = next((k for k in _DESIGN_KEYWORDS if k in text), None)
+    if hit:
+        return {"relevant": True, "reason": f"'{hit}' 관련 변경이라 설계에 영향을 준다."}
+    return {"relevant": False, "reason": "설계 구조와 무관한 변경으로 판단된다."}
 
 
 def _bullets(text: str) -> list[str]:

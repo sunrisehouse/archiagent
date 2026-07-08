@@ -13,12 +13,12 @@
   - 제목: **아키텍처 구성도**
   - 📍 이 구성도는 **목표 아키텍처**다. 슬라이드마다 현재 PoC 구현 범위를 `현재 구현(PoC)`으로 함께 표시한다.
 
-## 2. 전체 구성
+## 2. 전체 구성 — 목표 구성도
 
-- **목차 제목:** Overview
+- **목차 제목:** 목표 구성도
 - **거버닝 메시지:** Chat UI가 Orchestrator를 호출하고, Orchestrator가 그래프 조회·작성 도구를 묶어 Graph DB와 Vector DB를 다룬다.
 - **내부 컨텐츠:**
-  - > 구성도(계층·연결): 아래 6개 묶음을 위→아래로 쌓고 화살표로 연결한다.
+  - > 목표 구성도(계층·연결): 아래 6개 묶음을 위→아래로 쌓고 화살표로 연결한다.
   - ① Front — Chat UI · 그래프 뷰어
   - ② Agent Runtime (Claude Agent SDK) — Orchestrator Agent + 그래프 조회·작성 도구
   - ③ Model Provider — Anthropic Claude (Opus 4.8 / Sonnet 4.6 / Haiku 4.5)
@@ -26,9 +26,23 @@
   - ⑥ Knowledge Base — Graph DB · Vector DB
   - ⑦ Data Pipeline — 인제스트·LLM 추출·Upsert
   - 연결: ① —질의/응답→ ② —도구 호출→ ④ → ⑥ / ② ←Claude 호출→ ③ / ⑥ ←적재(Upsert)— ⑦
-  - 📍 현재 구현(PoC): 단일 Python 에이전트가 도구(`kb_*`)를 **직접 호출**(MCP 없음). Graph는 SQLite 인메모리, Vector DB·그래프 뷰어는 후속.
+  - 목표 아키텍처(청사진)다. 실제 구현 범위는 다음 장(현재 구현 구성도) 참고.
 
-## 3. ① Front — Front 구성
+## 3. 전체 구성 — 현재 구현 구성도
+
+- **목차 제목:** 현재 구현(PoC) · 구성도
+- **거버닝 메시지:** 지금은 단일 Python 에이전트가 `kb_*` 함수를 직접 호출하고, SQLite에 저장한다.
+- **내부 컨텐츠:**
+  - > 현재 구현 구성도(계층·연결): 아래 4단계를 위→아래로 쌓는다(구현된 부분).
+  - ① CLI 대화 — 질의 입력 · 답변 출력
+  - ② Agent (단일 Python 클래스) — 정규식 라우팅 · 확인 게이트(y/n) · 작성/영향도/질의응답/출력
+  - ③ kb_* 도구 (순수 함수) — ingest · generate · query · upsert · export
+  - ④ SQLite Store (인메모리) — 산출물 · 요구 · 추적성
+  - 곁: claude CLI(subprocess `--print`) — 추출 Haiku · 설계 Sonnet
+  - 연결: ① —질의/응답→ ② —함수 직접 호출→ ③ —저장/조회→ ④ / ② ←모델 호출→ claude CLI
+  - 영향도·추적성·출력은 저장된 사실에서 모델 없이 결정적으로 계산한다. MCP · Vector DB · 그래프 뷰어는 후속.
+
+## 4. ① Front — Front 구성
 
 - **목차 제목:** ① Front
 - **거버닝 메시지:** Front는 표현만 맡는다. 모든 추론과 조합은 Runtime이 담당한다.
@@ -38,7 +52,7 @@
   - **책임 분리** — Front는 표현만, 추론·조합은 Runtime
   - 📍 현재 구현(PoC): CLI 대화만 제공. 그래프 뷰는 후속이나, 산출물을 문서 HTML로 출력하는 기능(`kb_doc_export`)은 동작.
 
-## 4. ② Agent Runtime — Orchestration · Instruction
+## 5. ② Agent Runtime — Orchestration · Instruction
 
 - **목차 제목:** ② Agent Runtime
 - **거버닝 메시지:** Orchestrator가 의도를 분해하고 라우팅하며, 그래프 조회·작성으로 설계 산출물을 다뤄 응답을 합성한다.
@@ -55,7 +69,7 @@
   - > 다이어그램(시퀀스): Architect→Orchestrator 질의 → 그래프 조회(설계·추적성) → Orchestrator 합성 → 응답
   - 📍 현재 구현(PoC): Claude Agent SDK 대신 `claude` CLI(`--print`) subprocess 호출. 단일 `Agent` 클래스가 정규식으로 의도 라우팅하고 도구를 직접 호출(subagent 없음). 영향도·조회는 모델 없이 결정적 계산. 확인 게이트는 CLI y/n.
 
-## 5. ③④⑤ Provider · MCP · Tools — 모델 · MCP · 도구
+## 6. ③④⑤ Provider · MCP · Tools — 모델 · MCP · 도구
 
 - **목차 제목:** ③④⑤ Provider · MCP · Tools
 - **거버닝 메시지:** `kb_*` 도구로 산출물을 다루며, 모델과 MCP와 도구를 용도별로 분리한다.
@@ -76,7 +90,7 @@
     - `kb_doc_export` | 산출물 → 문서별 HTML 출력 | 구현
     - `kb_vector_search` | 자연어 의미검색 | 후속
 
-## 6. ⑥ Knowledge Base — 그래프 데이터 모델
+## 7. ⑥ Knowledge Base — 그래프 데이터 모델
 
 - **목차 제목:** ⑥ Knowledge Base
 - **거버닝 메시지:** Artifact와 설계 엔티티를 노드로 저장하고, 요구→설계→테스트 추적성을 엣지로 연결한다.
@@ -86,7 +100,7 @@
   - **Vector DB** (예: pgvector/Qdrant): 문서 청크·노드 설명 임베딩 → 자연어 질의를 그래프 진입점으로 변환.
   - 📍 현재 구현(PoC): **SQLite 인메모리**(교체 가능). 노드 ARTIFACT·REQUIREMENT·SYSTEM_NODE, 엣지 DERIVED_FROM·DESCRIBES·DEFINES(DEFINES는 정의만·후속). Service/Component·ADR·VALIDATES·Vector DB는 후속.
 
-## 7. ⑦ Data Pipeline — 작성·적재 → 그래프, 그리고 최신 유지
+## 8. ⑦ Data Pipeline — 작성·적재 → 그래프, 그리고 최신 유지
 
 - **목차 제목:** ⑦ Data Pipeline
 - **거버닝 메시지:** 작성과 적재로 Artifact와 추적성을 채워 Graph DB와 Vector DB를 항상 최신으로 유지한다.
@@ -96,7 +110,7 @@
   - **출력** (`kb_doc_export` · `render/html.py`): 저장된 산출물을 문서별 HTML로 렌더 — 내용은 그래프에서 오므로 항상 최신.
   - 📍 현재 구현(PoC): Graph(SQLite) Upsert까지 동작. Vector DB Upsert(임베딩)는 후속.
 
-## 8. Open Questions — 남은 결정
+## 9. Open Questions — 남은 결정
 
 - **목차 제목:** Open
 - **거버닝 메시지:** 기획 의도와 시나리오는 산출물 ① `01-product-brief.html`을 참고한다.

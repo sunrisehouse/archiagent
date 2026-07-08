@@ -147,7 +147,7 @@ def main(argv: list[str] | None = None) -> int:
     where = "실제 모델" if model.name == "claude" else "오프라인(예시) 모드"
     agent = Agent(SqliteStore(), model, project_dir=project, out_dir="out")
 
-    print(f"\033[1marchiagent\033[0m 시연 — 은행 차세대 시스템 [{where}]")
+    print(f"\033[1marchiagent\033[0m 를 시작합니다 [{where}]. 무엇을 도와드릴까요?")
     time.sleep(0.8)
 
     _banner("5.1 산출물 작성 — 분석 → 설계")
@@ -166,7 +166,7 @@ def main(argv: list[str] | None = None) -> int:
     _banner("5.4 산출물 출력 — 문서별 HTML")
     _ask(agent, "현재 산출물을 문서별로 HTML로 만들어.")
 
-    print("\n\033[1m시연 종료.\033[0m")
+    print()
     return 0
 
 

@@ -29,9 +29,18 @@ python scripts/demo.py        # 화면 녹화를 켠 상태에서 실행
 # 1) 최신 코드
 git pull
 
-# 2) 설치 (가상환경 권장)
-python -m venv .venv && source .venv/bin/activate
+# 2) 실행 준비 — (A) 설치 또는 (B) 무설치 중 하나
+
+#   (A) 가상환경에 설치 (권장). 오래된 pip 는 editable 설치를 못 하니 먼저 올린다.
+python3 -m venv .venv && source .venv/bin/activate
+python3 -m pip install --upgrade pip setuptools
 pip install -e ".[dev]"        # 또는: bash scripts/setup.sh
+
+#   (B) 설치 없이 실행 — 이 패키지는 외부 의존성이 0 이라 설치가 꼭 필요치 않다.
+#       PYTHONPATH 만 주면 그대로 돈다(설치 오류를 피하는 가장 확실한 길):
+#       pip install pytest                                            # 테스트만 필요할 때
+#       PYTHONPATH=src python scripts/demo.py                         # 데모
+#       PYTHONPATH=src python -m archiagent.cli examples/bank-nextgen # 라이브 CLI
 
 # 3) 오프라인 검증 — 모델 없이 전 시나리오가 도는지
 pytest -q                      # 통과하면 코드 정상
@@ -147,6 +156,7 @@ open out/design.html out/requirements.html out/current-system.html
 
 ## 9. 문제 해결
 
+- **`cannot be installed in editable mode` / `setup.cfg 가 없다`** → pip 가 오래됨(PEP 660 미지원). `python3 -m pip install --upgrade pip setuptools` 후 재시도(새 venv 권장). 또는 설치를 건너뛰고 §1-(B)의 `PYTHONPATH=src` 로 바로 실행.
 - **오프라인 모드로 뜬다("[오프라인(예시) 모드]")** → `claude` 미설치 또는 미로그인. §1-4로 확인.
 - **너무 느리다** → 편집에서 대기 구간 배속. 또는 리허설·짧은 컷은 `--fake`로.
 - **JSON 관련 오류** → 최신 코드인지 확인(`git pull`). 파서 이슈는 수정됨.

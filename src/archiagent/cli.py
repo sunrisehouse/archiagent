@@ -41,3 +41,7 @@ def main(argv: list[str] | None = None) -> int:
         if not command:
             continue
         print(agent.handle(command, confirm=_confirm))
+
+
+if __name__ == "__main__":  # 설치 없이도 실행: PYTHONPATH=src python -m archiagent.cli <폴더>
+    raise SystemExit(main())

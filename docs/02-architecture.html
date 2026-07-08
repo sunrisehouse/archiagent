@@ -15,9 +15,6 @@
       --line: #e2e8f0;
       --bg: #f8fafc;
       --surface: #ffffff;
-      --poc: #b45309;
-      --poc-soft: #fffbeb;
-      --poc-line: #fcd34d;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
@@ -39,333 +36,166 @@
     h2.gov::before { content: ""; position: absolute; left: 0; top: .15em; bottom: .15em; width: 6px; background: var(--accent); border-radius: 4px; }
     h3 { font-size: 1rem; color: var(--accent); margin-bottom: 8px; }
     p, li { font-size: .95rem; }
-    code, .tag { font-family: ui-monospace, "SF Mono", monospace; font-size: .86em; background: #eef1f6; padding: 1.5px 7px; border-radius: 6px; color: var(--accent); }
+    code { font-family: ui-monospace, "SF Mono", monospace; font-size: .86em; background: #eef1f6; padding: 1.5px 7px; border-radius: 6px; color: var(--accent); }
 
     .cover { text-align: center; align-items: center; }
     .cover .sub { font-size: 1.1rem; color: var(--ink-soft); margin-top: 22px; line-height: 1.7; }
     .cover .meta { margin-top: 34px; font-size: .82rem; color: var(--muted); }
 
-    table { border-collapse: collapse; width: 100%; background: var(--surface); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(30,41,59,.06); font-size: .9rem; }
-    thead th { background: var(--accent); color: #fff; font-weight: 700; padding: 11px 15px; text-align: left; }
-    tbody td { padding: 10px 15px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    table { border-collapse: collapse; width: 100%; background: var(--surface); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(30,41,59,.06); font-size: .95rem; }
+    thead th { background: var(--accent); color: #fff; font-weight: 700; padding: 12px 16px; text-align: left; }
+    tbody td { padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
     tbody tr:last-child td { border-bottom: 0; }
     tbody tr:nth-child(even) td { background: #f8fafc; }
 
-    .grid { display: grid; gap: 14px; }
+    .grid { display: grid; gap: 16px; }
     .grid.c2 { grid-template-columns: 1fr 1fr; }
-    .grid.c3 { grid-template-columns: repeat(3, 1fr); }
-    .card { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; padding: 15px 18px; box-shadow: 0 1px 3px rgba(30,41,59,.05); }
-    .card h3 { margin-bottom: 6px; font-size: .98rem; }
-    .card p, .card li { font-size: .88rem; color: var(--ink-soft); line-height: 1.55; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(30,41,59,.05); }
+    .card h3 { margin-bottom: 6px; font-size: 1rem; }
+    .card p, .card li { font-size: .92rem; color: var(--ink-soft); line-height: 1.6; }
     .card ul { padding-left: 1.1rem; }
+    .card.wide { grid-column: 1 / -1; border-left-color: #16a34a; }
+    .note { color: var(--muted); font-size: .88rem; margin-top: 16px; }
 
-    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
-
-    /* PoC callout */
-    .poc { margin-top: 16px; background: var(--poc-soft); border: 1px solid var(--poc-line); border-left: 4px solid var(--poc); border-radius: 10px; padding: 12px 16px; font-size: .86rem; color: #78350f; line-height: 1.55; }
-    .poc b { color: var(--poc); }
-    .poc .lab { display: inline-block; font-weight: 800; color: var(--poc); margin-right: 6px; }
-
-    /* diagram: flow of boxes */
-    .flow { display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 6px 0 4px; }
-    .flow .node { background: var(--accent-soft); border: 1px solid #c7d2fe; border-radius: 12px; padding: 12px 16px; font-size: .9rem; font-weight: 700; text-align: center; }
-    .flow .node small { display: block; font-weight: 500; color: var(--muted); font-size: .8em; margin-top: 2px; }
-    .flow .db { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: .88rem; text-align: center; box-shadow: 0 1px 3px rgba(30,41,59,.06); }
-    .flow .arr { color: var(--accent); font-weight: 800; font-size: 1.25rem; }
     .arch { max-width: 780px; margin: 4px auto 0; }
     .arch svg { width: 100%; height: auto; display: block; }
-    .arch .bx { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
-    .arch .bx.em { fill: #e0e7ff; stroke-width: 2; }
+    .arch .bx { fill: #ecfdf5; stroke: #16a34a; stroke-width: 1.5; }
+    .arch .bx.em { fill: #d1fae5; stroke-width: 2; }
     .arch .bx.sup { fill: var(--surface); stroke: #cbd5e1; stroke-width: 1.5; }
     .arch .t { fill: var(--ink); font-weight: 700; }
     .arch .s { fill: var(--muted); font-weight: 500; }
     .arch .ln { stroke: var(--accent2); stroke-width: 1.6; fill: none; }
     .arch .lbl { fill: var(--muted); font-weight: 600; }
-    .arch .bx.now { fill: #ecfdf5; stroke: #16a34a; stroke-width: 1.5; }
-    .arch .bx.now.em { fill: #d1fae5; stroke-width: 2; }
 
-    /* sequence steps */
-    .seq { display: grid; gap: 8px; }
-    .seq .step { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: .9rem; }
-    .seq .n { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: .8rem; display: flex; align-items: center; justify-content: center; }
-
-    /* relationship list (KB graph model) */
-    .rel { display: grid; gap: 9px; }
-    .rel .r { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: .9rem; }
-    .rel .r b { color: var(--ink); }
-    .rel .r em { font-style: normal; font-family: ui-monospace, monospace; font-size: .82em; color: var(--accent); background: #eef1f6; padding: 1px 7px; border-radius: 6px; margin: 0 4px; }
-
-    .status { font-size: .78rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
-    .status.impl { background: #dcfce7; color: #15803d; }
-    .status.next { background: #f1f5f9; color: var(--muted); }
-    .note { color: var(--muted); font-size: .86rem; margin-top: 14px; }
-
-    @media (max-width: 860px) {
-      .split, .grid.c2, .grid.c3 { grid-template-columns: 1fr; }
-      .flow { gap: 8px; }
-    }
+    @media (max-width: 860px) { .grid.c2 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
   <div class="progress" id="progress"></div>
   <div class="brandmark"><b>archiagent</b> · 산출물 ② 아키텍처 구성도</div>
-  <div class="counter" id="counter">1 / 9</div>
+  <div class="counter" id="counter">1 / 7</div>
 
   <!-- 1 · Title -->
   <section class="slide cover">
     <div class="slide-inner">
       <span class="kicker">산출물 ② · Architecture</span>
       <h1>아키텍처 구성도</h1>
-      <p class="sub"><strong>archiagent</strong>는 Claude Agent SDK 기반 에이전트로 구성한다.<br/>Front · Runtime · Model · MCP · Tools · Knowledge Base · Pipeline.</p>
-      <p class="meta">📍 이 구성도는 <strong>목표 아키텍처</strong>다. 슬라이드마다 현재 PoC 구현 범위를 함께 표시한다.</p>
+      <p class="sub"><strong>archiagent</strong>는 단일 Python 에이전트다.<br/>터미널로 대화하고, <code>kb_*</code> 도구로 산출물을 다루며, SQLite에 저장한다.</p>
+      <p class="meta">현재 구현(PoC) 기준</p>
     </div>
   </section>
 
-  <!-- 2 · Overview -->
+  <!-- 2 · 구성도 -->
   <section class="slide">
     <div class="slide-inner">
-      <span class="kicker">목표 구성도</span>
-      <h2 class="gov">Chat UI가 Orchestrator를 호출하고, Orchestrator가 그래프 조회·작성 도구를 묶어 Graph DB와 Vector DB를 다룬다.</h2>
+      <span class="kicker">구성도</span>
+      <h2 class="gov">사용자가 터미널에서 에이전트와 직접 대화하고, 에이전트가 <code>kb_*</code> 함수를 호출해 SQLite에 저장한다.</h2>
       <div class="arch">
-        <svg viewBox="0 0 980 500" font-family="system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" role="img" aria-label="archiagent 아키텍처 구성도">
+        <svg viewBox="0 0 980 430" font-family="system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" role="img" aria-label="archiagent 구성도">
           <defs>
             <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
               <path d="M0,0 L10,5 L0,10 z" fill="#6366f1"/>
             </marker>
           </defs>
-          <!-- connectors -->
-          <path class="ln" marker-end="url(#ah)" d="M440,86 L440,138"/>
-          <text class="lbl" x="452" y="118" font-size="12.5">질의 / 응답</text>
-          <path class="ln" marker-start="url(#ah)" marker-end="url(#ah)" d="M630,185 L720,185"/>
-          <text class="lbl" x="675" y="174" font-size="11.5" text-anchor="middle">Claude 호출</text>
-          <path class="ln" marker-end="url(#ah)" d="M440,232 L440,290"/>
-          <text class="lbl" x="452" y="266" font-size="12.5">도구 호출</text>
-          <path class="ln" marker-end="url(#ah)" d="M440,352 L440,398"/>
-          <path class="ln" marker-end="url(#ah)" d="M720,445 L632,445"/>
-          <text class="lbl" x="675" y="434" font-size="11.5" text-anchor="middle">적재 · Upsert</text>
-          <!-- ① Front -->
-          <rect class="bx" x="280" y="22" width="320" height="64" rx="12"/>
-          <text class="t" x="440" y="48" text-anchor="middle" font-size="17">① Front</text>
-          <text class="s" x="440" y="70" text-anchor="middle" font-size="13">Chat UI · 그래프 뷰어</text>
-          <!-- ② Agent Runtime -->
-          <rect class="bx em" x="250" y="138" width="380" height="94" rx="14"/>
-          <text class="t" x="440" y="166" text-anchor="middle" font-size="17">② Agent Runtime</text>
-          <text class="s" x="440" y="186" text-anchor="middle" font-size="12">Claude Agent SDK</text>
-          <text class="t" x="440" y="212" text-anchor="middle" font-size="13">Orchestrator + 그래프 조회·작성 도구(kb_*)</text>
-          <!-- ③ Model Provider -->
-          <rect class="bx sup" x="720" y="147" width="210" height="76" rx="12"/>
-          <text class="t" x="825" y="173" text-anchor="middle" font-size="15">③ Model Provider</text>
-          <text class="s" x="825" y="192" text-anchor="middle" font-size="12">Anthropic Claude</text>
-          <text class="s" x="825" y="209" text-anchor="middle" font-size="11">Opus 4.8 · Sonnet 4.6 · Haiku 4.5</text>
-          <!-- ④ MCP Servers -->
-          <rect class="bx" x="280" y="290" width="320" height="62" rx="12"/>
-          <text class="t" x="440" y="316" text-anchor="middle" font-size="16">④ MCP Servers</text>
-          <text class="s" x="440" y="337" text-anchor="middle" font-size="12.5">Graph/KB MCP</text>
-          <!-- ⑥ Knowledge Base -->
-          <rect class="bx" x="250" y="398" width="380" height="94" rx="14"/>
-          <text class="t" x="440" y="432" text-anchor="middle" font-size="17">⑥ Knowledge Base</text>
-          <text class="s" x="440" y="458" text-anchor="middle" font-size="13">Graph DB · Vector DB</text>
-          <!-- ⑦ Data Pipeline -->
-          <rect class="bx sup" x="720" y="408" width="210" height="76" rx="12"/>
-          <text class="t" x="825" y="434" text-anchor="middle" font-size="15">⑦ Data Pipeline</text>
-          <text class="s" x="825" y="453" text-anchor="middle" font-size="11.5">인제스트 · LLM 추출</text>
-          <text class="s" x="825" y="470" text-anchor="middle" font-size="11.5">Upsert</text>
-        </svg>
-      </div>
-      <p class="note">목표 아키텍처(청사진)다. 실제로 구현된 범위는 다음 장 <b>현재 구현 구성도</b>를 참고한다.</p>
-    </div>
-  </section>
-
-  <!-- 3 · 현재 구현 구성도 -->
-  <section class="slide">
-    <div class="slide-inner">
-      <span class="kicker">현재 구현(PoC) · 구성도</span>
-      <h2 class="gov">지금은 단일 Python 에이전트가 터미널 대화부터 <code>kb_*</code> 호출·SQLite 저장까지 겸한다 — 별도 프론트 앱은 없다.</h2>
-      <div class="arch">
-        <svg viewBox="0 0 980 430" font-family="system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" role="img" aria-label="archiagent 현재 구현 구성도">
-          <defs>
-            <marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0,0 L10,5 L0,10 z" fill="#6366f1"/>
-            </marker>
-          </defs>
-          <!-- user actor (별도 프론트 아님) -->
           <text class="s" x="440" y="22" text-anchor="middle" font-size="13">👤 사용자 · 터미널</text>
-          <path class="ln" marker-end="url(#ah2)" d="M440,32 L440,60"/>
+          <path class="ln" marker-end="url(#ah)" d="M440,32 L440,60"/>
           <text class="lbl" x="452" y="50" font-size="11.5">대화 (REPL)</text>
-          <!-- ① Agent (프론트 겸) -->
-          <rect class="bx now em" x="250" y="60" width="380" height="104" rx="14"/>
+          <rect class="bx em" x="250" y="60" width="380" height="104" rx="14"/>
           <text class="t" x="440" y="88" text-anchor="middle" font-size="16">① Agent · 단일 Python 클래스</text>
           <text class="s" x="440" y="108" text-anchor="middle" font-size="12">터미널 REPL(입출력) · 정규식 라우팅 · 확인 게이트</text>
           <text class="s" x="440" y="126" text-anchor="middle" font-size="12">작성 / 영향도 / 질의응답 / 출력</text>
           <text x="440" y="147" text-anchor="middle" font-size="11.5" fill="#16a34a" font-weight="600">프론트 겸 오케스트레이션 · 별도 프론트 앱 없음</text>
-          <!-- claude CLI -->
           <rect class="bx sup" x="720" y="74" width="210" height="76" rx="12"/>
           <text class="t" x="825" y="100" text-anchor="middle" font-size="14">claude CLI</text>
           <text class="s" x="825" y="118" text-anchor="middle" font-size="11.5">subprocess (--print)</text>
           <text class="s" x="825" y="135" text-anchor="middle" font-size="11.5">추출 Haiku · 설계 Sonnet</text>
-          <path class="ln" marker-start="url(#ah2)" marker-end="url(#ah2)" d="M630,112 L720,112"/>
+          <path class="ln" marker-start="url(#ah)" marker-end="url(#ah)" d="M630,112 L720,112"/>
           <text class="lbl" x="675" y="101" font-size="11.5" text-anchor="middle">모델 호출</text>
-          <!-- ② kb_* tools -->
-          <path class="ln" marker-end="url(#ah2)" d="M440,164 L440,214"/>
+          <path class="ln" marker-end="url(#ah)" d="M440,164 L440,214"/>
           <text class="lbl" x="452" y="194" font-size="12.5">함수 직접 호출</text>
-          <rect class="bx now" x="250" y="214" width="380" height="60" rx="12"/>
+          <rect class="bx" x="250" y="214" width="380" height="60" rx="12"/>
           <text class="t" x="440" y="239" text-anchor="middle" font-size="15">② kb_* 도구 · 순수 함수</text>
           <text class="s" x="440" y="259" text-anchor="middle" font-size="12">ingest · generate · query · upsert · export</text>
-          <!-- ③ SQLite -->
-          <path class="ln" marker-end="url(#ah2)" d="M440,274 L440,320"/>
+          <path class="ln" marker-end="url(#ah)" d="M440,274 L440,320"/>
           <text class="lbl" x="452" y="301" font-size="12.5">저장 / 조회</text>
-          <rect class="bx now" x="250" y="320" width="380" height="72" rx="14"/>
+          <rect class="bx" x="250" y="320" width="380" height="72" rx="14"/>
           <text class="t" x="440" y="350" text-anchor="middle" font-size="16">③ SQLite Store · 인메모리</text>
           <text class="s" x="440" y="372" text-anchor="middle" font-size="12.5">산출물 · 요구 · 추적성</text>
         </svg>
       </div>
-      <p class="note">사용자는 터미널로 에이전트와 직접 대화한다(별도 프론트 앱 없음). 영향도·추적성·출력은 <b>모델 없이 결정적</b>으로 계산하고, MCP · Vector DB · 그래프 뷰어는 후속.</p>
+      <p class="note">별도 프론트 앱 없이 에이전트가 프론트를 겸한다. 영향도·추적성·출력은 저장된 사실에서 <b>모델 없이 결정적</b>으로 계산한다.</p>
     </div>
   </section>
 
-  <!-- 4 · Front -->
+  <!-- 3 · Agent -->
   <section class="slide">
     <div class="slide-inner">
-      <span class="kicker">① Front</span>
-      <h2 class="gov">Front는 표현만 맡는다. 모든 추론과 조합은 Runtime이 담당한다.</h2>
-      <div class="grid c3">
-        <div class="card"><h3>대화 뷰</h3><p>아키텍트의 자연어 질의 입력 / 답변 출력. PoC에선 웹 챗 또는 CLI로 충분.</p></div>
-        <div class="card"><h3>그래프 뷰</h3><p>서브그래프 시각화 — 컴포넌트·의존성 관계.</p></div>
-        <div class="card"><h3>책임 분리</h3><p>Front는 표현만. 추론·조합은 Runtime.</p></div>
-      </div>
-      <div class="poc"><span class="lab">📍 현재 구현(PoC)</span> CLI 대화만 제공. 그래프 뷰는 후속이나, 산출물을 문서 HTML로 출력하는 기능(<code>kb_doc_export</code>)은 동작.</div>
-    </div>
-  </section>
-
-  <!-- 4 · Agent Runtime -->
-  <section class="slide">
-    <div class="slide-inner">
-      <span class="kicker">② Agent Runtime</span>
-      <h2 class="gov">Orchestrator가 의도를 분해하고 라우팅하며, 그래프 조회·작성으로 설계 산출물을 다뤄 응답을 합성한다.</h2>
-      <div class="split">
-        <div>
-          <div class="card" style="margin-bottom:12px;">
-            <h3>Orchestration 부문</h3>
-            <ul>
-              <li>SDK <code>query()</code> 루프 진입점</li>
-              <li>의도 분해 → 라우팅(작성/영향도/질의응답/출력)</li>
-              <li>정지 조건: 최대 반복 · 실패 시 graceful degrade</li>
-              <li>비가역 작업(그래프 쓰기)은 확인 게이트</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h3>Agent Instruction · Prompt</h3>
-            <ul>
-              <li>Orchestrator: 역할·라우팅 휴리스틱, SI 생애주기·단계별 산출물 내장</li>
-              <li>그래프 조회·작성: 모델·질의 패턴, "없으면 없다고", <code>concise|detailed</code></li>
-              <li>작성: As-Is 제약(노드 대수·용량) 읽어 ToBe 초안·충돌 경고</li>
-            </ul>
-          </div>
-        </div>
-        <div class="seq">
-          <div class="step"><span class="n">1</span><span>Architect → Orchestrator 질의</span></div>
-          <div class="step"><span class="n">2</span><span>그래프 조회 (설계·추적성)</span></div>
-          <div class="step"><span class="n">3</span><span>Orchestrator 합성</span></div>
-          <div class="step"><span class="n">4</span><span>→ Architect 응답</span></div>
-        </div>
-      </div>
-      <div class="poc"><span class="lab">📍 현재 구현(PoC)</span> Claude Agent SDK 대신 <code>claude</code> CLI(<code>--print</code>) subprocess 호출. 단일 <code>Agent</code> 클래스가 정규식으로 의도 라우팅하고 도구를 직접 호출(subagent 없음). 영향도·조회는 모델 없이 결정적 계산. 확인 게이트는 CLI y/n.</div>
-    </div>
-  </section>
-
-  <!-- 5 · Provider · MCP · Tools -->
-  <section class="slide">
-    <div class="slide-inner">
-      <span class="kicker">③④⑤ Provider · MCP · Tools</span>
-      <h2 class="gov"><code>kb_*</code> 도구로 산출물을 다루며, 모델과 MCP와 도구를 용도별로 분리한다.</h2>
-      <div class="split">
-        <div>
-          <h3>③ Model Provider</h3>
-          <table>
-            <thead><tr><th>용도</th><th>모델</th></tr></thead>
-            <tbody>
-              <tr><td>오케스트레이션·영향도 (기본)</td><td><code>claude-opus-4-8</code></td></tr>
-              <tr><td>라우틴 질의·요약</td><td><code>claude-sonnet-4-6</code></td></tr>
-              <tr><td>대량 엔티티 추출</td><td><code>claude-haiku-4-5</code></td></tr>
-            </tbody>
-          </table>
-          <div class="poc" style="margin-top:12px;"><span class="lab">📍 PoC</span> 모델을 인터페이스로 추상화 — 테스트는 <b>FakeModel</b>(모델 호출 0), 실행은 <b>ClaudeModel</b>(구독 CLI). 실제 사용은 추출=Haiku·설계생성=Sonnet 2종뿐, opus·오케스트레이션·영향도는 결정적 코드.</div>
-        </div>
-        <div>
-          <h3>⑤ Tools</h3>
-          <table>
-            <thead><tr><th>도구</th><th>설명</th><th>상태</th></tr></thead>
-            <tbody>
-              <tr><td><code>kb_artifact_ingest</code></td><td>문서 → Artifact 적재(확인)</td><td><span class="status impl">구현</span></td></tr>
-              <tr><td><code>kb_doc_generate</code></td><td>맥락 → 산출물 초안</td><td><span class="status impl">구현</span></td></tr>
-              <tr><td><code>kb_graph_query</code></td><td>추적성·영향도 탐색</td><td><span class="status impl">구현</span></td></tr>
-              <tr><td><code>kb_graph_upsert</code></td><td>노드·엣지 갱신(확인)</td><td><span class="status impl">구현</span></td></tr>
-              <tr><td><code>kb_doc_export</code></td><td>산출물 → 문서 HTML 출력</td><td><span class="status impl">구현</span></td></tr>
-              <tr><td><code>kb_vector_search</code></td><td>자연어 의미검색</td><td><span class="status next">후속</span></td></tr>
-            </tbody>
-          </table>
-          <div class="poc" style="margin-top:12px;"><span class="lab">📍 PoC</span> <b>④ MCP Server 없음.</b> Graph/KB 도구는 순수 Python 함수를 에이전트가 직접 호출.</div>
-        </div>
+      <span class="kicker">Agent</span>
+      <h2 class="gov">에이전트가 자연어 명령의 의도를 정규식으로 판별해 도구를 부르고, 저장 전 사람 확인을 받는다.</h2>
+      <div class="grid c2">
+        <div class="card"><h3>진입 · REPL</h3><p><code>archiagent</code> 콘솔 스크립트 → <code>cli.py</code> REPL(<code>input</code>/<code>print</code>)로 터미널 대화.</p></div>
+        <div class="card"><h3>라우팅 <code>_route</code></h3><p>정규식·키워드로 의도 판별 — 작성 / 영향도 / 반영 / 질의응답 / 출력. 핸들러가 알맞은 <code>kb_*</code> 도구 호출.</p></div>
+        <div class="card"><h3>확인 게이트</h3><p>저장 등 비가역 작업 전 <code>y/n</code>. 규칙 기반이라 한 명령당 유한 단계로 정지.</p></div>
+        <div class="card"><h3>결정적 계산</h3><p>영향도·추적성·조회는 <b>모델 없이</b> 저장된 사실에서 계산한다. 모델은 추출·생성에만 쓴다.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- 6 · Knowledge Base -->
+  <!-- 4 · Tools -->
   <section class="slide">
     <div class="slide-inner">
-      <span class="kicker">⑥ Knowledge Base</span>
-      <h2 class="gov">Artifact와 설계 엔티티를 노드로 저장하고, 요구→설계→테스트 추적성을 엣지로 연결한다.</h2>
-      <div class="split">
-        <div class="rel">
-          <div class="r"><b>Artifact</b> <em>DERIVED_FROM</em> <b>Artifact</b> — 요구→설계→테스트 추적성</div>
-          <div class="r"><b>Artifact</b> <em>DEFINES</em> <b>Service / Component</b> (DEPENDS_ON · EXPOSES · STORES_IN · OWNED_BY)</div>
-          <div class="r"><b>ADR / Decision</b> <em>AFFECTS</em> <b>Service</b></div>
-          <div class="r"><b>Artifact</b> <em>VALIDATES</em> <b>Service</b></div>
-        </div>
-        <div>
-          <p><b>Graph DB</b> <span class="muted">(예: Neo4j)</span></p>
-          <p style="font-size:.88rem; color:var(--ink-soft); margin:.3em 0 .8em;">Artifact 노드는 <code>phase</code>·<code>type</code> 속성으로 SI 단계 표현. DERIVED_FROM으로 추적성, DEFINES/VALIDATES로 설계 엔티티 연결.</p>
-          <p><b>Vector DB</b> <span class="muted">(예: pgvector/Qdrant)</span></p>
-          <p style="font-size:.88rem; color:var(--ink-soft); margin-top:.3em;">문서 청크·노드 설명 임베딩 → 자연어 질의를 그래프 진입점으로 변환.</p>
-        </div>
-      </div>
-      <div class="poc"><span class="lab">📍 현재 구현(PoC)</span> <b>SQLite 인메모리</b>(교체 가능). 노드 ARTIFACT·REQUIREMENT·SYSTEM_NODE, 엣지 DERIVED_FROM·DESCRIBES·DEFINES(DEFINES는 정의만·후속). Service/Component·ADR·VALIDATES·Vector DB는 후속.</div>
+      <span class="kicker">Tools</span>
+      <h2 class="gov">산출물 작성·조회·저장·출력을 <code>kb_*</code> 순수 함수로 나눈다.</h2>
+      <table>
+        <thead><tr><th style="width:230px">도구</th><th>하는 일</th></tr></thead>
+        <tbody>
+          <tr><td><code>kb_artifact_ingest</code></td><td>문서를 읽어 산출물로 적재(확인 게이트 경유)</td></tr>
+          <tr><td><code>kb_doc_generate</code></td><td>저장된 맥락으로 설계서 초안 생성</td></tr>
+          <tr><td><code>kb_graph_query</code></td><td>요구·현행·추적성·영향도 조회(결정적)</td></tr>
+          <tr><td><code>kb_graph_upsert</code></td><td>저장(노드·엣지 갱신, 확인)</td></tr>
+          <tr><td><code>kb_doc_export</code></td><td>산출물을 문서별 HTML로 출력</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
-  <!-- 7 · Data Pipeline -->
+  <!-- 5 · Store -->
   <section class="slide">
     <div class="slide-inner">
-      <span class="kicker">⑦ Data Pipeline</span>
-      <h2 class="gov">작성과 적재로 Artifact와 추적성을 채워 Graph DB와 Vector DB를 항상 최신으로 유지한다.</h2>
-      <div class="flow">
-        <div class="node">대화·인터뷰<small>→ 초안(kb_doc_generate)</small></div>
-        <span class="arr">→</span>
-        <div class="node">기존 SI 산출물<small>→ LLM 추출(Haiku)</small></div>
-        <span class="arr">→</span>
-        <div class="node">Upsert<small>Artifact + 추적성 엣지</small></div>
-        <span class="arr">→</span>
-        <div class="db">Graph DB · Vector DB</div>
+      <span class="kicker">Store</span>
+      <h2 class="gov">산출물과 요구, 현행 서버, 그리고 그 사이 연결을 SQLite에 저장한다. 사용자에게 저장 방식은 드러내지 않는다.</h2>
+      <div class="grid c2">
+        <div class="card"><h3>노드 3종</h3><p><b>ARTIFACT</b> — 요구사항 정의서 · 현행 시스템 분석서 · 설계서<br/><b>REQUIREMENT</b> — R-1 ..<br/><b>SYSTEM_NODE</b> — 운영 서버</p></div>
+        <div class="card"><h3>연결 3종</h3><p><b>DERIVED_FROM</b> — 설계→요구 추적성<br/><b>DESCRIBES</b> — 산출물→항목<br/><b>DEFINES</b> — 정의만(후속)</p></div>
+        <div class="card wide"><h3>원칙</h3><p>인메모리 기본이고 인터페이스로 추상화해 교체 가능하다. 사용자 노출 문구는 <b>문서 수준 언어만</b> 쓰고, 그래프·노드 같은 저장 용어는 숨긴다.</p></div>
       </div>
-      <div class="grid c2" style="margin-top:14px;">
-        <div class="card"><h3>작성·적재 <span class="muted" style="font-size:.85em;">kb_doc_generate · kb_artifact_ingest</span></h3><p>작성 — 대화·인터뷰→초안→승인 후 Upsert. 적재 — 기존 문서→LLM 추출→Artifact+추적성 Upsert.</p></div>
-        <div class="card"><h3>출력 <span class="muted" style="font-size:.85em;">kb_doc_export · render/html.py</span></h3><p>저장된 산출물을 문서별 HTML로 렌더 — 내용은 그래프에서 오므로 항상 최신.</p></div>
-      </div>
-      <div class="poc"><span class="lab">📍 현재 구현(PoC)</span> Graph(SQLite) Upsert까지 동작. Vector DB Upsert(임베딩)는 후속.</div>
     </div>
   </section>
 
-  <!-- 8 · Open Questions -->
+  <!-- 6 · Model -->
   <section class="slide">
     <div class="slide-inner">
-      <span class="kicker">Open</span>
-      <h2 class="gov">남은 결정 (Open Questions)</h2>
-      <div class="grid c3">
-        <div class="card"><p>Graph DB / Vector DB 제품 선정 (Neo4j vs 대안, pgvector vs Qdrant)</p></div>
-        <div class="card"><p>Front 형태(웹 챗 vs CLI) 확정</p></div>
-        <div class="card"><p>인제스트 대상 산출물 포맷 범위 (Markdown / Confluence / PPT 등)</p></div>
+      <span class="kicker">Model</span>
+      <h2 class="gov">추출·생성에만 모델을 쓰고, 테스트는 모델 없이 돈다.</h2>
+      <div class="grid c2">
+        <div class="card"><h3>FakeModel</h3><p>결정적 응답. 테스트 기본이라 <b>모델 호출 0회</b>로 전 시나리오가 재현된다.</p></div>
+        <div class="card"><h3>ClaudeModel</h3><p><code>claude</code> CLI(<code>--print</code>) subprocess 호출. Claude Max <b>구독 OAuth</b>로 동작(API 키 불필요).</p></div>
+        <div class="card wide"><h3>작업별 모델</h3><p>추출 = <code>claude-haiku-4-5</code> · 설계 생성 = <code>claude-sonnet-4-6</code>. 라우팅·영향도·조회·출력은 모델 없이 결정적 코드다.</p></div>
       </div>
-      <p class="note">기획 의도·시나리오는 산출물 ① <code>01-product-brief.html</code>, 데모는 ③ <code>03-demo.html</code> 참고.</p>
+    </div>
+  </section>
+
+  <!-- 7 · 후속 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">후속</span>
+      <h2 class="gov">아직 없다 — 필요와 측정 후에 붙인다.</h2>
+      <div class="grid c2">
+        <div class="card"><h3>Vector DB · 의미검색</h3><p><code>kb_vector_search</code> 등 임베딩 기반 자연어 검색.</p></div>
+        <div class="card"><h3>MCP 서버</h3><p>도구를 MCP 서버로 분리(여러 클라이언트·권한 경계 공유).</p></div>
+        <div class="card"><h3>웹 프론트 · 그래프 뷰어</h3><p>CLI 외 웹 챗, 서브그래프 시각화.</p></div>
+        <div class="card"><h3>확장</h3><p>Tier-2 산출물 타입 레지스트리, Neo4j 등 외부 저장소로 교체.</p></div>
+      </div>
     </div>
   </section>
 

@@ -67,12 +67,10 @@ def _extract_json(text: str) -> dict[str, Any]:
     start = s.find("{")
     if start == -1:
         raise ValueError(f"JSON 을 찾지 못함: {text[:200]}")
-    depth = 0
-    for i in range(start, len(s)):
-        if s[i] == "{":
-            depth += 1
-        elif s[i] == "}":
-            depth -= 1
-            if depth == 0:
-                return json.loads(s[start : i + 1])
-    raise ValueError(f"JSON 이 닫히지 않음: {text[:200]}")
+    # 표준 파서로 첫 JSON 객체만 디코드한다. 문자열 값 안의 중괄호·이스케이프를
+    # 정확히 처리하므로, 본문에 { } 가 들어가도 깨지지 않는다(뒤따르는 텍스트는 무시).
+    try:
+        obj, _ = json.JSONDecoder().raw_decode(s[start:])
+        return obj
+    except json.JSONDecodeError as e:
+        raise ValueError(f"JSON 파싱 실패({e.msg}): {text[:200]}") from e

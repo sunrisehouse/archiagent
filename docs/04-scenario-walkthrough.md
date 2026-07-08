@@ -4,6 +4,7 @@
 > 에이전트를 어떻게 켜고, 어떤 데이터를 넣고, 어떤 명령을 입력하는지를 **명령어 실행 단위**로 보여줍니다.
 > 예시는 **은행 차세대 시스템 구축** 프로젝트이며, 요건은 **비기능 요건**(클라우드 전환, MSA 전환,
 > 모니터링 체계 등)으로만 구성했습니다. 데이터는 이해를 돕기 위해 아주 단순한 형태(짧은 목록)로 적었습니다.
+> 🔗 렌더된 슬라이드: [① 기획·기능](https://sunrisehouse.github.io/archiagent/docs/01-product-brief.html) · [② 아키텍처](https://sunrisehouse.github.io/archiagent/docs/02-architecture.html) · [③ 데모](https://sunrisehouse.github.io/archiagent/docs/03-demo.html)
 
 ---
 

@@ -1,6 +1,7 @@
 # 산출물 ② — 아키텍처 구성도 (콘텐츠)
 
 > 콘텐츠 단일 소스. 슬라이드 디자인(`02-architecture.html`)은 이 MD를 입력으로 별도 입힌다.
+> 🔗 렌더된 슬라이드: [02-architecture.html](https://sunrisehouse.github.io/archiagent/docs/02-architecture.html)
 > 슬라이드별: **목차 제목**(kicker) · **거버닝 메시지** · **내부 컨텐츠**.
 
 ---

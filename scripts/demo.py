@@ -134,7 +134,7 @@ def _open_outputs(out_dir: str) -> None:
         print(f"\n생성된 문서: {out_dir}/  ({names})")
         return
     print(f"\n\033[1m생성된 산출물을 브라우저로 엽니다\033[0m — {names}")
-    time.sleep(0.6)
+    time.sleep(2.0)   # 마지막 응답을 읽을 여유를 두고 브라우저를 띄운다
     for f in files:
         try:
             subprocess.run([opener, str(f)], check=False)

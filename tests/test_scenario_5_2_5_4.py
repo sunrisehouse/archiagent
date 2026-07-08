@@ -9,7 +9,7 @@ from archiagent.agent import Agent
 from archiagent.model import FakeModel
 from archiagent.schema import DERIVED_FROM, REQUIREMENT
 from archiagent.store import SqliteStore
-from archiagent.tools import kb_doc_export
+from archiagent.tools import kb_change_assess, kb_doc_export
 
 EXAMPLES = str(Path(__file__).resolve().parents[1] / "examples" / "bank-nextgen")
 
@@ -50,6 +50,26 @@ def test_5_2_reflect_adds_requirement_and_updates_design():
     # 설계 추적성도 11건으로 갱신
     assert len(a.store.edges(rel=DERIVED_FROM, src="doc:design")) == 11
     assert "반영" in resp
+    _no_leak(resp)
+
+
+def test_change_assess_judges_relevance():
+    m = FakeModel()
+    v1 = kb_change_assess(m, "재해 복구를 위해 클라우드 리전을 두 곳으로 이중화한다.")
+    assert v1["relevant"] is True and v1["reason"]
+    v2 = kb_change_assess(m, "담당자 이름 오타를 수정한다.")
+    assert v2["relevant"] is False and v2["reason"]
+
+
+def test_5_2_reflect_skips_design_when_irrelevant(tmp_path):
+    # 설계와 무관한 변경은 요구로는 반영하되 설계서는 건드리지 않는다(모델 판단).
+    a = _agent()
+    before = len(a.store.edges(rel=DERIVED_FROM, src="doc:design"))
+    (tmp_path / "memo.md").write_text("- 담당자 이름 오타를 수정한다.\n", encoding="utf-8")
+    a.project_dir = tmp_path
+    resp = a.handle("memo.md 의 변경을 반영해.")
+    assert a.store.count(REQUIREMENT) == 11
+    assert len(a.store.edges(rel=DERIVED_FROM, src="doc:design")) == before
     _no_leak(resp)
 
 

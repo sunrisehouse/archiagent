@@ -16,6 +16,7 @@ from archiagent.store.base import GraphStore
 from archiagent.tools import (
     impact,
     kb_artifact_ingest,
+    kb_change_assess,
     kb_doc_export,
     kb_doc_generate,
     kb_graph_upsert,
@@ -114,16 +115,22 @@ class Agent:
         if text is None:
             return f"변경 내용을 담은 파일을 찾지 못했습니다: {filename}"
         proposal = kb_artifact_ingest(self.store, self.model, text, "requirements")
-        preview = (
-            f"{proposal.summary}\n그리고 이 변경을 반영해 아키텍처 설계서를 갱신합니다."
-            "\n이 내용을 저장할까요?"
+        # 변경을 요구로는 항상 반영하되, 설계서에 반영할지는 모델이 판단한다.
+        verdict = kb_change_assess(self.model, text)
+        plan = (
+            "이 변경을 반영해 아키텍처 설계서를 갱신합니다."
+            if verdict["relevant"]
+            else "설계서에는 영향이 없어 요구사항 정의서에만 반영합니다."
         )
+        preview = f"{proposal.summary}\n판단: {verdict['reason']}\n{plan}\n이 내용을 저장할까요?"
         if not confirm(preview):
             return "반영하지 않았습니다."
         kb_graph_upsert(self.store, proposal)
-        kb_graph_upsert(self.store, kb_doc_generate(self.store, self.model))
         added = sum(1 for n in proposal.nodes if n.type == REQUIREMENT)
-        return f"요구사항 정의서에 {added}건을 반영하고, 아키텍처 설계서를 갱신했습니다."
+        if verdict["relevant"]:
+            kb_graph_upsert(self.store, kb_doc_generate(self.store, self.model))
+            return f"요구사항 정의서에 {added}건을 반영하고, 아키텍처 설계서를 갱신했습니다."
+        return f"요구사항 정의서에 {added}건을 반영했습니다. 설계서에는 영향이 없어 그대로 두었습니다."
 
     def _query_nodes(self, confirm: Callable[[str], bool]) -> str:
         rows = system_nodes(self.store)  # 조회 — 게이트 없음

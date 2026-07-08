@@ -19,6 +19,7 @@ _MODEL_BY_KIND = {
     "extract_requirements": "claude-haiku-4-5",
     "extract_current_system": "claude-haiku-4-5",
     "generate_design": "claude-sonnet-4-6",
+    "assess_change": "claude-sonnet-4-6",  # 판단(추론)
 }
 
 

@@ -76,7 +76,7 @@
 <body>
   <div class="progress" id="progress"></div>
   <div class="brandmark"><b>archiagent</b> · 산출물 ② 아키텍처 구성도</div>
-  <div class="counter" id="counter">1 / 10</div>
+  <div class="counter" id="counter">1 / 9</div>
 
   <!-- 1 · Title -->
   <section class="slide cover">
@@ -162,22 +162,7 @@
     </div>
   </section>
 
-  <!-- 5 · 도구 구현 -->
-  <section class="slide">
-    <div class="slide-inner">
-      <span class="kicker">도구 구현</span>
-      <h2 class="gov">도구는 순수 함수다 — 모델은 추출·생성에만 쓰고, 조회·저장·출력은 결정적으로 짠다.</h2>
-      <div class="grid c2">
-        <div class="card"><h3>순수 함수</h3><p>각 도구는 <code>(store[, model], 입력) → 결과</code>. 부수효과를 최소화해 단위 테스트가 쉽다.</p></div>
-        <div class="card"><h3>모델은 추출·생성만</h3><p><code>kb_artifact_ingest</code>·<code>kb_doc_generate</code>만 모델 호출. <code>kb_graph_query</code>(영향도·추적성)·<code>kb_doc_export</code>는 저장된 사실에서 모델 없이 계산.</p></div>
-        <div class="card"><h3>구조화 출력</h3><p>모델 응답을 <b>JSON 스키마</b>로 받고 파싱·검증(산문 파싱 금지). 코드펜스·서론이 섞여도 첫 JSON만 안전하게 추출.</p></div>
-        <div class="card"><h3>미리보기 → 게이트 → 저장</h3><p>작성 도구는 저장 안 하고 <code>Proposal</code>(미리보기)만 반환 → 사람 <code>y/n</code> → <code>kb_graph_upsert</code>가 멱등 저장.</p></div>
-      </div>
-      <p class="note">흐름 예: <code>kb_artifact_ingest(store, model, text, kind)</code> → <code>Proposal</code> → (확인) → <code>kb_graph_upsert(store, proposal)</code></p>
-    </div>
-  </section>
-
-  <!-- 6 · 도구별 상세 -->
+  <!-- 5 · 도구별 상세 -->
   <section class="slide">
     <div class="slide-inner">
       <span class="kicker">도구별 상세</span>

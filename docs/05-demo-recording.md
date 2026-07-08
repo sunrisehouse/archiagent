@@ -106,7 +106,7 @@ python scripts/demo.py --fake      # 즉시·결정적, 모델 호출 0회
 
 ## 6. 마무리 컷 (임팩트)
 
-시연 후 **실제로 나온 산출물**을 보여준다:
+데모가 끝나면 **생성된 산출물 HTML 을 자동으로 브라우저에 띄운다**(macOS). 그 화면을 이어서 녹화하면 "자연어 몇 줄 → 이 문서들"이 한눈에 전달된다. 수동으로 다시 열려면:
 ```bash
 open out/design.html out/requirements.html out/current-system.html
 ```

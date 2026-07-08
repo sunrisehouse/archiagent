@@ -1,6 +1,7 @@
 # 산출물 ① — 기획 의도 및 주요 기능 (콘텐츠)
 
 > 콘텐츠 단일 소스. 슬라이드 디자인(`01-product-brief.html`)은 이 MD를 입력으로 별도 입힌다.
+> 🔗 렌더된 슬라이드: [01-product-brief.html](https://sunrisehouse.github.io/archiagent/docs/01-product-brief.html)
 > 슬라이드별: **목차 제목**(kicker) · **거버닝 메시지** · **내부 컨텐츠**.
 
 ---

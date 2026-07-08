@@ -61,7 +61,19 @@
   - **미리보기 → 게이트 → 저장** — 작성 도구는 저장하지 않고 `Proposal`(미리보기)만 반환 → 사람 `y/n` → `kb_graph_upsert`가 멱등 저장.
   - 흐름 예: `kb_artifact_ingest(store, model, text, kind)` → `Proposal` → (확인) → `kb_graph_upsert(store, proposal)`
 
-## 6. Store — SQLite
+## 6. 도구별 상세 — 입력 · 동작 · 출력
+
+- **목차 제목:** 도구별 상세
+- **거버닝 메시지:** 모델 쓰는 건 추출·생성 2개뿐이고, 쓰기는 `kb_graph_upsert` 하나로 모은다. 추적성·영향도는 저장된 연결에서 역추적한다.
+- **내부 컨텐츠:** (도구 | 입력 | 내부 동작 | 출력)
+  - `kb_artifact_ingest` | 문서 텍스트 · kind | 모델로 추출 → 산출물·요구/서버 노드 + `DESCRIBES` 조립. R 번호는 이어 붙여 멱등 | `Proposal`(미리보기)
+  - `kb_doc_generate` | (요구+현행 맥락) | 모델로 설계 본문 생성 + `addresses`로 요구→설계 `DERIVED_FROM` 연결 | `Proposal`(미리보기)
+  - `kb_graph_query` | (선택) 요구 id | 결정적 조회 — 요구·서버 목록, 영향도는 `DERIVED_FROM` 역추적 | 목록 · 영향 산출물
+  - `kb_graph_upsert` | `Proposal` | `store.upsert(nodes, edges)` 멱등 저장(게이트 통과 후에만) | 저장(반환 없음)
+  - `kb_doc_export` | 출력 폴더 | store에 있는 산출물만 `render/html.py`로 렌더해 파일 저장 | (경로, 제목) 목록
+  - 모델 사용은 `kb_artifact_ingest`·`kb_doc_generate`뿐. 나머지는 모델 없이 결정적.
+
+## 7. Store — SQLite
 
 - **목차 제목:** Store
 - **거버닝 메시지:** 산출물과 요구, 현행 서버, 그리고 그 사이 연결을 SQLite에 저장한다. 사용자에게 저장 방식은 드러내지 않는다.
@@ -71,7 +83,7 @@
   - 인메모리 기본이고, 인터페이스로 추상화해 교체 가능하다.
   - 사용자 노출 문구는 문서 수준 언어만 쓴다(그래프·노드 같은 저장 용어는 숨긴다).
 
-## 7. Model — FakeModel / ClaudeModel
+## 8. Model — FakeModel / ClaudeModel
 
 - **목차 제목:** Model
 - **거버닝 메시지:** 추출·생성에만 모델을 쓰고, 테스트는 모델 없이 돈다.
@@ -81,7 +93,7 @@
   - 작업별 모델: 추출 = `claude-haiku-4-5`, 설계 생성 = `claude-sonnet-4-6`
   - 추출·생성만 모델. 라우팅·영향도·조회·출력은 결정적 코드다.
 
-## 8. 프롬프팅 — 시스템 프롬프트 · 작업 지시문
+## 9. 프롬프팅 — 시스템 프롬프트 · 작업 지시문
 
 - **목차 제목:** 프롬프팅
 - **거버닝 메시지:** 시스템 프롬프트에 SI 생애주기와 표현 규칙을 박고, 작업별 지시문으로 모델이 구조화 JSON을 내게 한다.
@@ -96,7 +108,7 @@
     - `generate_design` → `{"title", "body", "addresses": ["R-1", ...]}`
   - 최종 프롬프트 = `SYSTEM_PROMPT` + `[작업]` 지시문 + `[입력]` 을 합쳐 claude CLI에 전달한다.
 
-## 9. 후속 (아직 없음)
+## 10. 후속 (아직 없음)
 
 - **목차 제목:** 후속
 - **거버닝 메시지:** 아래는 아직 없다. 필요와 측정 후에 붙인다.

@@ -47,6 +47,9 @@
     tbody td { padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
     tbody tr:last-child td { border-bottom: 0; }
     tbody tr:nth-child(even) td { background: #f8fafc; }
+    table.tools { font-size: .82rem; }
+    table.tools th { padding: 10px 12px; }
+    table.tools td { padding: 9px 12px; }
 
     .grid { display: grid; gap: 16px; }
     .grid.c2 { grid-template-columns: 1fr 1fr; }
@@ -73,7 +76,7 @@
 <body>
   <div class="progress" id="progress"></div>
   <div class="brandmark"><b>archiagent</b> · 산출물 ② 아키텍처 구성도</div>
-  <div class="counter" id="counter">1 / 9</div>
+  <div class="counter" id="counter">1 / 10</div>
 
   <!-- 1 · Title -->
   <section class="slide cover">
@@ -174,7 +177,26 @@
     </div>
   </section>
 
-  <!-- 6 · Store -->
+  <!-- 6 · 도구별 상세 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">도구별 상세</span>
+      <h2 class="gov">모델 쓰는 건 추출·생성 2개뿐, 쓰기는 <code>kb_graph_upsert</code> 하나로 모은다. 추적성·영향도는 저장된 연결에서 역추적한다.</h2>
+      <table class="tools">
+        <thead><tr><th style="width:190px">도구</th><th style="width:150px">입력</th><th>내부 동작</th><th style="width:150px">출력</th></tr></thead>
+        <tbody>
+          <tr><td><code>kb_artifact_ingest</code></td><td>문서 텍스트 · kind</td><td>모델로 추출 → 산출물·요구/서버 노드 + <code>DESCRIBES</code> 조립. R 번호는 이어 붙여 멱등</td><td><code>Proposal</code>(미리보기)</td></tr>
+          <tr><td><code>kb_doc_generate</code></td><td>요구+현행 맥락</td><td>모델로 설계 본문 생성 + <code>addresses</code>로 요구→설계 <code>DERIVED_FROM</code> 연결</td><td><code>Proposal</code>(미리보기)</td></tr>
+          <tr><td><code>kb_graph_query</code></td><td>(선택) 요구 id</td><td>결정적 조회 — 요구·서버 목록, 영향도는 <code>DERIVED_FROM</code> 역추적</td><td>목록 · 영향 산출물</td></tr>
+          <tr><td><code>kb_graph_upsert</code></td><td><code>Proposal</code></td><td><code>store.upsert(nodes, edges)</code> 멱등 저장(게이트 통과 후에만)</td><td>저장(반환 없음)</td></tr>
+          <tr><td><code>kb_doc_export</code></td><td>출력 폴더</td><td>store에 있는 산출물만 <code>render/html.py</code>로 렌더해 파일 저장</td><td>(경로, 제목) 목록</td></tr>
+        </tbody>
+      </table>
+      <p class="note">모델 사용은 <code>kb_artifact_ingest</code> · <code>kb_doc_generate</code>뿐. 나머지는 모델 없이 결정적.</p>
+    </div>
+  </section>
+
+  <!-- 7 · Store -->
   <section class="slide">
     <div class="slide-inner">
       <span class="kicker">Store</span>

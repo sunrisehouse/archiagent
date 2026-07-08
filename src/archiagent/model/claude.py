@@ -38,17 +38,27 @@ class ClaudeModel:
     def run(self, kind: str, content: str, context: dict | None = None) -> dict[str, Any]:
         instruction = INSTRUCTIONS[kind]
         payload = content if context is None else json.dumps(context, ensure_ascii=False)
-        prompt = f"{SYSTEM_PROMPT}\n\n[작업]\n{instruction}\n\n[입력]\n{payload}"
+        base = f"{SYSTEM_PROMPT}\n\n[작업]\n{instruction}\n\n[입력]\n{payload}"
         model = _MODEL_BY_KIND.get(kind, "claude-sonnet-4-6")
-        out = subprocess.run(
-            [self._cli, "--print", "--model", model, prompt],
-            capture_output=True,
-            text=True,
-            timeout=self._timeout,
-        )
-        if out.returncode != 0:
-            raise RuntimeError(f"claude CLI 실패: {out.stderr.strip()[:300]}")
-        return _extract_json(out.stdout)
+        # 실모델이 가끔 설명문을 섞어 JSON 파싱이 실패한다. 더 강하게 다시 요청(총 2회).
+        strict = "\n\n[중요] 인사·설명·요약 없이, 첫 글자가 '{' 인 JSON 객체 하나만 출력하라."
+        last = ""
+        for attempt in range(2):
+            prompt = base + (strict if attempt else "")
+            out = subprocess.run(
+                [self._cli, "--print", "--model", model, prompt],
+                capture_output=True,
+                text=True,
+                timeout=self._timeout,
+            )
+            if out.returncode != 0:
+                raise RuntimeError(f"claude CLI 실패: {out.stderr.strip()[:300]}")
+            last = out.stdout
+            try:
+                return _extract_json(last)
+            except ValueError:
+                continue
+        raise ValueError(f"모델이 JSON 을 반환하지 않았습니다: {last[:200]}")
 
 
 def _extract_json(text: str) -> dict[str, Any]:

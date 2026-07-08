@@ -73,7 +73,7 @@
 <body>
   <div class="progress" id="progress"></div>
   <div class="brandmark"><b>archiagent</b> · 산출물 ② 아키텍처 구성도</div>
-  <div class="counter" id="counter">1 / 7</div>
+  <div class="counter" id="counter">1 / 9</div>
 
   <!-- 1 · Title -->
   <section class="slide cover">
@@ -159,7 +159,22 @@
     </div>
   </section>
 
-  <!-- 5 · Store -->
+  <!-- 5 · 도구 구현 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">도구 구현</span>
+      <h2 class="gov">도구는 순수 함수다 — 모델은 추출·생성에만 쓰고, 조회·저장·출력은 결정적으로 짠다.</h2>
+      <div class="grid c2">
+        <div class="card"><h3>순수 함수</h3><p>각 도구는 <code>(store[, model], 입력) → 결과</code>. 부수효과를 최소화해 단위 테스트가 쉽다.</p></div>
+        <div class="card"><h3>모델은 추출·생성만</h3><p><code>kb_artifact_ingest</code>·<code>kb_doc_generate</code>만 모델 호출. <code>kb_graph_query</code>(영향도·추적성)·<code>kb_doc_export</code>는 저장된 사실에서 모델 없이 계산.</p></div>
+        <div class="card"><h3>구조화 출력</h3><p>모델 응답을 <b>JSON 스키마</b>로 받고 파싱·검증(산문 파싱 금지). 코드펜스·서론이 섞여도 첫 JSON만 안전하게 추출.</p></div>
+        <div class="card"><h3>미리보기 → 게이트 → 저장</h3><p>작성 도구는 저장 안 하고 <code>Proposal</code>(미리보기)만 반환 → 사람 <code>y/n</code> → <code>kb_graph_upsert</code>가 멱등 저장.</p></div>
+      </div>
+      <p class="note">흐름 예: <code>kb_artifact_ingest(store, model, text, kind)</code> → <code>Proposal</code> → (확인) → <code>kb_graph_upsert(store, proposal)</code></p>
+    </div>
+  </section>
+
+  <!-- 6 · Store -->
   <section class="slide">
     <div class="slide-inner">
       <span class="kicker">Store</span>
@@ -185,7 +200,34 @@
     </div>
   </section>
 
-  <!-- 7 · 후속 -->
+  <!-- 8 · 프롬프팅 -->
+  <section class="slide">
+    <div class="slide-inner">
+      <span class="kicker">프롬프팅</span>
+      <h2 class="gov">시스템 프롬프트에 SI 생애주기와 표현 규칙을 박고, 작업별 지시문으로 모델이 구조화 JSON을 내게 한다.</h2>
+      <div class="grid c2">
+        <div class="card">
+          <h3>시스템 프롬프트 <code>SYSTEM_PROMPT</code></h3>
+          <ul>
+            <li><b>도메인 지식</b> — SI 생애주기(분석·설계·개발·테스트·이행)와 단계별 산출물·도출 관계</li>
+            <li><b>표현 규칙</b> — 그래프·노드·벡터 같은 저장 용어 노출 금지, 문서 수준 언어만</li>
+            <li><b>작업 방식</b> — 저장 전 "저장할까요?" 확인, 초안을 충실히</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>작업별 지시문 <code>INSTRUCTIONS</code></h3>
+          <ul>
+            <li><code>extract_requirements</code> → <code>{"requirements":[{text}]}</code></li>
+            <li><code>extract_current_system</code> → <code>{"systems":[{name,ip,cpu,memory,disk}], note}</code></li>
+            <li><code>generate_design</code> → <code>{title, body, addresses:[R-1..]}</code></li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">최종 프롬프트 = <code>SYSTEM_PROMPT</code> + <code>[작업]</code> 지시문 + <code>[입력]</code> 을 합쳐 claude CLI에 전달.</p>
+    </div>
+  </section>
+
+  <!-- 9 · 후속 -->
   <section class="slide">
     <div class="slide-inner">
       <span class="kicker">후속</span>
